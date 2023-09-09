@@ -1,0 +1,19 @@
+{
+  "name": "punksim",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "web": "bun run --hot server.tsx",
+    "sockets": "bun run --hot sockets.tsx"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "prettier": "^3.0.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "hono": "^3.5.8"
+  }
+}
