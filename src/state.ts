@@ -1,5 +1,5 @@
 import { randomBytes, randomInt } from "crypto";
-import { Citizen, Species } from "./citizens";
+import { Citizen, Species, generateName } from "./citizens";
 
 export class State {
   private citizens: Map<string, Citizen> = new Map();
@@ -28,16 +28,15 @@ export class State {
     return new State();
   }
 
-  static base(): State {
+  static seed(): State {
     const state = new State();
 
     for (const i of Array(20).keys()) {
-      const id = randomBytes(4).toString("hex");
       state.addCitizen({
         alive: true,
         height: randomInt(150, 190),
-        id,
-        name: id,
+        id: randomBytes(4).toString("hex"),
+        name: generateName().join(" "),
         species: Species.Human,
         weight: randomInt(60, 90),
       });

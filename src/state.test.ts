@@ -8,7 +8,7 @@ test("empty state returns 0 population", () => {
 });
 
 test("base state returns 20 population", () => {
-  const state = State.base();
+  const state = State.seed();
   expect(state.population()).toBe(20);
 });
 

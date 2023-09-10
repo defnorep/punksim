@@ -1,4 +1,5 @@
 import { State } from "./state";
+import names from "../data/names.json";
 
 export enum Species {
   Android = "Android",
@@ -19,4 +20,11 @@ export const killCitizen = (state: State, id: string) => {
   if (citizen) {
     citizen.alive = false;
   }
+};
+
+export const generateName = (): [string, string] => {
+  return [
+    names.human[Math.floor(Math.random() * names.human.length)],
+    names.human[Math.floor(Math.random() * names.human.length)],
+  ];
 };

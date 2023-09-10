@@ -1,4 +1,8 @@
 {
+  "include": [
+    "src/**/*",
+    "data/**/*.json",
+  ],
   "compilerOptions": {
     "lib": [
       "ESNext"
