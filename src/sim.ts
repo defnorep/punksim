@@ -1,4 +1,5 @@
-import { Citizen, birthCitizen, citizenAgeSystem } from "./citizens";
+import { randomBytes } from "crypto";
+import { Citizen, birthCitizen } from "./citizens";
 
 export interface State {
   citizens: Map<string, Citizen>;
@@ -11,9 +12,10 @@ export const newState = (): State => ({
 export const baseStateSetup = (): State => {
   const state = newState();
 
-  ["Robot #50137", "Android #01194", "Human #855127"].forEach((name) =>
-    birthCitizen(state, name),
-  );
+  for (const i of Array(20).keys()) {
+    const id = randomBytes(4).toString("hex");
+    birthCitizen(state, id);
+  }
 
   return state;
 };
@@ -29,7 +31,7 @@ export class Sim {
   private state: State;
 
   constructor(
-    setup: () => State,
+    setup: () => State = newState,
     private tickCallback: (state: State) => void,
     private tickInterval: number = 500,
   ) {
@@ -49,8 +51,6 @@ export class Sim {
    * We might want to add a plugin system later but direct function calls are easy to see and understand.
    */
   private tick() {
-    citizenAgeSystem(this.state);
-
     /**
      * Allow arbitrary behaviour like I/O.
      * This might slow down tick speed if really slow I/O is being done.

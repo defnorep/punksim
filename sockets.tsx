@@ -50,6 +50,8 @@ export const server = Bun.serve({
       console.log(`Client connected: `, ws.remoteAddress);
       sockets.add(ws);
     },
+    // Bun requires this method to be implemented
+    // even though we aren't receiving any messages right now.
     message() {},
     close(ws) {
       console.log(`Client disconnected: `, ws.remoteAddress);

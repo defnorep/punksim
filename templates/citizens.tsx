@@ -7,7 +7,6 @@ export const Citizens = (props: { state: State }) => (
       <thead>
         <tr>
           <th>Name</th>
-          <th>Age (Days)</th>
           <th>Alive</th>
         </tr>
       </thead>
@@ -15,8 +14,7 @@ export const Citizens = (props: { state: State }) => (
         {Array.from(props.state.citizens.values()).map((citizen) => (
           <tr>
             <td>{citizen.name}</td>
-            <td>{citizen.ageDays}</td>
-            <td>{citizen.alive ? 'Yes' : 'No' }</td>
+            <td>{citizen.alive ? "Yes" : "No"}</td>
           </tr>
         ))}
       </tbody>
