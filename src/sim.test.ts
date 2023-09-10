@@ -1,15 +1,6 @@
-import { expect, test } from "bun:test";
-import { Sim, baseStateSetup, newState } from "./sim";
-
-test("new state", () => {
-  const state = newState();
-  expect(state.citizens.size).toBe(0);
-});
-
-test("base state setup", () => {
-  const state = baseStateSetup();
-  expect(state.citizens.size).toBe(3);
-});
+import { test } from "bun:test";
+import { Engine } from "./engine";
+import { State } from "./state";
 
 test("sim ticks", (done) => {
   const tickInterval = 0;
@@ -17,5 +8,5 @@ test("sim ticks", (done) => {
     done();
   };
 
-  new Sim(newState, tickCallback, tickInterval);
+  new Engine(State.empty(), tickCallback, tickInterval);
 });

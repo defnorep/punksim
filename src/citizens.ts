@@ -1,27 +1,22 @@
-import { State } from "./sim";
+import { State } from "./state";
 
-export interface Citizen {
-  name: string;
-  alive: boolean;
+export enum Species {
+  Android = "Android",
+  Human = "Human",
 }
 
-const maxAge = 100;
+export interface Citizen {
+  alive: boolean;
+  height: number;
+  id: string;
+  name: string;
+  species: Species;
+  weight: number;
+}
 
-export const birthCitizen = (state: State, name: string) => {
-  state.citizens.set(name, {
-    name,
-    alive: true,
-  });
-};
-
-export const killCitizen = (state: State, name: string) => {
-  const citizen = addressCitizen(state, name);
+export const killCitizen = (state: State, id: string) => {
+  const citizen = state.getCitizen(id);
   if (citizen) {
     citizen.alive = false;
   }
 };
-
-export const addressCitizen = (
-  state: State,
-  name: string,
-): Citizen | undefined => state.citizens.get(name);

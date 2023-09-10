@@ -1,24 +1,4 @@
-import { randomBytes } from "crypto";
-import { Citizen, birthCitizen } from "./citizens";
-
-export interface State {
-  citizens: Map<string, Citizen>;
-}
-
-export const newState = (): State => ({
-  citizens: new Map(),
-});
-
-export const baseStateSetup = (): State => {
-  const state = newState();
-
-  for (const i of Array(20).keys()) {
-    const id = randomBytes(4).toString("hex");
-    birthCitizen(state, id);
-  }
-
-  return state;
-};
+import { State } from "./state";
 
 /**
  * Sim is a class around three things:
@@ -27,20 +7,13 @@ export const baseStateSetup = (): State => {
  * 2. An ordering of system logic.
  * 3. A callback for external I/O.
  */
-export class Sim {
-  private state: State;
-
+export class Engine {
   constructor(
-    setup: () => State = newState,
+    private state: State = State.empty(),
     private tickCallback: (state: State) => void,
     private tickInterval: number = 500,
   ) {
-    this.tickInterval = tickInterval;
-    this.tickCallback = tickCallback;
-
     setInterval(this.tick.bind(this), this.tickInterval);
-
-    this.state = setup();
   }
 
   /**

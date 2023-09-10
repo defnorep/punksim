@@ -1,24 +1,23 @@
 import { expect, test } from "bun:test";
-import { newState } from "./sim";
-import { addressCitizen, birthCitizen, killCitizen } from "./citizens";
-
-test("can birth and address citizen", () => {
-  const name = "Test Citizen";
-  const state = newState();
-
-  birthCitizen(state, name);
-
-  expect(addressCitizen(state, name)).toBeTruthy();
-});
+import { Species, killCitizen } from "./citizens";
+import { State } from "./state";
 
 test("can kill citizen", () => {
   const name = "Test Citizen";
-  const state = newState();
+  const state = State.empty();
 
-  birthCitizen(state, name);
+  state.addCitizen({
+    alive: false,
+    height: 0,
+    id: name,
+    name,
+    species: Species.Android,
+    weight: 0,
+  });
+
   killCitizen(state, name);
 
-  const citizen = addressCitizen(state, name);
+  const citizen = state.getCitizen(name);
 
   expect(citizen).toBeTruthy();
   expect(citizen?.alive).toBe(false);

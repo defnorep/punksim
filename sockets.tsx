@@ -1,6 +1,6 @@
-import { State, newState } from "./src/sim";
 import { ServerWebSocket } from "bun";
 import { Citizens } from "./templates/citizens";
+import { State } from "./src/state";
 
 /**
  * Simulation setup.
@@ -9,11 +9,10 @@ import { Citizens } from "./templates/citizens";
  * It's possible a client connects before we have received an update
  * message from the worker, however unlikely.
  */
-let state: State = newState();
+const state = State.empty();
+const engine = new Worker(new URL("./src/engineWorker.ts", import.meta.url));
 
-const sim = new Worker(new URL("./src/simWorker.ts", import.meta.url));
-
-sim.addEventListener("message", (event: MessageEvent) => {
+engine.addEventListener("message", (event: MessageEvent) => {
   // Ignore any messages that don't have a command property.
   if (!event.data?.cmd) {
     return;
@@ -22,8 +21,9 @@ sim.addEventListener("message", (event: MessageEvent) => {
   // Message router
   switch (event.data.cmd) {
     case "update":
-      // We just hold on to the state that the worker sends to us.
-      state = event.data.state;
+      // Any class instances are serialized when sent across postMessage.
+      // This means we have to patch the State instance on this side of the worker.
+      state.setCitizens(event.data.state.citizens);
       break;
     default:
       break;
@@ -66,6 +66,6 @@ export const server = Bun.serve({
  */
 setInterval(() => {
   sockets.forEach((ws) => {
-    ws.send(<Citizens state={state} />);
+    ws.send(<Citizens citizens={state.getCitizens()} />);
   });
 }, 1000);
