@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { Species, generateName, killCitizen } from "./citizens";
+import { Species, generateCitizenName, killCitizen } from "./citizens";
 import { State } from "./state";
 
 test("can kill citizen", () => {
@@ -24,8 +24,12 @@ test("can kill citizen", () => {
 });
 
 test("can generate first and last names", () => {
-  const name = generateName();
+  const humanName = generateCitizenName(Species.Human);
+  const androidName = generateCitizenName(Species.Android);
 
-  expect(name[0]).toBeString();
-  expect(name[1]).toBeString();
+  expect(humanName[0]).toBeString();
+  expect(humanName[1]).toBeString();
+
+  expect(androidName[0]).toBeString();
+  expect(androidName[1]).toBeString();
 });

@@ -1,6 +1,7 @@
 {
   "include": [
     "src/**/*",
+    "templates/**/*",
     "data/**/*.json",
   ],
   "compilerOptions": {

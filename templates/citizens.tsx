@@ -11,7 +11,7 @@ export const Citizens = (props: { citizens: Citizen[] }) => (
           <th>Height</th>
           <th>Weight</th>
           <th>Species</th>
-          <th>Alive</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -22,7 +22,7 @@ export const Citizens = (props: { citizens: Citizen[] }) => (
             <td>{citizen.height} cm</td>
             <td>{citizen.weight} kg</td>
             <td>{citizen.species.toString()}</td>
-            <td>{citizen.alive.toString()}</td>
+            <td>{citizen.status.toString()}</td>
           </tr>
         ))}
       </tbody>
