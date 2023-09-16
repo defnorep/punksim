@@ -1,8 +1,8 @@
 {
   "include": [
-    "src/**/*",
-    "templates/**/*",
     "data/**/*.json",
+    "**/*.tsx",
+    "**/*.ts",
   ],
   "compilerOptions": {
     "lib": [
