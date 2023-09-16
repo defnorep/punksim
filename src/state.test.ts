@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { State } from "./state";
-import { Citizen, Species } from "./citizens";
+import { Citizen, Species, Status } from "./citizens";
 
 test("empty state returns 0 population", () => {
   const state = State.empty();
@@ -18,7 +18,7 @@ test("adds and retrieves citizens", () => {
   const state = State.empty();
 
   state.addCitizen({
-    alive: true,
+    status: Status.Active,
     height: 1,
     id: "123",
     name: "456",
@@ -39,7 +39,7 @@ test("sets and retrieves citizens", () => {
   const citizens = new Map<string, Citizen>();
 
   citizens.set("123", {
-    alive: false,
+    status: Status.Active,
     height: 0,
     id: "123",
     name: "",

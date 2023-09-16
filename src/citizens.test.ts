@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { Species, generateCitizenName, killCitizen } from "./citizens";
+import { Species, Status, generateCitizenName, killCitizen } from "./citizens";
 import { State } from "./state";
 
 test("can kill citizen", () => {
@@ -7,7 +7,7 @@ test("can kill citizen", () => {
   const state = State.empty();
 
   state.addCitizen({
-    alive: false,
+    status: Status.Active,
     height: 0,
     id: name,
     name,
@@ -20,7 +20,7 @@ test("can kill citizen", () => {
   const citizen = state.getCitizen(name);
 
   expect(citizen).toBeTruthy();
-  expect(citizen?.alive).toBe(false);
+  expect(citizen?.status).toBe(Status.Deceased);
 });
 
 test("can generate first and last names", () => {
