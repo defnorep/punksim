@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { State } from "./state";
-import { Citizen, Species, Status } from "./citizens";
+import { Citizen, Species, Status, generateCitizen } from "./citizens";
 import seed from "../data/seed.json";
 
 test("empty state returns 0 population", () => {
@@ -18,22 +18,15 @@ test("base state returns 20 population", () => {
 test("adds and retrieves citizens", () => {
   const state = State.empty();
 
-  state.addCitizen({
-    birthdate: Date.now(),
-    height: 1,
-    id: "123",
-    name: "456",
-    status: Status.Active,
-    species: Species.Human,
-    surname: "789",
-    weight: 1,
-  });
+  const citizen = generateCitizen();
+
+  state.addCitizen(citizen);
 
   const citizens = state.getCitizens();
-  const citizen = state.getCitizen("123");
+  const c123 = state.getCitizen(citizen.id);
 
   expect(citizens.length).toBe(1);
-  expect(citizens[0].id).toBe("123");
+  expect(citizens[0].id).toBe(citizen.id);
   expect(citizen).toBeTruthy();
 });
 
@@ -41,16 +34,9 @@ test("sets and retrieves citizens", () => {
   const state = State.empty();
   const citizens = new Map<string, Citizen>();
 
-  citizens.set("123", {
-    birthdate: Date.now(),
-    height: 0,
-    id: "123",
-    name: "",
-    species: Species.Android,
-    surname: "",
-    status: Status.Active,
-    weight: 0,
-  });
+  const citizen = generateCitizen();
+
+  citizens.set(citizen.id, citizen);
   state.setCitizens(citizens);
 
   expect(state.population()).toBe(1);
