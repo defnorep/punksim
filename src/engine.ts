@@ -12,7 +12,7 @@ const defaultTimeOptions = (): TimeOptions => ({
 });
 
 /**
- * Sim is a class around three things:
+ * Engine is a class around three things:
  *
  * 1. A timed loop.
  * 2. An ordering of system logic.
