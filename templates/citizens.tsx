@@ -7,6 +7,7 @@ export const Citizens = (props: { citizens: Citizen[] }) => (
       <thead>
         <tr>
           <th>Name</th>
+          <th>Surname</th>
           <th>ID</th>
           <th>Height</th>
           <th>Weight</th>
@@ -18,6 +19,7 @@ export const Citizens = (props: { citizens: Citizen[] }) => (
         {props.citizens.map((citizen) => (
           <tr>
             <td>{citizen.name}</td>
+            <td>{citizen.surname}</td>
             <td>{citizen.id}</td>
             <td>{citizen.height} cm</td>
             <td>{citizen.weight} kg</td>

@@ -16,6 +16,7 @@ export interface Citizen {
   height: number;
   id: string;
   name: string;
+  surname: string;
   species: Species;
   status: Status;
   weight: number;

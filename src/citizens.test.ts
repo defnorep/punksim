@@ -3,21 +3,22 @@ import { Species, Status, generateCitizenName, killCitizen } from "./citizens";
 import { State } from "./state";
 
 test("can kill citizen", () => {
-  const name = "Test Citizen";
+  const id = "12345";
   const state = State.empty();
 
   state.addCitizen({
     status: Status.Active,
     height: 0,
-    id: name,
-    name,
+    id,
+    name: "Test",
+    surname: "Citizen",
     species: Species.Android,
     weight: 0,
   });
 
-  killCitizen(state, name);
+  killCitizen(state, id);
 
-  const citizen = state.getCitizen(name);
+  const citizen = state.getCitizen(id);
 
   expect(citizen).toBeTruthy();
   expect(citizen?.status).toBe(Status.Deceased);
