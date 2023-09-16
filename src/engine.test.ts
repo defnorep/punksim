@@ -17,7 +17,7 @@ test("engine provides time delta to systems", (done) => {
     expect(delta).toBe(500);
   };
 
-  const engine = new Engine(
+  new Engine(
     State.empty(),
     [timeTestingSystem],
     tickCallback,

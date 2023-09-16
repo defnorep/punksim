@@ -62,6 +62,7 @@ export class Engine {
     });
 
     this.time = timeAfterTick;
+
     /**
      * Allow arbitrary behaviour like I/O.
      * This might slow down tick speed if really slow I/O is being done.
