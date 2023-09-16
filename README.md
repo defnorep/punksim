@@ -5,6 +5,7 @@ Things to simulate:
 - Citizens
   - Births, Deaths
   - Immigration
+  - Attributes, Characteristics, Implants
   - Health, Mental Health
   - Relationships
   - Work
