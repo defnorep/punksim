@@ -12,21 +12,26 @@ export enum Status {
   Deceased = "Deceased",
 }
 
-export interface Citizen {
-  height: number;
-  id: string;
-  name: string;
-  surname: string;
-  species: Species;
-  status: Status;
-  weight: number;
+export enum Gender {
+  Male = "Male",
+  Female = "Female",
+  None = "None",
 }
 
-export const killCitizen = (state: State, id: string) => {
-  const citizen = state.getCitizen(id);
-  if (citizen) {
-    citizen.status = Status.Deceased;
-  }
+export interface Citizen {
+  birthdate: number; // epoch milliseconds
+  height: number; // cm
+  id: string;
+  name: string;
+  gender: Gender;
+  species: Species;
+  status: Status;
+  surname: string;
+  weight: number; // kg
+}
+
+export const age = (birthdate: number) => {
+  return new Date().getFullYear() - new Date(birthdate).getFullYear();
 };
 
 export const generateCitizenName = (species: Species = Species.Human) => {

@@ -1,4 +1,4 @@
-import { Citizen } from "../src/citizens";
+import { Citizen, age } from "../src/citizens";
 
 export const Citizens = (props: { citizens: Citizen[] }) => (
   <div id="citizens">
@@ -9,6 +9,8 @@ export const Citizens = (props: { citizens: Citizen[] }) => (
           <th>Name</th>
           <th>Surname</th>
           <th>ID</th>
+          <th>Age</th>
+          <th>Gender</th>
           <th>Height</th>
           <th>Weight</th>
           <th>Species</th>
@@ -21,6 +23,8 @@ export const Citizens = (props: { citizens: Citizen[] }) => (
             <td>{citizen.name}</td>
             <td>{citizen.surname}</td>
             <td>{citizen.id}</td>
+            <td>{age(citizen.birthdate)}</td>
+            <td>{citizen.gender.toString()}</td>
             <td>{citizen.height} cm</td>
             <td>{citizen.weight} kg</td>
             <td>{citizen.species.toString()}</td>

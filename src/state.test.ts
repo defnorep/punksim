@@ -19,12 +19,13 @@ test("adds and retrieves citizens", () => {
   const state = State.empty();
 
   state.addCitizen({
-    status: Status.Active,
+    birthdate: Date.now(),
     height: 1,
     id: "123",
     name: "456",
-    surname: "789",
+    status: Status.Active,
     species: Species.Human,
+    surname: "789",
     weight: 1,
   });
 
@@ -41,12 +42,13 @@ test("sets and retrieves citizens", () => {
   const citizens = new Map<string, Citizen>();
 
   citizens.set("123", {
-    status: Status.Active,
+    birthdate: Date.now(),
     height: 0,
     id: "123",
     name: "",
-    surname: "",
     species: Species.Android,
+    surname: "",
+    status: Status.Active,
     weight: 0,
   });
   state.setCitizens(citizens);

@@ -1,5 +1,11 @@
 import { randomBytes, randomInt } from "crypto";
-import { Citizen, Species, Status, generateCitizenName } from "./citizens";
+import {
+  Citizen,
+  Gender,
+  Species,
+  Status,
+  generateCitizenName,
+} from "./citizens";
 import seed from "../data/seed.json";
 
 export class State {
@@ -29,21 +35,40 @@ export class State {
     return new State();
   }
 
+  /**
+   * This is getting very ugly.
+   */
   static seed(): State {
     const state = new State();
+    const ageJitter = 75; // years
+    const now = new Date();
 
     for (const i of Array(seed.base.citizens).keys()) {
       const isAndroid = Math.random() > 0.7;
       const species = isAndroid ? Species.Android : Species.Human;
       const names = generateCitizenName(species);
+      const birthdate = new Date().setFullYear(
+        now.getFullYear() - Math.round(Math.random() * ageJitter),
+      );
+
+      const genderRoll = randomInt(0, 2);
+      let gender = Gender.None;
+      if (genderRoll > 0) {
+        gender = Gender.Male;
+        if (genderRoll > 1) {
+          gender = Gender.Female;
+        }
+      }
 
       state.addCitizen({
-        status: Status.Active,
+        birthdate,
         height: randomInt(150, 190),
         id: randomBytes(4).toString("hex"),
         name: names[0],
-        surname: names[1],
+        gender,
         species,
+        status: Status.Active,
+        surname: names[1],
         weight: randomInt(60, 90),
       });
     }
