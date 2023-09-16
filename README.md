@@ -4,9 +4,12 @@ Things to simulate:
 
 - Citizens
   - Births, Deaths
-  - Health
+  - Immigration
+  - Health, Mental Health
   - Relationships
   - Work
 - Crime
 - Traffic
 - Power Generation, Usage
+- Government, Elections
+- Special Events
