@@ -36,8 +36,6 @@ export class Engine {
    * This calls systems, which are the meat and potatoes of the simulation.
    *
    * Order is important.
-   *
-   * We might want to add a plugin system later but direct function calls are easy to see and understand.
    */
   private tick() {
     /**
@@ -46,10 +44,8 @@ export class Engine {
      * Time is maintained as a unix epoch, in milliseconds.
      * The initial time as well as the rate of time can be set in TimeOptions.
      *
-     * The rate of time is a multiplier. If the tick interval is 500 ms and the multiplier is 1.0,
-     * then the amount of time that has passed since the last tick is 500 ms. If the multiplier
-     * is 2.0, then the amount of time will be 1000 ms. This lets us speed up and slow down time,
-     * either for system mechanics, or to simulate things more quickly than in real time.
+     * The rate of time is decoupled from the tick interval. This lets us manipulate time for
+     * game mechanics, or to simply run the simulation a lot faster.
      *
      * Since time is closely related to the tick interval, and time deltas (time since last tick)
      * are crucial for systems to run, it makes sense to keep time as an Engine concern for now.
