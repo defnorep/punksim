@@ -1,6 +1,5 @@
-import { State } from "./state";
 import names from "../data/names.json";
-import { randomInt } from "crypto";
+import { randomBytes, randomInt } from "crypto";
 
 export enum Species {
   Android = "Android",
@@ -29,6 +28,37 @@ export interface Citizen {
   surname: string;
   weight: number; // kg
 }
+
+export const generateCitizen = (ageJitter: number = 0): Citizen => {
+  const now = new Date();
+  const isAndroid = Math.random() > 0.7;
+  const species = isAndroid ? Species.Android : Species.Human;
+  const names = generateCitizenName(species);
+  const birthdate = new Date().setFullYear(
+    now.getFullYear() - Math.round(Math.random() * ageJitter),
+  );
+
+  const genderRoll = randomInt(0, 2);
+  let gender = Gender.None;
+  if (genderRoll > 0) {
+    gender = Gender.Male;
+    if (genderRoll > 1) {
+      gender = Gender.Female;
+    }
+  }
+
+  return {
+    birthdate,
+    height: randomInt(150, 190),
+    id: randomBytes(4).toString("hex"),
+    name: names[0],
+    gender,
+    species,
+    status: Status.Active,
+    surname: names[1],
+    weight: randomInt(60, 90),
+  };
+};
 
 export const age = (birthdate: number) => {
   return new Date().getFullYear() - new Date(birthdate).getFullYear();
