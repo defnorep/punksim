@@ -48,6 +48,9 @@ test("can derive census from list of citizens", () => {
   census = deriveCensus(citizens);
 
   expect(census.population.total).toBe(1);
-  expect(census.population.androids).toBe(1);
-  expect(census.population.humans).toBe(0);
+  expect(census.population.android).toBe(1);
+  expect(census.population.human).toBe(0);
+  expect(census.population.male).toBe(1);
+  expect(census.population.female).toBe(0);
+  expect(census.population.noGender).toBe(0);
 });
