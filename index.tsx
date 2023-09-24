@@ -1,6 +1,9 @@
 import { ServerWebSocket } from "bun";
 import { Citizens } from "./templates/citizens";
 import { State } from "./src/state";
+import { Hono } from "hono";
+import { Sim } from "./templates/sim";
+import { serveStatic } from "hono/bun";
 
 /**
  * Simulation setup.
@@ -69,3 +72,10 @@ setInterval(() => {
     ws.send(<Citizens citizens={state.getCitizens()} />);
   });
 }, 1000);
+
+const app = new Hono();
+
+app.get("/", (c) => c.html(<Sim state={State.empty()} />));
+app.use("/public/*", serveStatic({ root: "./" }));
+
+export default app;

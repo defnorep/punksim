@@ -3,8 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "web": "bun run --hot web.tsx",
-    "sockets": "bun run --hot sockets.tsx"
+    "start": "bun run --watch index.tsx"
   },
   "devDependencies": {
     "bun-types": "latest",

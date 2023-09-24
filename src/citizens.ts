@@ -7,7 +7,7 @@ export enum Species {
 }
 
 export enum Status {
-  Active = "Active",
+  Living = "Living",
   Deceased = "Deceased",
 }
 
@@ -54,7 +54,7 @@ export const generateCitizen = (ageJitter: number = 0): Citizen => {
     name: names[0],
     gender,
     species,
-    status: Status.Active,
+    status: Status.Living,
     surname: names[1],
     weight: randomInt(60, 90),
   };
