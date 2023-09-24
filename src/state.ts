@@ -1,10 +1,12 @@
 import { Citizen, generateCitizen } from "./citizens";
 import seed from "../data/seed.json";
-import { WorldTimeState, defaultWorldTimeState } from "./system/worldTime";
+import { WorldTimeState } from "./system/worldTime";
 
 export class State {
   private citizens: Map<string, Citizen> = new Map();
-  public worldTimeState: WorldTimeState = defaultWorldTimeState();
+  public worldTimeState: WorldTimeState = {
+    time: new Date(seed.base.date).getTime(),
+  };
 
   population(): number {
     return this.citizens.size;
