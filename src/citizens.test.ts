@@ -1,5 +1,13 @@
 import { expect, test } from "bun:test";
-import { Species, age, generateCitizenName } from "./citizens";
+import {
+  Citizen,
+  Gender,
+  Species,
+  Status,
+  age,
+  deriveCensus,
+  generateCitizenName,
+} from "./citizens";
 
 test("can generate first and last names", () => {
   const humanName = generateCitizenName(Species.Human);
@@ -17,4 +25,29 @@ test("can determine age", () => {
   const birthdate = new Date().setFullYear(today.getFullYear() - 10);
 
   expect(age(birthdate)).toBe(10);
+});
+
+test("can derive census from list of citizens", () => {
+  const citizens: Citizen[] = [];
+  let census = deriveCensus(citizens);
+
+  expect(census.population.total).toBe(0);
+
+  citizens.push({
+    birthdate: 0,
+    height: 0,
+    id: "",
+    name: "",
+    gender: Gender.Male,
+    species: Species.Android,
+    status: Status.Living,
+    surname: "",
+    weight: 0,
+  });
+
+  census = deriveCensus(citizens);
+
+  expect(census.population.total).toBe(1);
+  expect(census.population.androids).toBe(1);
+  expect(census.population.humans).toBe(0);
 });

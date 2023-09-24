@@ -1,11 +1,13 @@
 import { Layout } from "./layout";
-import { Citizens } from "./citizens";
+import { CitizensCensus, CitizensDetail } from "./citizens";
 import { State } from "../src/state";
+import { deriveCensus } from "../src/citizens";
 
 export const Sim = (props: { state: State }) => (
   <Layout title="Cyberpunk City Simulator">
     <div hx-ext="ws" ws-connect="ws://localhost:3001">
-      <Citizens citizens={props.state.getCitizens()} />
+      <CitizensCensus census={deriveCensus(props.state.getCitizens())} />
+      <CitizensDetail citizens={props.state.getCitizens()} />
     </div>
   </Layout>
 );

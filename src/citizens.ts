@@ -1,3 +1,4 @@
+import { nextTick } from "process";
 import names from "../data/names.json";
 import { randomBytes, randomInt } from "crypto";
 
@@ -29,6 +30,51 @@ export interface Citizen {
   weight: number; // kg
 }
 
+export interface Census {
+  population: {
+    total: number;
+    human: number;
+    android: number;
+    male: number;
+    female: number;
+    noGender: number;
+  };
+}
+
+export const deriveCensus = (citizens: Citizen[]) => {
+  return {
+    population: citizens.reduce(
+      (population, citizen) => {
+        population.total++;
+
+        switch (citizen.species) {
+          case Species.Human:
+            population.human++;
+            break;
+          case Species.Android:
+            population.android++;
+            break;
+        }
+
+        switch (citizen.gender) {
+          case Gender.Male:
+            population.male++;
+            break;
+          case Gender.Female:
+            population.female++;
+            break;
+          case Gender.None:
+            population.noGender++;
+            break;
+        }
+
+        return population;
+      },
+      { total: 0, human: 0, android: 0, male: 0, female: 0, noGender: 0 },
+    ),
+  };
+};
+
 export const generateCitizen = (ageJitter: number = 0): Citizen => {
   const now = new Date();
   const isAndroid = Math.random() > 0.7;
@@ -38,7 +84,7 @@ export const generateCitizen = (ageJitter: number = 0): Citizen => {
     now.getFullYear() - Math.round(Math.random() * ageJitter),
   );
 
-  const genderRoll = randomInt(0, 2);
+  const genderRoll = randomInt(0, 3);
   let gender = Gender.None;
   if (genderRoll > 0) {
     gender = Gender.Male;

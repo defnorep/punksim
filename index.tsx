@@ -1,9 +1,10 @@
 import { ServerWebSocket } from "bun";
-import { Citizens } from "./templates/citizens";
+import { CitizensCensus, CitizensDetail } from "./templates/citizens";
 import { State } from "./src/state";
 import { Hono } from "hono";
 import { Sim } from "./templates/sim";
 import { serveStatic } from "hono/bun";
+import { deriveCensus } from "./src/citizens";
 
 /**
  * Simulation setup.
@@ -69,7 +70,8 @@ export const server = Bun.serve({
  */
 setInterval(() => {
   sockets.forEach((ws) => {
-    ws.send(<Citizens citizens={state.getCitizens()} />);
+    ws.send(<CitizensDetail citizens={state.getCitizens()} />);
+    ws.send(<CitizensCensus census={deriveCensus(state.getCitizens())} />);
   });
 }, 1000);
 
