@@ -6,6 +6,11 @@ export interface TimeOptions {
   rate: number;
 }
 
+export interface Time {
+  time: number;
+  delta: number;
+}
+
 const defaultTimeOptions = (): TimeOptions => ({
   initialTime: Date.now(),
   rate: 500, // milliseconds
@@ -50,9 +55,8 @@ export class Engine {
      * Since time is closely related to the tick interval, and time deltas (time since last tick)
      * are crucial for systems to run, it makes sense to keep time as an Engine concern for now.
      */
-    const timeBeforeTick = this.time;
-    const timeAfterTick = this.time + this.timeOptions.rate;
-    const delta = timeAfterTick - timeBeforeTick;
+    const tickTime = this.time + this.timeOptions.rate;
+    const delta = tickTime - this.time;
 
     /**
      * Now that we have the time delta, we can run systems.
@@ -61,7 +65,7 @@ export class Engine {
       system(delta, this.state);
     });
 
-    this.time = timeAfterTick;
+    this.time = tickTime;
 
     /**
      * Allow arbitrary behaviour like I/O.

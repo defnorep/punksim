@@ -1,10 +1,9 @@
 import { ServerWebSocket } from "bun";
-import { CitizensCensus, CitizensDetail } from "./templates/citizens";
 import { State } from "./src/state";
 import { Hono } from "hono";
 import { Sim } from "./templates/sim";
 import { serveStatic } from "hono/bun";
-import { deriveCensus } from "./src/citizens";
+import { Layout } from "./templates/layout";
 
 /**
  * Simulation setup.
@@ -28,6 +27,7 @@ engine.addEventListener("message", (event: MessageEvent) => {
       // Any class instances are serialized when sent across postMessage.
       // This means we have to patch the State instance on this side of the worker.
       state.setCitizens(event.data.state.citizens);
+      state.worldTimeState = event.data.state.worldTimeState;
       break;
     default:
       break;
@@ -70,8 +70,7 @@ export const server = Bun.serve({
  */
 setInterval(() => {
   sockets.forEach((ws) => {
-    ws.send(<CitizensDetail citizens={state.getCitizens()} />);
-    ws.send(<CitizensCensus census={deriveCensus(state.getCitizens())} />);
+    ws.send(<Sim state={state} />);
   });
 }, 1000);
 
@@ -80,7 +79,13 @@ setInterval(() => {
  */
 const app = new Hono();
 
-app.get("/", (c) => c.html(<Sim state={state} />));
+app.get("/", (c) =>
+  c.html(
+    <Layout title="Cyberpunk City Simulator">
+      <Sim state={state} />
+    </Layout>,
+  ),
+);
 app.use("/public/*", serveStatic({ root: "./" }));
 
 export default app;
