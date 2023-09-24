@@ -75,9 +75,12 @@ setInterval(() => {
   });
 }, 1000);
 
+/**
+ * Web Server Setup
+ */
 const app = new Hono();
 
-app.get("/", (c) => c.html(<Sim state={State.empty()} />));
+app.get("/", (c) => c.html(<Sim state={state} />));
 app.use("/public/*", serveStatic({ root: "./" }));
 
 export default app;
