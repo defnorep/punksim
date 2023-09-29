@@ -30,9 +30,6 @@ const engine = new Engine()
 
 setInterval(() => {
   sockets.forEach((ws) => {
-    // This being in the callback WILL slow down the simulation
-    // since all sockets must be updated before the tick finishes.
-    // Let's try to profile this in order to fix it correctly.
     ws.send(<Sim states={engine.getStates()} />);
   });
 }, 500);
@@ -66,6 +63,7 @@ export const server = Bun.serve({
 
 /**
  * Web Server Setup
+ * Just serves the application shell.
  */
 const app = new Hono();
 
