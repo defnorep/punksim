@@ -8,7 +8,7 @@ export const Sim = (props: { states: State[] }) => {
   const jsx = props.states.map((state) => {
     switch (state.kind) {
       case "time":
-        return <Time time={state.time.getTime()} />;
+        return <Time datetime={state.datetime} />;
       case "citizens":
         return [
           <CitizensCensus census={state.census} />,

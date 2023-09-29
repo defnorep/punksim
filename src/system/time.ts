@@ -3,28 +3,28 @@ import { System } from "../system";
 
 export interface TimeState {
   kind: "time";
-  time: Date;
+  datetime: Date;
   rate: number;
 }
 
 export class TimeSystem implements System {
-  private local: { time: Date; rate: number };
+  private local: { datetime: Date; rate: number };
 
-  constructor(time: Date, rate = 1.0) {
+  constructor(datetime: Date, rate = 1.0) {
     this.local = {
-      time: time,
+      datetime,
       rate,
     };
   }
 
   tick(delta: number, _global: State[]): TimeState {
-    this.local.time.setTime(
-      this.local.time.getTime() + delta * this.local.rate,
+    this.local.datetime.setTime(
+      this.local.datetime.getTime() + delta * this.local.rate,
     );
 
     return {
       kind: "time",
-      time: this.local.time,
+      datetime: this.local.datetime,
       rate: this.local.rate,
     };
   }
