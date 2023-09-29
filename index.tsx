@@ -22,7 +22,6 @@ const citizens = Array(config.citizens)
 
 /**
  * Simulation setup.
- *
  */
 const engine = new Engine()
   .addSystem(new TimeSystem(date, rateOfTime))
