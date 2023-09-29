@@ -16,5 +16,5 @@ export const Sim = (props: { states: State[] }) => {
         ];
     }
   });
-  return <div id="sim">{jsx}</div>;
+  return <div id="sim">{jsx.length > 0 ? jsx : "Socket connecting..."}</div>;
 };
