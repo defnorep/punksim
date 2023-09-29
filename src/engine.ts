@@ -12,7 +12,7 @@ export class Engine {
   private systems: System[] = [];
 
   constructor(
-    private state: State[] = [],
+    private states: State[] = [],
     private updateCallback: (global: any) => void,
     private tickInterval: number = 500,
   ) {
@@ -31,9 +31,11 @@ export class Engine {
    * Order is very important.
    */
   private tick() {
-    this.state = this.systems.map((sys) => {
-      return sys.tick(this.tickInterval, this.state);
-    });
+    this.states = this.systems.reduce((states: State[], system) => {
+      states.push(system.tick(this.tickInterval, states));
+
+      return states;
+    }, []);
 
     /**
      * Allow arbitrary behaviour like I/O.
@@ -42,6 +44,6 @@ export class Engine {
      * which will now slow down the next tick. This might need
      * to change.
      */
-    this.updateCallback(this.state);
+    this.updateCallback(this.states);
   }
 }
