@@ -1,5 +1,4 @@
-import { State } from "../system";
-import { System } from "../system";
+import { State, System } from "../system";
 
 export interface TimeState {
   kind: "time";

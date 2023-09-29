@@ -1,7 +1,6 @@
-import { randomInt, randomBytes } from "crypto";
-import { State } from "../system";
-import { System } from "../system";
+import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
+import { State, System } from "../system";
 import { TimeState } from "./time";
 
 export enum Species {

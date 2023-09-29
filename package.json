@@ -15,6 +15,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "hono": "^3.5.8"
+    "hono": "^3.5.8",
+    "prettier-plugin-organize-imports": "^3.2.3"
   }
 }

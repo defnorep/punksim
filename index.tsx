@@ -1,12 +1,12 @@
 import { ServerWebSocket } from "bun";
 import { Hono } from "hono";
-import { Sim } from "./templates/sim";
 import { serveStatic } from "hono/bun";
-import { Layout } from "./templates/layout";
-import { Engine } from "./src/engine";
-import { TimeSystem } from "./src/system/time";
-import { CitizensSystem, generateCitizen } from "./src/system/citizens";
 import seed from "./data/seed.json";
+import { Engine } from "./src/engine";
+import { CitizensSystem, generateCitizen } from "./src/system/citizens";
+import { TimeSystem } from "./src/system/time";
+import { Layout } from "./templates/layout";
+import { Sim } from "./templates/sim";
 
 /**
  * Generate/Collect Seed Data

@@ -1,5 +1,4 @@
-import { State } from "./system";
-import { System } from "./system";
+import { State, System } from "./system";
 
 /**
  * Engine is a class around two things:

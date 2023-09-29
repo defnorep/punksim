@@ -1,5 +1,5 @@
-import { CitizensCensus, CitizensDetail } from "./citizens";
 import { State } from "../src/system";
+import { CitizensCensus, CitizensDetail } from "./citizens";
 import { Time } from "./global";
 
 export const Sim = (props: { states: State[] }) => {
