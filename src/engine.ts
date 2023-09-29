@@ -2,11 +2,10 @@ import { State } from "./system";
 import { System } from "./system";
 
 /**
- * Engine is a class around three things:
+ * Engine is a class around two things:
  *
  * 1. A timed loop.
  * 2. An ordering of system logic.
- * 3. A callback for external I/O.
  */
 export class Engine {
   private systems: System[] = [];
@@ -28,6 +27,8 @@ export class Engine {
 
   /**
    * This calls systems, which are the meat and potatoes of the simulation.
+   * State starts as an empty array but each system pushes its state result
+   * onto it for subsequent system invocations.
    *
    * Order is very important.
    */
