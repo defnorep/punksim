@@ -22,16 +22,18 @@ const date = new Date(seed.base.date);
  * Simulation setup.
  *
  */
-new Engine([], (states: State[]) => {
+const engine = new Engine()
+  .addSystem(new WorldTimeSystem(date))
+  .addSystem(new CitizensSystem(citizens));
+
+setInterval(() => {
   sockets.forEach((ws) => {
     // This being in the callback WILL slow down the simulation
     // since all sockets must be updated before the tick finishes.
     // Let's try to profile this in order to fix it correctly.
-    ws.send(<Sim states={states} />);
+    ws.send(<Sim states={engine.getStates()} />);
   });
-})
-  .addSystem(new WorldTimeSystem(date))
-  .addSystem(new CitizensSystem(citizens));
+}, 500);
 
 let sockets: Set<ServerWebSocket<unknown>> = new Set();
 

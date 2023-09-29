@@ -10,12 +10,9 @@ import { System } from "./system";
  */
 export class Engine {
   private systems: System[] = [];
+  private states: State[] = [];
 
-  constructor(
-    private states: State[] = [],
-    private updateCallback: (global: any) => void,
-    private tickInterval: number = 500,
-  ) {
+  constructor(private tickInterval: number = 500) {
     setInterval(this.tick.bind(this), this.tickInterval);
   }
 
@@ -23,6 +20,10 @@ export class Engine {
     this.systems.push(system);
 
     return this;
+  }
+
+  getStates() {
+    return this.states;
   }
 
   /**
@@ -36,14 +37,5 @@ export class Engine {
 
       return states;
     }, []);
-
-    /**
-     * Allow arbitrary behaviour like I/O.
-     *
-     * The callback in index.tsx is the websocket invocation,
-     * which will now slow down the next tick. This might need
-     * to change.
-     */
-    this.updateCallback(this.states);
   }
 }
