@@ -6,7 +6,7 @@ export interface WorldTimeState {
   time: Date;
 }
 
-export class WorldTimeSystem implements System<WorldTimeState> {
+export class WorldTimeSystem implements System {
   private local = { time: new Date() };
 
   constructor(date: Date) {

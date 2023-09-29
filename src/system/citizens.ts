@@ -48,7 +48,7 @@ export interface CitizensState {
   citizens: Citizen[];
 }
 
-export class CitizensSystem implements System<CitizensState> {
+export class CitizensSystem implements System {
   constructor(private local: Citizen[] = []) {}
 
   tick(_delta: number, _global: State[]): CitizensState {

@@ -9,7 +9,7 @@ import { System } from "./system";
  * 3. A callback for external I/O.
  */
 export class Engine {
-  private systems: System<State>[] = [];
+  private systems: System[] = [];
 
   constructor(
     private state: State[] = [],
@@ -19,7 +19,7 @@ export class Engine {
     setInterval(this.tick.bind(this), this.tickInterval);
   }
 
-  addSystem(system: System<State>) {
+  addSystem(system: System) {
     this.systems.push(system);
 
     return this;
