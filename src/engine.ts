@@ -34,7 +34,7 @@ export class Engine {
   /**
    * This calls systems, which are the meat and potatoes of the simulation.
    *
-   * Order is important.
+   * Order is very important.
    */
   private tick() {
     this.state = this.systems.map((sys) => {
@@ -43,10 +43,10 @@ export class Engine {
 
     /**
      * Allow arbitrary behaviour like I/O.
-     * This might slow down tick speed if really slow I/O is being done.
      *
-     * In our app, this callback is generally calling postMessage in a worker,
-     * which can be slow due to copying data between thread boundaries.
+     * The callback in index.tsx is the websocket invocation,
+     * which will now slow down the next tick. This might need
+     * to change.
      */
     this.updateCallback(this.state);
   }

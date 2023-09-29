@@ -54,6 +54,7 @@ export const server = Bun.serve({
     },
   },
 });
+
 /**
  * Web Server Setup
  */

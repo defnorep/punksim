@@ -3,6 +3,8 @@ import { State } from "../src/state";
 import { Time } from "./global";
 
 export const Sim = (props: { states: State[] }) => {
+  // Time will tell if this routing belongs in the template.
+  // Maybe we just get rid of the Sim component and compose these directly.
   const jsx = props.states.map((state) => {
     switch (state.kind) {
       case "worldtime":

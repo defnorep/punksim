@@ -51,7 +51,7 @@ export interface CitizensState {
 export class CitizensSystem implements System<CitizensState> {
   constructor(private local: Citizen[] = []) {}
 
-  tick(delta: number, _global: State[]): CitizensState {
+  tick(_delta: number, _global: State[]): CitizensState {
     return {
       kind: "citizens",
       census: deriveCensus(this.local),
