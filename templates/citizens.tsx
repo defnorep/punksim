@@ -1,4 +1,4 @@
-import { Census, Citizen, age } from "../src/citizens";
+import { Census, Citizen, age } from "../src/system/citizens";
 
 export const CitizensCensus = (props: { census: Census }) => (
   <div id="citizens-census">

@@ -1,3 +1,5 @@
 import { State } from "./state";
 
-export type System = (delta: number, state: State) => void;
+export interface System<T extends State> {
+  tick(delta: number, global: State[]): T;
+}

@@ -1,6 +1,6 @@
 # Cyberpunk City Simulator
 
-Things to simulate:
+## Things to simulate:
 
 - Citizens
   - Births, Deaths

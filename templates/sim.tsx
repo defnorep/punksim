@@ -1,12 +1,18 @@
 import { CitizensCensus, CitizensDetail } from "./citizens";
 import { State } from "../src/state";
-import { deriveCensus } from "../src/citizens";
 import { Time } from "./global";
 
-export const Sim = (props: { state: State }) => (
-  <div id="sim">
-    <Time time={props.state.worldTimeState.time} />
-    <CitizensCensus census={deriveCensus(props.state.getCitizens())} />
-    <CitizensDetail citizens={props.state.getCitizens()} />
-  </div>
-);
+export const Sim = (props: { states: State[] }) => {
+  const jsx = props.states.map((state) => {
+    switch (state.kind) {
+      case "worldtime":
+        return <Time time={state.time.getTime()} />;
+      case "citizens":
+        return [
+          <CitizensCensus census={state.census} />,
+          <CitizensDetail citizens={state.citizens} />,
+        ];
+    }
+  });
+  return <div id="sim">{jsx}</div>;
+};

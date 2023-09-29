@@ -1,6 +1,7 @@
-import { nextTick } from "process";
-import names from "../data/names.json";
-import { randomBytes, randomInt } from "crypto";
+import { randomInt, randomBytes } from "crypto";
+import { State } from "../state";
+import { System } from "../system";
+import names from "../../data/names.json";
 
 export enum Species {
   Android = "Android",
@@ -39,6 +40,24 @@ export interface Census {
     female: number;
     noGender: number;
   };
+}
+
+export interface CitizensState {
+  kind: "citizens";
+  census: Census;
+  citizens: Citizen[];
+}
+
+export class CitizensSystem implements System<CitizensState> {
+  constructor(private local: Citizen[] = []) {}
+
+  tick(delta: number, _global: State[]): CitizensState {
+    return {
+      kind: "citizens",
+      census: deriveCensus(this.local),
+      citizens: this.local,
+    };
+  }
 }
 
 export const deriveCensus = (citizens: Citizen[]) => {

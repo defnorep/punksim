@@ -9,13 +9,26 @@ import { System } from "./system";
  * 3. A callback for external I/O.
  */
 export class Engine {
+  private systems: System<State>[] = [];
+
   constructor(
-    private state: State = State.empty(),
-    private systems: System[] = [],
-    private tickCallback: (state: State) => void,
+    private state: State[] = [],
+    private updateCallback: (global: any) => void,
     private tickInterval: number = 500,
   ) {
     setInterval(this.tick.bind(this), this.tickInterval);
+  }
+
+  addSystem(system: System<State>) {
+    this.systems.push(system);
+
+    return this;
+  }
+
+  onUpdate(callback: (global: Map<any, any>) => void) {
+    this.updateCallback = callback;
+
+    return this;
   }
 
   /**
@@ -24,8 +37,8 @@ export class Engine {
    * Order is important.
    */
   private tick() {
-    this.systems.forEach((system) => {
-      system(this.tickInterval, this.state);
+    this.state = this.systems.map((sys) => {
+      return sys.tick(this.tickInterval, this.state);
     });
 
     /**
@@ -35,6 +48,6 @@ export class Engine {
      * In our app, this callback is generally calling postMessage in a worker,
      * which can be slow due to copying data between thread boundaries.
      */
-    this.tickCallback(this.state);
+    this.updateCallback(this.state);
   }
 }

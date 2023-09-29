@@ -2,8 +2,23 @@ import { State } from "../state";
 import { System } from "../system";
 
 export interface WorldTimeState {
-  time: number;
+  kind: "worldtime";
+  time: Date;
 }
-export const worldTimeSystem: System = (delta: number, state: State) => {
-  state.worldTimeState.time += delta;
-};
+
+export class WorldTimeSystem implements System<WorldTimeState> {
+  private local = { time: new Date() };
+
+  constructor(date: Date) {
+    this.local.time = date;
+  }
+
+  tick(delta: number, _global: State[]): WorldTimeState {
+    this.local.time.setTime(this.local.time.getTime() + delta);
+
+    return {
+      kind: "worldtime",
+      time: this.local.time,
+    };
+  }
+}

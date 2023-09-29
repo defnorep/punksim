@@ -4,39 +4,30 @@ import { Hono } from "hono";
 import { Sim } from "./templates/sim";
 import { serveStatic } from "hono/bun";
 import { Layout } from "./templates/layout";
+import { Engine } from "./src/engine";
+import { WorldTimeSystem } from "./src/system/worldTime";
+import { CitizensSystem, generateCitizen } from "./src/system/citizens";
+import seed from "./data/seed.json";
+
+/**
+ * Generate Seed Data
+ */
+const citizens = Array(seed.base.citizens)
+  .fill(1)
+  .map(() => generateCitizen(80));
 
 /**
  * Simulation setup.
  *
- * We need a valid state to start with.
- * It's possible a client connects before we have received an update
- * message from the worker, however unlikely.
  */
-const state = State.empty();
-const engine = new Worker(new URL("./src/engineWorker.ts", import.meta.url));
+new Engine([], (states: State[]) => {
+  sockets.forEach((ws) => {
+    ws.send(<Sim states={states} />);
+  });
+})
+  .addSystem(new WorldTimeSystem(new Date(seed.base.date)))
+  .addSystem(new CitizensSystem(citizens));
 
-engine.addEventListener("message", (event: MessageEvent) => {
-  // Ignore any messages that don't have a command property.
-  if (!event.data?.cmd) {
-    return;
-  }
-
-  // Message router
-  switch (event.data.cmd) {
-    case "update":
-      // Any class instances are serialized when sent across postMessage.
-      // This means we have to patch the State instance on this side of the worker.
-      state.setCitizens(event.data.state.citizens);
-      state.worldTimeState = event.data.state.worldTimeState;
-      break;
-    default:
-      break;
-  }
-});
-
-/**
- * Websocket setup.
- */
 let sockets: Set<ServerWebSocket<unknown>> = new Set();
 
 export const server = Bun.serve({
@@ -63,17 +54,6 @@ export const server = Bun.serve({
     },
   },
 });
-
-/**
- * At some interval, update all connected clients
- * if there are any.
- */
-setInterval(() => {
-  sockets.forEach((ws) => {
-    ws.send(<Sim state={state} />);
-  });
-}, 1000);
-
 /**
  * Web Server Setup
  */
@@ -82,7 +62,7 @@ const app = new Hono();
 app.get("/", (c) =>
   c.html(
     <Layout title="Cyberpunk City Simulator">
-      <Sim state={state} />
+      <Sim states={[]} />
     </Layout>,
   ),
 );
