@@ -10,13 +10,15 @@ import seed from "./data/seed.json";
 
 /**
  * Generate/Collect Seed Data
+ * Let's use the fast seed layer all the time for now.
+ * Maybe we will slow things down in the future when there is more to watch.
  */
-const citizens = Array(seed.base.citizens)
+const config = { ...seed.base, ...seed.fast };
+const date = new Date(config.date);
+const rateOfTime = config.rateOfTime;
+const citizens = Array(config.citizens)
   .fill(1)
-  .map(() => generateCitizen(80));
-
-const date = new Date(seed.base.date);
-const rateOfTime = seed.base.rateOfTime;
+  .map(() => generateCitizen(date, 80));
 
 /**
  * Simulation setup.

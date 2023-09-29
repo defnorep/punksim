@@ -52,7 +52,7 @@ export const CitizensDetail = (props: { citizens: Citizen[] }) => (
             <td>{citizen.name}</td>
             <td>{citizen.surname}</td>
             <td>{citizen.id}</td>
-            <td>{age(citizen.birthdate)}</td>
+            <td>{citizen.age}</td>
             <td>{citizen.gender.toString()}</td>
             <td>{citizen.height} cm</td>
             <td>{citizen.weight} kg</td>

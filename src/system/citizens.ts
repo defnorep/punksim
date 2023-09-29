@@ -2,6 +2,7 @@ import { randomInt, randomBytes } from "crypto";
 import { State } from "../system";
 import { System } from "../system";
 import names from "../../data/names.json";
+import { TimeState } from "./time";
 
 export enum Species {
   Android = "Android",
@@ -20,7 +21,8 @@ export enum Gender {
 }
 
 export interface Citizen {
-  birthdate: number; // epoch milliseconds
+  age: number;
+  birthdate: Date;
   height: number; // cm
   id: string;
   name: string;
@@ -51,7 +53,19 @@ export interface CitizensState {
 export class CitizensSystem implements System {
   constructor(private local: Citizen[] = []) {}
 
-  tick(_delta: number, _global: State[]): CitizensState {
+  tick(_delta: number, global: State[]): CitizensState {
+    const timestate = global
+      .filter((state): state is TimeState => state.kind === "time")
+      .at(0);
+
+    if (timestate) {
+      this.local = this.local.map((citizen) => {
+        citizen.age = age(citizen.birthdate, timestate.datetime);
+
+        return citizen;
+      });
+    }
+
     return {
       kind: "citizens",
       census: deriveCensus(this.local),
@@ -94,13 +108,16 @@ export const deriveCensus = (citizens: Citizen[]) => {
   };
 };
 
-export const generateCitizen = (ageJitter: number = 0): Citizen => {
-  const now = new Date();
+export const generateCitizen = (
+  referenceDate: Date,
+  ageJitter: number = 0,
+): Citizen => {
   const isAndroid = Math.random() > 0.7;
   const species = isAndroid ? Species.Android : Species.Human;
   const names = generateCitizenName(species);
-  const birthdate = new Date().setFullYear(
-    now.getFullYear() - Math.round(Math.random() * ageJitter),
+  const birthdate = new Date();
+  birthdate.setFullYear(
+    referenceDate.getFullYear() - Math.round(Math.random() * ageJitter),
   );
 
   const genderRoll = randomInt(0, 3);
@@ -114,6 +131,7 @@ export const generateCitizen = (ageJitter: number = 0): Citizen => {
 
   return {
     birthdate,
+    age: age(birthdate, referenceDate),
     height: randomInt(150, 190),
     id: randomBytes(4).toString("hex"),
     name: names[0],
@@ -125,8 +143,8 @@ export const generateCitizen = (ageJitter: number = 0): Citizen => {
   };
 };
 
-export const age = (birthdate: number) => {
-  return new Date().getFullYear() - new Date(birthdate).getFullYear();
+export const age = (birthdate: Date, reference: Date) => {
+  return reference.getFullYear() - new Date(birthdate).getFullYear();
 };
 
 export const generateCitizenName = (species: Species = Species.Human) => {
