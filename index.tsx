@@ -10,11 +10,13 @@ import { CitizensSystem, generateCitizen } from "./src/system/citizens";
 import seed from "./data/seed.json";
 
 /**
- * Generate Seed Data
+ * Generate/Collect Seed Data
  */
 const citizens = Array(seed.base.citizens)
   .fill(1)
   .map(() => generateCitizen(80));
+
+const date = new Date(seed.base.date);
 
 /**
  * Simulation setup.
@@ -22,10 +24,13 @@ const citizens = Array(seed.base.citizens)
  */
 new Engine([], (states: State[]) => {
   sockets.forEach((ws) => {
+    // This being in the callback WILL slow down the simulation
+    // since all sockets must be updated before the tick finishes.
+    // Let's try to profile this in order to fix it correctly.
     ws.send(<Sim states={states} />);
   });
 })
-  .addSystem(new WorldTimeSystem(new Date(seed.base.date)))
+  .addSystem(new WorldTimeSystem(date))
   .addSystem(new CitizensSystem(citizens));
 
 let sockets: Set<ServerWebSocket<unknown>> = new Set();
