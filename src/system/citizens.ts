@@ -57,6 +57,8 @@ export class CitizensSystem implements System {
       .filter((state): state is TimeState => state.kind === "time")
       .at(0);
 
+    // I'm not the biggest fan in the world of having to do this,
+    // but the state might actually not exist in the global array yet.
     if (timestate) {
       this.local = this.local.map((citizen) => {
         citizen.age = age(citizen.birthdate, timestate.datetime);
