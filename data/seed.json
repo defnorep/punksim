@@ -1,6 +1,7 @@
 {
   "base": {
     "date": "2200/01/01",
-    "citizens": 20
+    "citizens": 20,
+    "rateOfTime": 1.0
   }
 }

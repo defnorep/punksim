@@ -7,7 +7,7 @@ export const Sim = (props: { states: State[] }) => {
   // Maybe we just get rid of the Sim component and compose these directly.
   const jsx = props.states.map((state) => {
     switch (state.kind) {
-      case "worldtime":
+      case "time":
         return <Time time={state.time.getTime()} />;
       case "citizens":
         return [

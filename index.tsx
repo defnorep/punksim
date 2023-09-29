@@ -1,11 +1,10 @@
 import { ServerWebSocket } from "bun";
-import { State } from "./src/system";
 import { Hono } from "hono";
 import { Sim } from "./templates/sim";
 import { serveStatic } from "hono/bun";
 import { Layout } from "./templates/layout";
 import { Engine } from "./src/engine";
-import { WorldTimeSystem } from "./src/system/worldTime";
+import { TimeSystem } from "./src/system/time";
 import { CitizensSystem, generateCitizen } from "./src/system/citizens";
 import seed from "./data/seed.json";
 
@@ -17,13 +16,14 @@ const citizens = Array(seed.base.citizens)
   .map(() => generateCitizen(80));
 
 const date = new Date(seed.base.date);
+const rateOfTime = seed.base.rateOfTime;
 
 /**
  * Simulation setup.
  *
  */
 const engine = new Engine()
-  .addSystem(new WorldTimeSystem(date))
+  .addSystem(new TimeSystem(date, rateOfTime))
   .addSystem(new CitizensSystem(citizens));
 
 setInterval(() => {
