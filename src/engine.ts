@@ -25,12 +25,6 @@ export class Engine {
     return this;
   }
 
-  onUpdate(callback: (global: Map<any, any>) => void) {
-    this.updateCallback = callback;
-
-    return this;
-  }
-
   /**
    * This calls systems, which are the meat and potatoes of the simulation.
    *
