@@ -1,5 +1,5 @@
 import { randomInt, randomBytes } from "crypto";
-import { State } from "../state";
+import { State } from "../system";
 import { System } from "../system";
 import names from "../../data/names.json";
 

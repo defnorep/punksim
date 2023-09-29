@@ -1,5 +1,5 @@
 import { ServerWebSocket } from "bun";
-import { State } from "./src/state";
+import { State } from "./src/system";
 import { Hono } from "hono";
 import { Sim } from "./templates/sim";
 import { serveStatic } from "hono/bun";
