@@ -32,7 +32,7 @@ const citizens = Array(config.citizens)
  * Simulation setup.
  */
 const ecs = new Ecs();
-const engine = new Engine(ecs)
+new Engine(ecs)
   .addSystem(new NetSystem(ecs))
   .addSystem(new TimeSystem(ecs, date, rateOfTime))
   .addSystem(new CitizenPopulatorSystem(ecs, date, citizens))

@@ -2,29 +2,9 @@ import { HtmlEscapedString } from "hono/utils/html";
 import { CitizensCensus, CitizensDetail } from "../../templates/citizens";
 import { Time } from "../../templates/global";
 import { Ecs, Entity, System } from "../ecs";
-import { CitizenComponent, deriveCensus } from "./citizens";
+import { Citizen, deriveCensus } from "./citizens";
 import { SocketConnection } from "./net";
 import { FlowingTime } from "./time";
-
-const broadcast = (ecs: Ecs, message: HtmlEscapedString) => {
-  const connections = ecs
-    .getEntities()
-    .map((entity) =>
-      ecs
-        .getComponents(entity)
-        .find(
-          (component): component is SocketConnection =>
-            component.kind === "socket",
-        ),
-    )
-    .filter(
-      (connection): connection is SocketConnection => connection !== undefined,
-    );
-
-  for (const connection of connections) {
-    connection.socket.send(message);
-  }
-};
 
 export class TimeUi extends System {
   update(_delta: number, entities: string[]): void {
@@ -51,7 +31,7 @@ export class CensusUi extends System {
       .map((entity) => {
         return this.ecs.getComponents(entity);
       })
-      .filter((components): components is CitizenComponent[] =>
+      .filter((components): components is Citizen[] =>
         components.some((component) => component.kind === "citizen"),
       )
       .flat();
@@ -66,7 +46,7 @@ export class CitizensUi extends System {
       .map((entity) => {
         return this.ecs.getComponents(entity);
       })
-      .filter((components): components is CitizenComponent[] =>
+      .filter((components): components is Citizen[] =>
         components.some((component) => component.kind === "citizen"),
       )
       .flat();
@@ -74,3 +54,23 @@ export class CitizensUi extends System {
     broadcast(this.ecs, <CitizensDetail citizens={citizens} />);
   }
 }
+
+const broadcast = (ecs: Ecs, message: HtmlEscapedString) => {
+  const connections = ecs
+    .getEntities()
+    .map((entity) =>
+      ecs
+        .getComponents(entity)
+        .find(
+          (component): component is SocketConnection =>
+            component.kind === "socket",
+        ),
+    )
+    .filter(
+      (connection): connection is SocketConnection => connection !== undefined,
+    );
+
+  for (const connection of connections) {
+    connection.socket.send(message);
+  }
+};

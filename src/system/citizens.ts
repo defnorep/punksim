@@ -20,6 +20,7 @@ export enum Gender {
 }
 
 export interface Citizen {
+  kind: "citizen";
   age: number;
   birthdate: Date;
   height: number; // cm
@@ -41,10 +42,6 @@ export interface Census {
     female: number;
     noGender: number;
   };
-}
-
-export interface CitizenComponent extends Citizen {
-  kind: "citizen";
 }
 
 export interface CitizensState {
@@ -80,8 +77,7 @@ export class CitizensAgeSystem extends System {
 
     citizens.forEach((citizen) => {
       const citizenComponent = citizen.find(
-        (component): component is CitizenComponent =>
-          component.kind === "citizen",
+        (component): component is Citizen => component.kind === "citizen",
       );
 
       if (citizenComponent && time) {
@@ -97,43 +93,12 @@ export class CitizensPopulator extends System {
     super(ecs);
 
     citizens.forEach((citizen) => {
-      const citizenComponent: CitizenComponent = {
-        kind: "citizen",
-        ...citizen,
-      };
-
-      this.ecs.createEntity([citizenComponent]);
+      this.ecs.createEntity([citizen]);
     });
   }
 
   update(delta: number, entities: string[]): void {}
 }
-
-// export class CitizensSystem implements System {
-//   constructor(private local: Citizen[] = []) {}
-
-//   tick(_delta: number, global: State[]): CitizensState {
-//     const timestate = global
-//       .filter((state): state is TimeState => state.kind === "time")
-//       .at(0);
-
-//     // I'm not the biggest fan in the world of having to do this,
-//     // but the state might actually not exist in the global array yet.
-//     if (timestate) {
-//       this.local = this.local.map((citizen) => {
-//         citizen.age = age(citizen.birthdate, timestate.datetime);
-
-//         return citizen;
-//       });
-//     }
-
-//     return {
-//       kind: "citizens",
-//       census: deriveCensus(this.local),
-//       citizens: this.local,
-//     };
-//   }
-// }
 
 export const deriveCensus = (citizens: Citizen[]) => {
   return {
@@ -191,10 +156,11 @@ export const generateCitizen = (
   }
 
   return {
-    birthdate,
     age: age(birthdate, referenceDate),
+    birthdate,
     height: randomInt(150, 190),
     id: randomBytes(4).toString("hex"),
+    kind: "citizen",
     name: names[0],
     gender,
     species,
