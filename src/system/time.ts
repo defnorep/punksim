@@ -1,12 +1,13 @@
 import { Ecs, Entity, System } from "../ecs";
 
 export interface FlowingTime {
-  kind: "time";
+  kind: "flowingtime";
   datetime: Date;
   rate: number;
 }
 
 export class TimeSystem extends System {
+  components = ["flowingtime"];
   private entity: Entity;
 
   constructor(
@@ -16,7 +17,7 @@ export class TimeSystem extends System {
   ) {
     super(ecs);
     const time = {
-      kind: "time",
+      kind: "flowingtime",
       datetime: this.datetime,
       rate: this.rate,
     };
@@ -24,11 +25,13 @@ export class TimeSystem extends System {
     this.entity = ecs.createEntity([time]);
   }
 
-  update(delta: number, _entities: string[]): void {
-    const time = this.ecs
-      // should caching an entity be illegal? :thinking_face:
-      .getComponents(this.entity)
-      .find((component): component is FlowingTime => component.kind === "time");
+  update(delta: number, entities: FlowingTime[][]): void {
+    const time = entities
+      .at(0)
+      ?.find(
+        (component): component is FlowingTime =>
+          component.kind === "flowingtime",
+      );
 
     if (time) {
       time.datetime.setTime(time.datetime.getTime() + delta * time.rate);

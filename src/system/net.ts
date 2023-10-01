@@ -1,5 +1,5 @@
 import { Server, ServerWebSocket } from "bun";
-import { Ecs, Entity, System } from "../ecs";
+import { Ecs, Entity, EntityComponents, System } from "../ecs";
 
 export interface SocketConnection {
   kind: "socket";
@@ -11,6 +11,7 @@ interface WebSocketData {
 }
 
 export class NetSystem extends System {
+  components = ["socket"];
   server: Server;
 
   constructor(ecs: Ecs) {
@@ -48,5 +49,5 @@ export class NetSystem extends System {
     });
   }
 
-  update(_delta: number, entities: string[]): void {}
+  update(_delta: number, entities: EntityComponents): void {}
 }

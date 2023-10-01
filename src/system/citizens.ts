@@ -1,6 +1,6 @@
 import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
-import { Ecs, System } from "../ecs";
+import { Ecs, EntityComponents, System } from "../ecs";
 import { FlowingTime } from "./time";
 
 export enum Species {
@@ -50,30 +50,22 @@ export interface CitizensState {
   citizens: Citizen[];
 }
 
-export class CensusSystem extends System {
-  update(delta: number, entities: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-}
-
 export class CitizensAgeSystem extends System {
-  update(_delta: number, entities: string[]): void {
+  components = ["citizen", "flowingtime"];
+  update(_delta: number, entities: (Citizen | FlowingTime)[][]): void {
     const time = entities
-      .map((entity) =>
-        this.ecs
-          .getComponents(entity)
-          .find(
-            (component): component is FlowingTime => component.kind === "time",
-          ),
-      )
-      .filter((time): time is FlowingTime => time !== undefined)
-      .at(0);
-
-    const citizens = entities
-      .map((entity) => this.ecs.getComponents(entity))
       .filter((components) =>
-        components.some((component) => component.kind === "citizen"),
+        components.some((component) => component.kind === "flowingtime"),
+      )
+      .at(0)
+      ?.find(
+        (component): component is FlowingTime =>
+          component.kind === "flowingtime",
       );
+
+    const citizens = entities.filter((components): components is Citizen[] =>
+      components.some((component) => component.kind === "citizen"),
+    );
 
     citizens.forEach((citizen) => {
       const citizenComponent = citizen.find(
@@ -89,6 +81,7 @@ export class CitizensAgeSystem extends System {
 
 // @todo Candidate for Startup System
 export class CitizensPopulator extends System {
+  components = ["citizen"];
   constructor(ecs: Ecs, date: Date, citizens: Citizen[]) {
     super(ecs);
 
@@ -97,7 +90,7 @@ export class CitizensPopulator extends System {
     });
   }
 
-  update(delta: number, entities: string[]): void {}
+  update(delta: number, entities: EntityComponents): void {}
 }
 
 export const deriveCensus = (citizens: Citizen[]) => {

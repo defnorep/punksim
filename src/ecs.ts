@@ -2,12 +2,14 @@ import { randomBytes } from "crypto";
 
 export type Entity = string;
 
+export type EntityComponents = Component[][];
+
 export type Component = { kind: string };
 
 export abstract class System {
-  // abstract readonly components: string[];
+  abstract readonly components: string[];
   constructor(protected ecs: Ecs) {}
-  abstract update(delta: number, entities: Entity[]): void;
+  abstract update(delta: number, entities: EntityComponents): void;
 }
 
 export class Ecs {
@@ -46,7 +48,15 @@ export class Ecs {
 
   update(delta: number) {
     this.systems.forEach((system) => {
-      system.update(delta, [...this.entities.keys()]);
+      const entities = this.getEntities()
+        .map((entity) => this.getComponents(entity))
+        .filter((components) =>
+          components.some((component) =>
+            system.components.includes(component.kind),
+          ),
+        );
+
+      system.update(delta, entities);
     });
   }
 }
