@@ -3,22 +3,6 @@ import names from "../../data/names.json";
 import { Component, Ecs, Entity, System } from "../ecs";
 import { FlowingTime } from "./time";
 
-export enum Species {
-  Android = "Android",
-  Human = "Human",
-}
-
-export enum Status {
-  Living = "Living",
-  Deceased = "Deceased",
-}
-
-export enum Gender {
-  Male = "Male",
-  Female = "Female",
-  None = "None",
-}
-
 export class Citizen extends Component {
   constructor(
     public age: number,
@@ -34,6 +18,22 @@ export class Citizen extends Component {
   ) {
     super();
   }
+}
+
+export enum Species {
+  Android = "Android",
+  Human = "Human",
+}
+
+export enum Status {
+  Living = "Living",
+  Deceased = "Deceased",
+}
+
+export enum Gender {
+  Male = "Male",
+  Female = "Female",
+  None = "None",
 }
 
 export interface Census {
@@ -86,7 +86,7 @@ export class CitizensPopulator extends System {
   }
 }
 
-export const deriveCensus = (citizens: Citizen[]) => {
+export const deriveCensus = (citizens: Citizen[]): Census => {
   return {
     population: citizens.reduce(
       (population, citizen) => {
