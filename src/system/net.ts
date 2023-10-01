@@ -10,6 +10,7 @@ interface WebSocketData {
   entity: Entity;
 }
 
+// @todo Candidate for a Startup System
 export class NetSystem extends System {
   components = ["socket"];
   server: Server;
