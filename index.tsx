@@ -32,14 +32,16 @@ const citizens = Array(config.citizens)
  * Simulation setup.
  */
 const ecs = new Ecs();
-new Engine(ecs)
-  .addSystem(new NetSystem(ecs))
+ecs
+  .addStartupSystem(new NetSystem(ecs))
+  .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
   .addSystem(new TimeSystem(ecs, date, rateOfTime))
-  .addSystem(new CitizenPopulatorSystem(ecs, date, citizens))
   .addSystem(new CitizenAgingSystem(ecs))
   .addSystem(new CensusUi(ecs))
   .addSystem(new CitizensUi(ecs))
   .addSystem(new TimeUi(ecs));
+
+new Engine(ecs).start();
 
 /**
  * Web Server Setup

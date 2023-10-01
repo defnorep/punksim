@@ -14,6 +14,7 @@ export abstract class System {
 
 export class Ecs {
   private entities: Map<Entity, Component[]> = new Map();
+  private startupSystems: System[] = [];
   private systems: System[] = [];
 
   createEntity(components: Component[]): Entity {
@@ -42,21 +43,35 @@ export class Ecs {
     return this.entities.get(entity) ?? [];
   }
 
-  addSystem(system: System): void {
+  addSystem(system: System): Ecs {
     this.systems.push(system);
+
+    return this;
+  }
+
+  addStartupSystem(system: System): Ecs {
+    this.startupSystems.push(system);
+
+    return this;
+  }
+
+  startup() {
+    this.startupSystems.forEach((system) => {
+      system.update(0, this.filterEntityComponents(system.components));
+    });
   }
 
   update(delta: number) {
     this.systems.forEach((system) => {
-      const entities = this.getEntities()
-        .map((entity) => this.getComponents(entity))
-        .filter((components) =>
-          components.some((component) =>
-            system.components.includes(component.kind),
-          ),
-        );
-
-      system.update(delta, entities);
+      system.update(delta, this.filterEntityComponents(system.components));
     });
+  }
+
+  private filterEntityComponents(query: string[]): Component[][] {
+    return this.getEntities()
+      .map((entity) => this.getComponents(entity))
+      .filter((components) =>
+        components.some((component) => query.includes(component.kind)),
+      );
   }
 }

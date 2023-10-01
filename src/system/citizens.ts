@@ -79,18 +79,20 @@ export class CitizensAgeSystem extends System {
   }
 }
 
-// @todo Candidate for Startup System
 export class CitizensPopulator extends System {
   components = ["citizen"];
-  constructor(ecs: Ecs, date: Date, citizens: Citizen[]) {
+  constructor(
+    ecs: Ecs,
+    private citizens: Citizen[],
+  ) {
     super(ecs);
+  }
 
-    citizens.forEach((citizen) => {
+  update(_delta: number, _entities: EntityComponents): void {
+    this.citizens.forEach((citizen) => {
       this.ecs.createEntity([citizen]);
     });
   }
-
-  update(delta: number, entities: EntityComponents): void {}
 }
 
 export const deriveCensus = (citizens: Citizen[]) => {

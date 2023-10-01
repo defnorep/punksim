@@ -1,5 +1,5 @@
-import { Server, ServerWebSocket } from "bun";
-import { Ecs, Entity, EntityComponents, System } from "../ecs";
+import { ServerWebSocket } from "bun";
+import { Entity, EntityComponents, System } from "../ecs";
 
 export interface SocketConnection {
   kind: "socket";
@@ -10,21 +10,18 @@ interface WebSocketData {
   entity: Entity;
 }
 
-// @todo Candidate for a Startup System
 export class NetSystem extends System {
-  components = ["socket"];
-  server: Server;
+  components = [];
 
-  constructor(ecs: Ecs) {
-    super(ecs);
-    this.server = Bun.serve<WebSocketData>({
+  update(_delta: number, _entities: EntityComponents): void {
+    Bun.serve<WebSocketData>({
       port: 3001,
-      fetch(req, server) {
+      fetch: (req, server) => {
         console.log(`Client connecting`);
         if (
           server.upgrade(req, {
             data: {
-              entity: ecs.createEntity([]),
+              entity: this.ecs.createEntity([]),
             },
           })
         ) {
@@ -34,21 +31,19 @@ export class NetSystem extends System {
         return new Response("Upgrade failed.", { status: 250 });
       },
       websocket: {
-        open(ws) {
+        open: (ws) => {
           console.log(`Client connected: `, ws.remoteAddress);
           const conn = { kind: "socket", socket: ws };
-          ecs.addComponents(ws.data.entity, [conn]);
+          this.ecs.addComponents(ws.data.entity, [conn]);
         },
         // Bun requires this method to be implemented
         // even though we aren't receiving any messages right now.
         message() {},
-        close(ws) {
+        close: (ws) => {
           console.log(`Client disconnected: `, ws.remoteAddress);
-          ecs.destroyEntity(ws.data.entity);
+          this.ecs.destroyEntity(ws.data.entity);
         },
       },
     });
   }
-
-  update(_delta: number, entities: EntityComponents): void {}
 }
