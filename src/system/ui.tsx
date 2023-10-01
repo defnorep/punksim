@@ -6,7 +6,10 @@ import { Citizen, deriveCensus } from "./citizens";
 import { SocketConnection } from "./net";
 import { FlowingTime } from "./time";
 
-export class TimeUi extends System {
+/**
+ * Broadcasts the current time to all connected clients.
+ */
+export class TimeUiSystem extends System {
   update(_delta: number, entities: Entity[]): void {
     const entity = entities.find((entity) =>
       this.ecs.getComponents(entity).has(FlowingTime),
@@ -22,7 +25,10 @@ export class TimeUi extends System {
   }
 }
 
-export class CensusUi extends System {
+/**
+ * Broadcasts the current census to all connected clients.
+ */
+export class CensusUiSystem extends System {
   update(_delta: number, entities: Entity[]): void {
     const citizens = this.ecs.reduceToComponent(Citizen);
 
@@ -30,7 +36,10 @@ export class CensusUi extends System {
   }
 }
 
-export class CitizensUi extends System {
+/**
+ * Broadcasts the current citizen details to all connected clients.
+ */
+export class CitizensUiSystem extends System {
   update(_delta: number, entities: Entity[]): void {
     const citizens = this.ecs.reduceToComponent(Citizen);
 

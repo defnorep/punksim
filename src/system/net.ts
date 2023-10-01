@@ -1,16 +1,9 @@
 import { ServerWebSocket } from "bun";
 import { Component, Entity, System } from "../ecs";
 
-export class SocketConnection extends Component {
-  constructor(public socket: ServerWebSocket<unknown>) {
-    super();
-  }
-}
-
-interface WebSocketData {
-  entity: Entity;
-}
-
+/**
+ * The NetSystem is responsible for managing the network connection.
+ */
 export class NetSystem extends System {
   update(_delta: number, _entities: Entity[]): void {
     Bun.serve<WebSocketData>({
@@ -44,4 +37,14 @@ export class NetSystem extends System {
       },
     });
   }
+}
+
+export class SocketConnection extends Component {
+  constructor(public socket: ServerWebSocket<unknown>) {
+    super();
+  }
+}
+
+interface WebSocketData {
+  entity: Entity;
 }

@@ -5,13 +5,17 @@ import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
 import {
   CitizensAgeSystem as CitizenAgingSystem,
-  CitizensPopulator as CitizenPopulatorSystem,
+  StartupCitizenPopulatorSystem as CitizenPopulatorSystem,
   deriveCensus,
   generateCitizen,
 } from "./src/system/citizens";
 import { NetSystem } from "./src/system/net";
 import { StartupTimeSystem, TimeSystem } from "./src/system/time";
-import { CensusUi, CitizensUi, TimeUi } from "./src/system/ui";
+import {
+  CensusUiSystem,
+  CitizensUiSystem,
+  TimeUiSystem,
+} from "./src/system/ui";
 import { CitizensCensus, CitizensDetail } from "./templates/citizens";
 import { Time } from "./templates/global";
 import { Layout } from "./templates/layout";
@@ -38,9 +42,9 @@ ecs
   .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
   .addSystem(new TimeSystem(ecs))
   .addSystem(new CitizenAgingSystem(ecs))
-  .addSystem(new CensusUi(ecs))
-  .addSystem(new CitizensUi(ecs))
-  .addSystem(new TimeUi(ecs));
+  .addSystem(new CensusUiSystem(ecs))
+  .addSystem(new CitizensUiSystem(ecs))
+  .addSystem(new TimeUiSystem(ecs));
 
 new Engine(ecs).start();
 

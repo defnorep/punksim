@@ -3,6 +3,42 @@ import names from "../../data/names.json";
 import { Component, Ecs, Entity, System } from "../ecs";
 import { FlowingTime } from "./time";
 
+/**
+ * The CitizensAgeSystem is responsible for aging citizens.
+ */
+export class CitizensAgeSystem extends System {
+  update(_delta: number, entities: Entity[]): void {
+    const time = this.ecs.reduceToComponent(FlowingTime).at(0); // scary; what if there are more?
+
+    if (!time) {
+      // we literally need more time
+      return;
+    }
+
+    for (const citizen of this.ecs.reduceToComponent(Citizen)) {
+      citizen.age = age(citizen.birthdate, time.datetime);
+    }
+  }
+}
+
+/**
+ * The CitizensPopulator is responsible for creating the initial set of citizens.
+ */
+export class StartupCitizenPopulatorSystem extends System {
+  constructor(
+    ecs: Ecs,
+    private citizens: Citizen[],
+  ) {
+    super(ecs);
+  }
+
+  update(_delta: number, _entities: Entity[]): void {
+    this.citizens.forEach((citizen) => {
+      this.ecs.createEntity(citizen);
+    });
+  }
+}
+
 export class Citizen extends Component {
   constructor(
     public age: number,
@@ -45,36 +81,6 @@ export interface Census {
     female: number;
     noGender: number;
   };
-}
-
-export class CitizensAgeSystem extends System {
-  update(_delta: number, entities: Entity[]): void {
-    const time = this.ecs.reduceToComponent(FlowingTime).at(0); // scary; what if there are more?
-
-    if (!time) {
-      // we literally need more time
-      return;
-    }
-
-    for (const citizen of this.ecs.reduceToComponent(Citizen)) {
-      citizen.age = age(citizen.birthdate, time.datetime);
-    }
-  }
-}
-
-export class CitizensPopulator extends System {
-  constructor(
-    ecs: Ecs,
-    private citizens: Citizen[],
-  ) {
-    super(ecs);
-  }
-
-  update(_delta: number, _entities: Entity[]): void {
-    this.citizens.forEach((citizen) => {
-      this.ecs.createEntity(citizen);
-    });
-  }
 }
 
 export const deriveCensus = (citizens: Citizen[]): Census => {
