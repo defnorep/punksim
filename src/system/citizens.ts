@@ -1,7 +1,7 @@
 import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
-import { State, System } from "../system";
-import { TimeState } from "./time";
+import { Ecs, System } from "../ecs";
+import { FlowingTime } from "./time";
 
 export enum Species {
   Android = "Android",
@@ -43,37 +43,97 @@ export interface Census {
   };
 }
 
+export interface CitizenComponent extends Citizen {
+  kind: "citizen";
+}
+
 export interface CitizensState {
   kind: "citizens";
   census: Census;
   citizens: Citizen[];
 }
 
-export class CitizensSystem implements System {
-  constructor(private local: Citizen[] = []) {}
-
-  tick(_delta: number, global: State[]): CitizensState {
-    const timestate = global
-      .filter((state): state is TimeState => state.kind === "time")
-      .at(0);
-
-    // I'm not the biggest fan in the world of having to do this,
-    // but the state might actually not exist in the global array yet.
-    if (timestate) {
-      this.local = this.local.map((citizen) => {
-        citizen.age = age(citizen.birthdate, timestate.datetime);
-
-        return citizen;
-      });
-    }
-
-    return {
-      kind: "citizens",
-      census: deriveCensus(this.local),
-      citizens: this.local,
-    };
+export class CensusSystem extends System {
+  update(delta: number, entities: string[]): void {
+    throw new Error("Method not implemented.");
   }
 }
+
+export class CitizensAgeSystem extends System {
+  update(_delta: number, entities: string[]): void {
+    const time = entities
+      .map((entity) =>
+        this.ecs
+          .getComponents(entity)
+          .find(
+            (component): component is FlowingTime => component.kind === "time",
+          ),
+      )
+      .filter((time): time is FlowingTime => time !== undefined)
+      .at(0);
+
+    const citizens = entities
+      .map((entity) => this.ecs.getComponents(entity))
+      .filter((components) =>
+        components.some((component) => component.kind === "citizen"),
+      );
+
+    citizens.forEach((citizen) => {
+      const citizenComponent = citizen.find(
+        (component): component is CitizenComponent =>
+          component.kind === "citizen",
+      );
+
+      if (citizenComponent && time) {
+        citizenComponent.age = age(citizenComponent.birthdate, time.datetime);
+      }
+    });
+  }
+}
+
+// @todo Candidate for Startup System
+export class CitizensPopulator extends System {
+  constructor(ecs: Ecs, date: Date, citizens: Citizen[]) {
+    super(ecs);
+
+    citizens.forEach((citizen) => {
+      const citizenComponent: CitizenComponent = {
+        kind: "citizen",
+        ...citizen,
+      };
+
+      this.ecs.createEntity([citizenComponent]);
+    });
+  }
+
+  update(delta: number, entities: string[]): void {}
+}
+
+// export class CitizensSystem implements System {
+//   constructor(private local: Citizen[] = []) {}
+
+//   tick(_delta: number, global: State[]): CitizensState {
+//     const timestate = global
+//       .filter((state): state is TimeState => state.kind === "time")
+//       .at(0);
+
+//     // I'm not the biggest fan in the world of having to do this,
+//     // but the state might actually not exist in the global array yet.
+//     if (timestate) {
+//       this.local = this.local.map((citizen) => {
+//         citizen.age = age(citizen.birthdate, timestate.datetime);
+
+//         return citizen;
+//       });
+//     }
+
+//     return {
+//       kind: "citizens",
+//       census: deriveCensus(this.local),
+//       citizens: this.local,
+//     };
+//   }
+// }
 
 export const deriveCensus = (citizens: Citizen[]) => {
   return {

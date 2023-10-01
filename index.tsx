@@ -1,12 +1,20 @@
-import { ServerWebSocket } from "bun";
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import seed from "./data/seed.json";
+import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
-import { CitizensSystem, generateCitizen } from "./src/system/citizens";
+import {
+  CitizensAgeSystem as CitizenAgingSystem,
+  CitizensPopulator as CitizenPopulatorSystem,
+  deriveCensus,
+  generateCitizen,
+} from "./src/system/citizens";
+import { NetSystem } from "./src/system/net";
 import { TimeSystem } from "./src/system/time";
+import { CensusUi, CitizensUi, TimeUi } from "./src/system/ui";
+import { CitizensCensus, CitizensDetail } from "./templates/citizens";
+import { Time } from "./templates/global";
 import { Layout } from "./templates/layout";
-import { Sim } from "./templates/sim";
 
 /**
  * Generate/Collect Seed Data
@@ -23,42 +31,15 @@ const citizens = Array(config.citizens)
 /**
  * Simulation setup.
  */
-const engine = new Engine()
-  .addSystem(new TimeSystem(date, rateOfTime))
-  .addSystem(new CitizensSystem(citizens));
-
-setInterval(() => {
-  sockets.forEach((ws) => {
-    ws.send(<Sim states={engine.getStates()} />);
-  });
-}, 500);
-
-let sockets: Set<ServerWebSocket<unknown>> = new Set();
-
-export const server = Bun.serve({
-  port: 3001,
-  fetch(req, server) {
-    console.log(`Client connecting`);
-    if (server.upgrade(req)) {
-      return;
-    }
-
-    return new Response("Upgrade failed.", { status: 250 });
-  },
-  websocket: {
-    open(ws) {
-      console.log(`Client connected: `, ws.remoteAddress);
-      sockets.add(ws);
-    },
-    // Bun requires this method to be implemented
-    // even though we aren't receiving any messages right now.
-    message() {},
-    close(ws) {
-      console.log(`Client disconnected: `, ws.remoteAddress);
-      sockets.delete(ws);
-    },
-  },
-});
+const ecs = new Ecs();
+const engine = new Engine(ecs)
+  .addSystem(new NetSystem(ecs))
+  .addSystem(new TimeSystem(ecs, date, rateOfTime))
+  .addSystem(new CitizenPopulatorSystem(ecs, date, citizens))
+  .addSystem(new CitizenAgingSystem(ecs))
+  .addSystem(new CensusUi(ecs))
+  .addSystem(new CitizensUi(ecs))
+  .addSystem(new TimeUi(ecs));
 
 /**
  * Web Server Setup
@@ -69,7 +50,9 @@ const app = new Hono();
 app.get("/", (c) =>
   c.html(
     <Layout title="Cyberpunk City Simulator">
-      <Sim states={[]} />
+      <Time datetime={date} />
+      <CitizensCensus census={deriveCensus(citizens)} />
+      <CitizensDetail citizens={citizens} />
     </Layout>,
   ),
 );

@@ -1,30 +1,37 @@
-import { State, System } from "../system";
+import { Ecs, Entity, System } from "../ecs";
 
-export interface TimeState {
+export interface FlowingTime {
   kind: "time";
   datetime: Date;
   rate: number;
 }
 
-export class TimeSystem implements System {
-  private local: { datetime: Date; rate: number };
+export class TimeSystem extends System {
+  private entity: Entity;
 
-  constructor(datetime: Date, rate = 1.0) {
-    this.local = {
-      datetime,
-      rate,
+  constructor(
+    ecs: Ecs,
+    private datetime: Date,
+    private rate = 1.0,
+  ) {
+    super(ecs);
+    const time = {
+      kind: "time",
+      datetime: this.datetime,
+      rate: this.rate,
     };
+
+    this.entity = ecs.createEntity([time]);
   }
 
-  tick(delta: number, _global: State[]): TimeState {
-    this.local.datetime.setTime(
-      this.local.datetime.getTime() + delta * this.local.rate,
-    );
+  update(delta: number, _entities: string[]): void {
+    const time = this.ecs
+      // should caching an entity be illegal? :thinking_face:
+      .getComponents(this.entity)
+      .find((component): component is FlowingTime => component.kind === "time");
 
-    return {
-      kind: "time",
-      datetime: this.local.datetime,
-      rate: this.local.rate,
-    };
+    if (time) {
+      time.datetime.setTime(time.datetime.getTime() + delta * time.rate);
+    }
   }
 }
