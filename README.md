@@ -40,4 +40,5 @@
   2. Systems are provided with entities that satisfy their required components.
   3. Benchmark and improve performance with aspects/archetypes and cache locality optimization.
 
-We definitely need some querying ergonomics. The Array.prototype soup is intense.
+We definitely need some querying ergonomics. The Array.prototype soup is intense. 
+It's also not _great_ juggling the Component type as well s the `kind` property. Hopefully updating the querying ergonomics will make this less prolific.

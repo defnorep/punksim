@@ -63,19 +63,19 @@ export class CitizensAgeSystem extends System {
           component.kind === "flowingtime",
       );
 
-    const citizens = entities.filter((components): components is Citizen[] =>
-      components.some((component) => component.kind === "citizen"),
-    );
+    entities
+      .filter((components): components is Citizen[] =>
+        components.some((component) => component.kind === "citizen"),
+      )
+      .forEach((citizen) => {
+        const citizenComponent = citizen.find(
+          (component): component is Citizen => component.kind === "citizen",
+        );
 
-    citizens.forEach((citizen) => {
-      const citizenComponent = citizen.find(
-        (component): component is Citizen => component.kind === "citizen",
-      );
-
-      if (citizenComponent && time) {
-        citizenComponent.age = age(citizenComponent.birthdate, time.datetime);
-      }
-    });
+        if (citizenComponent && time) {
+          citizenComponent.age = age(citizenComponent.birthdate, time.datetime);
+        }
+      });
   }
 }
 
