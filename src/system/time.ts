@@ -28,11 +28,9 @@ export class TimeSystem extends System {
     super(ecs);
   }
 
-  update(delta: number, entities: Entity[]): void {
-    entities
-      .map((entity) => this.ecs.getComponents(entity))
-      .filter((components) => components.has(FlowingTime))
-      .map((components) => components.get(FlowingTime))
+  update(delta: number, _entities: Entity[]): void {
+    this.ecs
+      .reduceToComponent(FlowingTime)
       .forEach((time) =>
         time.datetime.setTime(time.datetime.getTime() + delta * time.rate),
       );

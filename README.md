@@ -42,3 +42,5 @@
 
 We definitely need some querying ergonomics. The Array.prototype soup is intense. 
 It's also not _great_ juggling the Component type as well s the `kind` property. Hopefully updating the querying ergonomics will make this less prolific.
+
+Solved quite a bit of the above but not 100% happy with all ergonomics. Let's build a nontrivial system and observe the cracks that form.

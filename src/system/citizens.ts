@@ -49,25 +49,16 @@ export interface Census {
 
 export class CitizensAgeSystem extends System {
   update(_delta: number, entities: Entity[]): void {
-    const time = entities
-      .map((entity) => this.ecs.getComponents(entity))
-      .filter((components) => components.has(FlowingTime))
-      .map((components) => components.get(FlowingTime))
-      .at(0); // scary
+    const time = this.ecs.reduceToComponent(FlowingTime).at(0); // scary; what if there are more?
 
     if (!time) {
       // we literally need more time
       return;
     }
 
-    entities
-      .map((entity) => this.ecs.getComponents(entity))
-      .filter((components) => components.has(Citizen))
-      .forEach((components) => {
-        const citizen = components.get(Citizen);
-
-        citizen.age = age(citizen.birthdate, time.datetime);
-      });
+    for (const citizen of this.ecs.reduceToComponent(Citizen)) {
+      citizen.age = age(citizen.birthdate, time.datetime);
+    }
   }
 }
 

@@ -66,6 +66,13 @@ export class Ecs {
     return [...this.entities.keys()];
   }
 
+  reduceToComponent<T extends Component>(component: ComponentClass<T>): T[] {
+    return this.getEntities()
+      .map((entity) => this.getComponents(entity))
+      .filter((components) => components.has(component))
+      .map((components) => components.get(component));
+  }
+
   addComponents(entity: Entity, components: Component[]): void {
     for (const component of components) {
       this.entities.get(entity)?.add(component);

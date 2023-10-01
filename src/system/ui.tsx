@@ -24,10 +24,7 @@ export class TimeUi extends System {
 
 export class CensusUi extends System {
   update(_delta: number, entities: Entity[]): void {
-    const citizens = entities
-      .map((entity) => this.ecs.getComponents(entity))
-      .filter((components) => components.has(Citizen))
-      .map((components) => components.get(Citizen));
+    const citizens = this.ecs.reduceToComponent(Citizen);
 
     broadcast(this.ecs, <CitizensCensus census={deriveCensus(citizens)} />);
   }
@@ -35,23 +32,14 @@ export class CensusUi extends System {
 
 export class CitizensUi extends System {
   update(_delta: number, entities: Entity[]): void {
-    const citizens = entities
-      .map((entity) => this.ecs.getComponents(entity))
-      .filter((components) => components.has(Citizen))
-      .map((components) => components.get(Citizen));
+    const citizens = this.ecs.reduceToComponent(Citizen);
 
     broadcast(this.ecs, <CitizensDetail citizens={citizens} />);
   }
 }
 
 const broadcast = (ecs: Ecs, message: HtmlEscapedString) => {
-  const connections = ecs
-    .getEntities()
-    .map((entity) => ecs.getComponents(entity))
-    .filter((components) => components.has(SocketConnection))
-    .map((components) => components.get(SocketConnection));
-
-  for (const connection of connections) {
+  for (const connection of ecs.reduceToComponent(SocketConnection)) {
     connection.socket.send(message);
   }
 };
