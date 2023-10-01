@@ -1,9 +1,10 @@
 import { ServerWebSocket } from "bun";
-import { Entity, System } from "../ecs";
+import { Component, Entity, System } from "../ecs";
 
-export interface SocketConnection {
-  kind: "socket";
-  socket: ServerWebSocket<unknown>;
+export class SocketConnection extends Component {
+  constructor(public socket: ServerWebSocket<unknown>) {
+    super();
+  }
 }
 
 interface WebSocketData {
@@ -19,7 +20,7 @@ export class NetSystem extends System {
         if (
           server.upgrade(req, {
             data: {
-              entity: this.ecs.createEntity([]),
+              entity: this.ecs.createEntity(),
             },
           })
         ) {
@@ -31,8 +32,7 @@ export class NetSystem extends System {
       websocket: {
         open: (ws) => {
           console.log(`Client connected: `, ws.remoteAddress);
-          const conn = { kind: "socket", socket: ws };
-          this.ecs.addComponents(ws.data.entity, [conn]);
+          this.ecs.addComponents(ws.data.entity, [new SocketConnection(ws)]);
         },
         // Bun requires this method to be implemented
         // even though we aren't receiving any messages right now.

@@ -2,9 +2,38 @@ import { randomBytes } from "crypto";
 
 export type Entity = string;
 
-export type EntityComponents = Component[][];
+export abstract class Component {}
 
-export type Component = { kind: string };
+type ComponentClass<T extends Component> = new (...args: any[]) => T;
+
+export class ComponentContainer {
+  private map = new Map<Function, Component>();
+
+  public add(component: Component): void {
+    this.map.set(component.constructor, component);
+  }
+
+  public get<T extends Component>(componentClass: ComponentClass<T>): T {
+    return this.map.get(componentClass) as T;
+  }
+
+  public has(componentClass: Function): boolean {
+    return this.map.has(componentClass);
+  }
+
+  public hasAll(componentClasses: Iterable<Function>): boolean {
+    for (let cls of componentClasses) {
+      if (!this.map.has(cls)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public delete(componentClass: Function): void {
+    this.map.delete(componentClass);
+  }
+}
 
 export abstract class System {
   constructor(protected ecs: Ecs) {}
@@ -12,14 +41,19 @@ export abstract class System {
 }
 
 export class Ecs {
-  private entities: Map<Entity, Component[]> = new Map();
+  private entities: Map<Entity, ComponentContainer> = new Map();
   private startupSystems: System[] = [];
   private systems: System[] = [];
 
-  createEntity(components: Component[]): Entity {
+  createEntity(...components: Component[]): Entity {
     const entity = randomBytes(8).toString("hex");
+    const container = new ComponentContainer();
 
-    this.entities.set(entity, components);
+    for (const component of components) {
+      container.add(component);
+    }
+
+    this.entities.set(entity, container);
 
     return entity;
   }
@@ -33,13 +67,19 @@ export class Ecs {
   }
 
   addComponents(entity: Entity, components: Component[]): void {
-    const currentComponents = this.entities.get(entity) ?? [];
-
-    this.entities.set(entity, [...currentComponents, ...components]);
+    for (const component of components) {
+      this.entities.get(entity)?.add(component);
+    }
   }
 
-  getComponents(entity: Entity): Component[] {
-    return this.entities.get(entity) ?? [];
+  removeComponents(entity: Entity, componentClasses: Function[]): void {
+    for (const componentClass of componentClasses) {
+      this.entities.get(entity)?.delete(componentClass);
+    }
+  }
+
+  getComponents(entity: Entity): ComponentContainer {
+    return this.entities.get(entity) ?? new ComponentContainer();
   }
 
   addSystem(system: System): Ecs {

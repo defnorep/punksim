@@ -8,15 +8,12 @@ import { FlowingTime } from "./time";
 
 export class TimeUi extends System {
   update(_delta: number, entities: Entity[]): void {
-    const entity = entities.at(0);
+    const entity = entities.find((entity) =>
+      this.ecs.getComponents(entity).has(FlowingTime),
+    );
 
     if (entity) {
-      const time = this.ecs
-        .getComponents(entity)
-        .find(
-          (component): component is FlowingTime =>
-            component.kind === "flowingtime",
-        );
+      const time = this.ecs.getComponents(entity).get(FlowingTime);
 
       if (time) {
         broadcast(this.ecs, <Time datetime={time.datetime} />);
@@ -29,10 +26,8 @@ export class CensusUi extends System {
   update(_delta: number, entities: Entity[]): void {
     const citizens = entities
       .map((entity) => this.ecs.getComponents(entity))
-      .flat()
-      .filter(
-        (component): component is Citizen => component.kind === "citizen",
-      );
+      .filter((components) => components.has(Citizen))
+      .map((components) => components.get(Citizen));
 
     broadcast(this.ecs, <CitizensCensus census={deriveCensus(citizens)} />);
   }
@@ -42,10 +37,8 @@ export class CitizensUi extends System {
   update(_delta: number, entities: Entity[]): void {
     const citizens = entities
       .map((entity) => this.ecs.getComponents(entity))
-      .flat()
-      .filter(
-        (component): component is Citizen => component.kind === "citizen",
-      );
+      .filter((components) => components.has(Citizen))
+      .map((components) => components.get(Citizen));
 
     broadcast(this.ecs, <CitizensDetail citizens={citizens} />);
   }
@@ -54,17 +47,9 @@ export class CitizensUi extends System {
 const broadcast = (ecs: Ecs, message: HtmlEscapedString) => {
   const connections = ecs
     .getEntities()
-    .map((entity) =>
-      ecs
-        .getComponents(entity)
-        .find(
-          (component): component is SocketConnection =>
-            component.kind === "socket",
-        ),
-    )
-    .filter(
-      (connection): connection is SocketConnection => connection !== undefined,
-    );
+    .map((entity) => ecs.getComponents(entity))
+    .filter((components) => components.has(SocketConnection))
+    .map((components) => components.get(SocketConnection));
 
   for (const connection of connections) {
     connection.socket.send(message);

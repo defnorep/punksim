@@ -1,9 +1,12 @@
-import { Ecs, Entity, System } from "../ecs";
+import { Component, Ecs, Entity, System } from "../ecs";
 
-export interface FlowingTime {
-  kind: "flowingtime";
-  datetime: Date;
-  rate: number;
+export class FlowingTime extends Component {
+  constructor(
+    public datetime: Date,
+    public rate: number,
+  ) {
+    super();
+  }
 }
 
 export class StartupTimeSystem extends System {
@@ -15,14 +18,8 @@ export class StartupTimeSystem extends System {
     super(ecs);
   }
 
-  update(delta: number, entities: Entity[]): void {
-    const time = {
-      kind: "flowingtime",
-      datetime: this.datetime,
-      rate: this.rate,
-    };
-
-    this.ecs.createEntity([time]);
+  update(_delta: number, _entities: Entity[]): void {
+    this.ecs.createEntity(new FlowingTime(this.datetime, this.rate));
   }
 }
 
@@ -32,19 +29,12 @@ export class TimeSystem extends System {
   }
 
   update(delta: number, entities: Entity[]): void {
-    const entity = entities.at(0);
-
-    if (entity) {
-      const time = this.ecs
-        .getComponents(entity)
-        .find(
-          (component): component is FlowingTime =>
-            component.kind === "flowingtime",
-        );
-
-      if (time) {
-        time.datetime.setTime(time.datetime.getTime() + delta * time.rate);
-      }
-    }
+    entities
+      .map((entity) => this.ecs.getComponents(entity))
+      .filter((components) => components.has(FlowingTime))
+      .map((components) => components.get(FlowingTime))
+      .forEach((time) =>
+        time.datetime.setTime(time.datetime.getTime() + delta * time.rate),
+      );
   }
 }

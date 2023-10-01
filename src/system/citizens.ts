@@ -1,6 +1,6 @@
 import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
-import { Ecs, Entity, System } from "../ecs";
+import { Component, Ecs, Entity, System } from "../ecs";
 import { FlowingTime } from "./time";
 
 export enum Species {
@@ -19,18 +19,21 @@ export enum Gender {
   None = "None",
 }
 
-export interface Citizen {
-  kind: "citizen";
-  age: number;
-  birthdate: Date;
-  height: number; // cm
-  id: string;
-  name: string;
-  gender: Gender;
-  species: Species;
-  status: Status;
-  surname: string;
-  weight: number; // kg
+export class Citizen extends Component {
+  constructor(
+    public age: number,
+    public birthdate: Date,
+    public height: number,
+    public id: string,
+    public name: string,
+    public gender: Gender,
+    public species: Species,
+    public status: Status,
+    public surname: string,
+    public weight: number,
+  ) {
+    super();
+  }
 }
 
 export interface Census {
@@ -44,37 +47,26 @@ export interface Census {
   };
 }
 
-export interface CitizensState {
-  kind: "citizens";
-  census: Census;
-  citizens: Citizen[];
-}
-
 export class CitizensAgeSystem extends System {
   update(_delta: number, entities: Entity[]): void {
     const time = entities
       .map((entity) => this.ecs.getComponents(entity))
-      .find((components) =>
-        components.some((component) => component.kind === "flowingtime"),
-      )
-      ?.find(
-        (component): component is FlowingTime =>
-          component.kind === "flowingtime",
-      );
+      .filter((components) => components.has(FlowingTime))
+      .map((components) => components.get(FlowingTime))
+      .at(0); // scary
+
+    if (!time) {
+      // we literally need more time
+      return;
+    }
 
     entities
       .map((entity) => this.ecs.getComponents(entity))
-      .filter((components): components is Citizen[] =>
-        components.some((component) => component.kind === "citizen"),
-      )
-      .forEach((citizen) => {
-        const citizenComponent = citizen.find(
-          (component): component is Citizen => component.kind === "citizen",
-        );
+      .filter((components) => components.has(Citizen))
+      .forEach((components) => {
+        const citizen = components.get(Citizen);
 
-        if (citizenComponent && time) {
-          citizenComponent.age = age(citizenComponent.birthdate, time.datetime);
-        }
+        citizen.age = age(citizen.birthdate, time.datetime);
       });
   }
 }
@@ -89,7 +81,7 @@ export class CitizensPopulator extends System {
 
   update(_delta: number, _entities: Entity[]): void {
     this.citizens.forEach((citizen) => {
-      this.ecs.createEntity([citizen]);
+      this.ecs.createEntity(citizen);
     });
   }
 }
@@ -149,19 +141,18 @@ export const generateCitizen = (
     }
   }
 
-  return {
-    age: age(birthdate, referenceDate),
+  return new Citizen(
+    age(birthdate, referenceDate),
     birthdate,
-    height: randomInt(150, 190),
-    id: randomBytes(4).toString("hex"),
-    kind: "citizen",
-    name: names[0],
+    randomInt(150, 190),
+    randomBytes(4).toString("hex"),
+    names[0],
     gender,
     species,
-    status: Status.Living,
-    surname: names[1],
-    weight: randomInt(60, 90),
-  };
+    Status.Living,
+    names[1],
+    randomInt(60, 90),
+  );
 };
 
 export const age = (birthdate: Date, reference: Date) => {
