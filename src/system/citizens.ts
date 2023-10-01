@@ -51,7 +51,6 @@ export interface CitizensState {
 }
 
 export class CitizensAgeSystem extends System {
-  components = ["citizen", "flowingtime"];
   update(_delta: number, entities: Entity[]): void {
     const time = entities
       .map((entity) => this.ecs.getComponents(entity))
@@ -81,7 +80,6 @@ export class CitizensAgeSystem extends System {
 }
 
 export class CitizensPopulator extends System {
-  components = ["citizen"];
   constructor(
     ecs: Ecs,
     private citizens: Citizen[],

@@ -1,5 +1,5 @@
 import { ServerWebSocket } from "bun";
-import { Entity, EntityComponents, System } from "../ecs";
+import { Entity, System } from "../ecs";
 
 export interface SocketConnection {
   kind: "socket";
@@ -11,9 +11,7 @@ interface WebSocketData {
 }
 
 export class NetSystem extends System {
-  components = [];
-
-  update(_delta: number, _entities: EntityComponents): void {
+  update(_delta: number, _entities: Entity[]): void {
     Bun.serve<WebSocketData>({
       port: 3001,
       fetch: (req, server) => {

@@ -7,7 +7,6 @@ import { SocketConnection } from "./net";
 import { FlowingTime } from "./time";
 
 export class TimeUi extends System {
-  components = ["flowingtime"];
   update(_delta: number, entities: Entity[]): void {
     const entity = entities.at(0);
 
@@ -27,7 +26,6 @@ export class TimeUi extends System {
 }
 
 export class CensusUi extends System {
-  components = ["citizen"];
   update(_delta: number, entities: Entity[]): void {
     const citizens = entities
       .map((entity) => this.ecs.getComponents(entity))
@@ -41,7 +39,6 @@ export class CensusUi extends System {
 }
 
 export class CitizensUi extends System {
-  components = ["citizen"];
   update(_delta: number, entities: Entity[]): void {
     const citizens = entities
       .map((entity) => this.ecs.getComponents(entity))

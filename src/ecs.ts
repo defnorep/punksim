@@ -7,7 +7,6 @@ export type EntityComponents = Component[][];
 export type Component = { kind: string };
 
 export abstract class System {
-  abstract readonly components: string[];
   constructor(protected ecs: Ecs) {}
   abstract update(delta: number, entities: Entity[]): void;
 }
@@ -57,21 +56,13 @@ export class Ecs {
 
   startup() {
     this.startupSystems.forEach((system) => {
-      system.update(0, this.filterEntityComponents(system.components));
+      system.update(0, this.getEntities());
     });
   }
 
   update(delta: number) {
     this.systems.forEach((system) => {
-      system.update(delta, this.filterEntityComponents(system.components));
+      system.update(delta, this.getEntities());
     });
-  }
-
-  private filterEntityComponents(query: string[]): Entity[] {
-    return this.getEntities().filter((entity) =>
-      this.getComponents(entity).some((component) =>
-        query.includes(component.kind),
-      ),
-    );
   }
 }

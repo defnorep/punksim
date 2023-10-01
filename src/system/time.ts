@@ -7,8 +7,6 @@ export interface FlowingTime {
 }
 
 export class StartupTimeSystem extends System {
-  components = ["flowingtime"];
-
   constructor(
     ecs: Ecs,
     private datetime: Date,
@@ -29,8 +27,6 @@ export class StartupTimeSystem extends System {
 }
 
 export class TimeSystem extends System {
-  components = ["flowingtime"];
-
   constructor(ecs: Ecs) {
     super(ecs);
   }
