@@ -9,9 +9,7 @@ import { FlowingTime } from "./time";
 export class TimeUi extends System {
   components = ["flowingtime"];
   update(_delta: number, entities: FlowingTime[][]): void {
-    const time = entities
-      .at(0)
-      ?.find((component) => component.kind === "flowingtime");
+    const time = entities.flat().at(0);
 
     if (time) {
       broadcast(this.ecs, <Time datetime={time.datetime} />);

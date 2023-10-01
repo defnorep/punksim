@@ -26,12 +26,7 @@ export class TimeSystem extends System {
   }
 
   update(delta: number, entities: FlowingTime[][]): void {
-    const time = entities
-      .at(0)
-      ?.find(
-        (component): component is FlowingTime =>
-          component.kind === "flowingtime",
-      );
+    const time = entities.flat().at(0);
 
     if (time) {
       time.datetime.setTime(time.datetime.getTime() + delta * time.rate);
