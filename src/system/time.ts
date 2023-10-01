@@ -6,9 +6,8 @@ export interface FlowingTime {
   rate: number;
 }
 
-export class TimeSystem extends System {
+export class StartupTimeSystem extends System {
   components = ["flowingtime"];
-  private entity: Entity;
 
   constructor(
     ecs: Ecs,
@@ -16,20 +15,40 @@ export class TimeSystem extends System {
     private rate = 1.0,
   ) {
     super(ecs);
+  }
+
+  update(delta: number, entities: Entity[]): void {
     const time = {
       kind: "flowingtime",
       datetime: this.datetime,
       rate: this.rate,
     };
 
-    this.entity = ecs.createEntity([time]);
+    this.ecs.createEntity([time]);
+  }
+}
+
+export class TimeSystem extends System {
+  components = ["flowingtime"];
+
+  constructor(ecs: Ecs) {
+    super(ecs);
   }
 
-  update(delta: number, entities: FlowingTime[][]): void {
-    const time = entities.flat().at(0);
+  update(delta: number, entities: Entity[]): void {
+    const entity = entities.at(0);
 
-    if (time) {
-      time.datetime.setTime(time.datetime.getTime() + delta * time.rate);
+    if (entity) {
+      const time = this.ecs
+        .getComponents(entity)
+        .find(
+          (component): component is FlowingTime =>
+            component.kind === "flowingtime",
+        );
+
+      if (time) {
+        time.datetime.setTime(time.datetime.getTime() + delta * time.rate);
+      }
     }
   }
 }

@@ -9,7 +9,7 @@ export type Component = { kind: string };
 export abstract class System {
   abstract readonly components: string[];
   constructor(protected ecs: Ecs) {}
-  abstract update(delta: number, entities: EntityComponents): void;
+  abstract update(delta: number, entities: Entity[]): void;
 }
 
 export class Ecs {
@@ -67,11 +67,11 @@ export class Ecs {
     });
   }
 
-  private filterEntityComponents(query: string[]): Component[][] {
-    return this.getEntities()
-      .map((entity) => this.getComponents(entity))
-      .filter((components) =>
-        components.some((component) => query.includes(component.kind)),
-      );
+  private filterEntityComponents(query: string[]): Entity[] {
+    return this.getEntities().filter((entity) =>
+      this.getComponents(entity).some((component) =>
+        query.includes(component.kind),
+      ),
+    );
   }
 }

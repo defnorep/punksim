@@ -10,7 +10,7 @@ import {
   generateCitizen,
 } from "./src/system/citizens";
 import { NetSystem } from "./src/system/net";
-import { TimeSystem } from "./src/system/time";
+import { StartupTimeSystem, TimeSystem } from "./src/system/time";
 import { CensusUi, CitizensUi, TimeUi } from "./src/system/ui";
 import { CitizensCensus, CitizensDetail } from "./templates/citizens";
 import { Time } from "./templates/global";
@@ -34,8 +34,9 @@ const citizens = Array(config.citizens)
 const ecs = new Ecs();
 ecs
   .addStartupSystem(new NetSystem(ecs))
+  .addStartupSystem(new StartupTimeSystem(ecs, date, rateOfTime))
   .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
-  .addSystem(new TimeSystem(ecs, date, rateOfTime))
+  .addSystem(new TimeSystem(ecs))
   .addSystem(new CitizenAgingSystem(ecs))
   .addSystem(new CensusUi(ecs))
   .addSystem(new CitizensUi(ecs))

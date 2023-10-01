@@ -1,26 +1,40 @@
 import { HtmlEscapedString } from "hono/utils/html";
 import { CitizensCensus, CitizensDetail } from "../../templates/citizens";
 import { Time } from "../../templates/global";
-import { Ecs, System } from "../ecs";
+import { Ecs, Entity, System } from "../ecs";
 import { Citizen, deriveCensus } from "./citizens";
 import { SocketConnection } from "./net";
 import { FlowingTime } from "./time";
 
 export class TimeUi extends System {
   components = ["flowingtime"];
-  update(_delta: number, entities: FlowingTime[][]): void {
-    const time = entities.flat().at(0);
+  update(_delta: number, entities: Entity[]): void {
+    const entity = entities.at(0);
 
-    if (time) {
-      broadcast(this.ecs, <Time datetime={time.datetime} />);
+    if (entity) {
+      const time = this.ecs
+        .getComponents(entity)
+        .find(
+          (component): component is FlowingTime =>
+            component.kind === "flowingtime",
+        );
+
+      if (time) {
+        broadcast(this.ecs, <Time datetime={time.datetime} />);
+      }
     }
   }
 }
 
 export class CensusUi extends System {
   components = ["citizen"];
-  update(_delta: number, entities: Citizen[][]): void {
-    const citizens = entities.flat();
+  update(_delta: number, entities: Entity[]): void {
+    const citizens = entities
+      .map((entity) => this.ecs.getComponents(entity))
+      .flat()
+      .filter(
+        (component): component is Citizen => component.kind === "citizen",
+      );
 
     broadcast(this.ecs, <CitizensCensus census={deriveCensus(citizens)} />);
   }
@@ -28,8 +42,13 @@ export class CensusUi extends System {
 
 export class CitizensUi extends System {
   components = ["citizen"];
-  update(_delta: number, entities: Citizen[][]): void {
-    const citizens = entities.flat();
+  update(_delta: number, entities: Entity[]): void {
+    const citizens = entities
+      .map((entity) => this.ecs.getComponents(entity))
+      .flat()
+      .filter(
+        (component): component is Citizen => component.kind === "citizen",
+      );
 
     broadcast(this.ecs, <CitizensDetail citizens={citizens} />);
   }

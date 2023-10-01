@@ -1,6 +1,6 @@
 import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
-import { Ecs, EntityComponents, System } from "../ecs";
+import { Ecs, Entity, System } from "../ecs";
 import { FlowingTime } from "./time";
 
 export enum Species {
@@ -52,18 +52,19 @@ export interface CitizensState {
 
 export class CitizensAgeSystem extends System {
   components = ["citizen", "flowingtime"];
-  update(_delta: number, entities: (Citizen | FlowingTime)[][]): void {
+  update(_delta: number, entities: Entity[]): void {
     const time = entities
-      .filter((components) =>
+      .map((entity) => this.ecs.getComponents(entity))
+      .find((components) =>
         components.some((component) => component.kind === "flowingtime"),
       )
-      .at(0)
       ?.find(
         (component): component is FlowingTime =>
           component.kind === "flowingtime",
       );
 
     entities
+      .map((entity) => this.ecs.getComponents(entity))
       .filter((components): components is Citizen[] =>
         components.some((component) => component.kind === "citizen"),
       )
@@ -88,7 +89,7 @@ export class CitizensPopulator extends System {
     super(ecs);
   }
 
-  update(_delta: number, _entities: EntityComponents): void {
+  update(_delta: number, _entities: Entity[]): void {
     this.citizens.forEach((citizen) => {
       this.ecs.createEntity([citizen]);
     });
