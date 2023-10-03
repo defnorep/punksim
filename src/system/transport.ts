@@ -10,7 +10,18 @@ import { Component, Entity, System } from "../ecs";
  */
 export class TransportSystem extends System {
   update(delta: number, entities: Entity[]): void {
-    throw new Error("Method not implemented.");
+    /**
+     * Here are the basic steps. We may split this up into multiple systems.
+     *
+     * 1. Select Entities that have both IntendsToTravel and Location components.
+     * 2. Create a Travelling component on each Entity using data from IntendsToTravel, Location,
+     *    and our own location graph knowledge such as distance. Remove the IntendsToTravel and Location components.
+     * 3. On each update, Select Entities that are Travelling, and reduce the timeRemaining proeprty by the delta value.
+     * 4. When the Entity has arrived, update the Location component to the new location and remove Travelling.
+     */
+    const entitiesWithTravelIntent =
+      // already seeing some ergonomic requirements; we need to be able to select entities with multiple components
+      this.ecs.reduceToComponent(IntendsToTravel);
   }
 }
 
@@ -18,6 +29,16 @@ export type LocationId = string;
 
 export class IntendsToTravel extends Component {
   constructor(public destination: LocationId) {
+    super();
+  }
+}
+
+export class Travelling extends Component {
+  constructor(
+    public origin: LocationId,
+    public destination: LocationId,
+    public timeRemaining: number,
+  ) {
     super();
   }
 }
