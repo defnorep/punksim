@@ -52,7 +52,7 @@ export class TransportRandomIntentSystem extends System {
     const travellers = entities.allOf(Travelling);
 
     for (const [entity, components] of citizens.results()) {
-      const willTravel = Math.random() < 0.005;
+      const willTravel = Math.random() < 0.01;
       const location = components.get(Location);
 
       if (
