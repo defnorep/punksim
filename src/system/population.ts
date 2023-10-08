@@ -155,7 +155,7 @@ export const generateCitizen = (
       names[1],
       randomInt(60, 90),
     ),
-    new Location("origin-1"),
+    new Location("Residence-1"),
   ];
 };
 

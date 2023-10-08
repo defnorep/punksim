@@ -13,7 +13,9 @@ export const Travellers = (props: {
           <th>ID</th>
           <th>Origin</th>
           <th>Destination</th>
-          <th>Time To Destination</th>
+          <th>Mode</th>
+          <th>Distance</th>
+          <th>Distance Remaining</th>
         </tr>
       </thead>
       <tbody>
@@ -24,7 +26,9 @@ export const Travellers = (props: {
             <td>{traveller.id}</td>
             <td>{traveller.originId}</td>
             <td>{traveller.destinationId}</td>
-            <td>{traveller.timeRemaining / 1000} seconds</td>
+            <td>{traveller.mode}</td>
+            <td>{traveller.distance.toPrecision(4)} meters</td>
+            <td>{traveller.distanceRemaining.toPrecision(4)} meters</td>
           </tr>
         ))}
       </tbody>

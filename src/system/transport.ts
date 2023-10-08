@@ -1,9 +1,16 @@
-import { Component, System } from "../ecs";
+import { Component, Ecs, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
 import { Citizen } from "./population";
 import { FlowingTime } from "./time";
 
 export class TransportDispatchSystem extends System {
+  constructor(
+    ecs: Ecs,
+    private network: TransportNetwork,
+  ) {
+    super(ecs);
+  }
+
   update(_delta: number, entities: EntityContainer): void {
     const travellers = entities.allOf(IntendsToTravel, Location);
 
@@ -15,9 +22,25 @@ export class TransportDispatchSystem extends System {
         return;
       }
 
+      const path = this.network.findPath(
+        location.id,
+        intendsToTravel.destinationId,
+      );
+
+      const distance = path.reduce(
+        (total, edge) => (total += edge.distance),
+        0,
+      );
+
       this.ecs.addComponents(entity, [
         // time in minutes
-        new Travelling(location.id, intendsToTravel.destinationId, 0.2 * 60000),
+        new Travelling(
+          location.id,
+          intendsToTravel.destinationId,
+          distance,
+          distance,
+          intendsToTravel.mode,
+        ),
       ]);
 
       this.ecs.removeComponents(entity, [IntendsToTravel, Location]);
@@ -26,16 +49,32 @@ export class TransportDispatchSystem extends System {
 }
 
 export class TransportTravellingSystem extends System {
+  speeds: Map<TransportMode, number>;
+  constructor(ecs: Ecs) {
+    super(ecs);
+    this.speeds = new Map();
+    this.speeds.set(TransportMode.Road, 50);
+  }
+
   update(delta: number, entities: EntityContainer): void {
     const travellers = entities.allOf(Travelling);
     const time = this.ecs.getSingleton(FlowingTime);
 
     for (const [entity, components] of travellers.results()) {
       const travelling = components.get(Travelling);
+      const speed = this.speeds.get(travelling.mode);
 
-      travelling.timeRemaining -= delta * time.rate;
+      if (!speed) {
+        return;
+      }
 
-      if (travelling.timeRemaining <= 0) {
+      // the amount of time that has passed multiplied by the speed of the transportation mode.
+      // distanceRemaining is in meters
+      // delta * time.rate == milliseconds
+      // speed = kilometers per hour by default, so get meters per millisecond
+      travelling.distanceRemaining -=
+        delta * time.rate * ((speed * 1000) / 60 / 60 / 1000);
+      if (travelling.distanceRemaining <= 0) {
         this.ecs.addComponents(entity, [
           new Location(travelling.destinationId),
         ]);
@@ -46,7 +85,7 @@ export class TransportTravellingSystem extends System {
   }
 }
 
-export class TransportRandomIntentSystem extends System {
+export class RandomTravelIntentSystem extends System {
   update(delta: number, entities: EntityContainer): void {
     const citizens = entities.allOf(Citizen, Location);
     const travellers = entities.allOf(Travelling);
@@ -57,10 +96,12 @@ export class TransportRandomIntentSystem extends System {
 
       if (
         travellers.results().length < 3 &&
-        location.id === "origin-1" &&
+        location.id === "Residence-1" &&
         willTravel
       ) {
-        this.ecs.addComponents(entity, [new IntendsToTravel("destination-1")]);
+        this.ecs.addComponents(entity, [
+          new IntendsToTravel("Work-1", TransportMode.Road),
+        ]);
       }
     }
   }
@@ -69,7 +110,10 @@ export class TransportRandomIntentSystem extends System {
 export type LocationId = string;
 
 export class IntendsToTravel extends Component {
-  constructor(public destinationId: LocationId) {
+  constructor(
+    public destinationId: LocationId,
+    public mode: TransportMode,
+  ) {
     super();
   }
 }
@@ -78,7 +122,9 @@ export class Travelling extends Component {
   constructor(
     public originId: LocationId,
     public destinationId: LocationId,
-    public timeRemaining: number,
+    public distance: Meters,
+    public distanceRemaining: Meters = 0,
+    public mode: TransportMode,
   ) {
     super();
   }
@@ -88,4 +134,67 @@ export class Location extends Component {
   constructor(public id: LocationId) {
     super();
   }
+}
+
+export type Meters = number;
+
+export class TransportNetwork {
+  private nodes: Map<string, TransportNode> = new Map();
+  private edges: Set<TransportEdge> = new Set();
+
+  static fromObject(object: any): TransportNetwork {
+    const network = new TransportNetwork();
+
+    for (const node in object.nodes) {
+      network.addNode({
+        label: node,
+      });
+    }
+
+    for (const edge of object.edges) {
+      network.addEdge({
+        source: edge.source,
+        target: edge.target,
+        mode: edge.relation as TransportMode,
+        directed: edge.directed,
+        distance: edge.metadata.distance,
+      });
+    }
+
+    return network;
+  }
+
+  public addNode(node: TransportNode): void {
+    this.nodes.set(node.label, node);
+  }
+
+  public addEdge(edge: TransportEdge): void {
+    this.edges.add(edge);
+  }
+
+  public findPath(
+    origin: LocationId,
+    destination: LocationId,
+  ): TransportEdge[] {
+    const edge = Array.from(this.edges.values()).find((edge) => {
+      return edge.source === origin && edge.target === destination;
+    });
+
+    return edge ? [edge] : [];
+  }
+}
+
+enum TransportMode {
+  Road = "Road",
+}
+
+export interface TransportNode {
+  label: string;
+}
+export interface TransportEdge {
+  source: LocationId;
+  target: LocationId;
+  mode: TransportMode;
+  directed: boolean;
+  distance: Meters;
 }

@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import seed from "./data/seed.json";
+import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
 import { NetSystem } from "./src/system/net";
@@ -11,8 +12,9 @@ import {
 } from "./src/system/population";
 import { StartupTimeSystem, TimeSystem } from "./src/system/time";
 import {
+  RandomTravelIntentSystem,
   TransportDispatchSystem,
-  TransportRandomIntentSystem,
+  TransportNetwork,
   TransportTravellingSystem,
 } from "./src/system/transport";
 import {
@@ -39,6 +41,7 @@ const rateOfTime = config.rateOfTime;
 const citizens = Array(config.citizens)
   .fill(1)
   .map(() => generateCitizen(date, 80));
+const tpn = TransportNetwork.fromObject(transportNetwork.graph);
 
 /**
  * Simulation setup.
@@ -49,9 +52,9 @@ ecs
   .addStartupSystem(new StartupTimeSystem(ecs, date, rateOfTime))
   .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
   .addSystem(new TimeSystem(ecs))
-  .addSystem(new TransportDispatchSystem(ecs))
+  .addSystem(new TransportDispatchSystem(ecs, tpn))
   .addSystem(new TransportTravellingSystem(ecs))
-  .addSystem(new TransportRandomIntentSystem(ecs))
+  .addSystem(new RandomTravelIntentSystem(ecs))
   .addSystem(new CitizenAgingSystem(ecs))
   .addSystem(new CensusUiSystem(ecs))
   .addSystem(new CitizensUiSystem(ecs))
