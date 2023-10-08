@@ -31,14 +31,14 @@ export class CitizensAgeSystem extends System {
 export class StartupCitizenPopulatorSystem extends System {
   constructor(
     ecs: Ecs,
-    private citizens: Citizen[],
+    private citizens: [Citizen, Location][],
   ) {
     super(ecs);
   }
 
   update(_delta: number, _entities: EntityContainer): void {
     this.citizens.forEach((citizen) => {
-      this.ecs.createEntity(citizen, new Location("origin-1"));
+      this.ecs.createEntity(...citizen);
     });
   }
 }
@@ -124,7 +124,7 @@ export const deriveCensus = (citizens: Citizen[]): Census => {
 export const generateCitizen = (
   referenceDate: Date,
   ageJitter: number = 0,
-): Citizen & Location => {
+): [Citizen, Location] => {
   const isAndroid = Math.random() > 0.7;
   const species = isAndroid ? Species.Android : Species.Human;
   const names = generateCitizenName(species);
@@ -142,18 +142,21 @@ export const generateCitizen = (
     }
   }
 
-  return new Citizen(
-    age(birthdate, referenceDate),
-    birthdate,
-    randomInt(150, 190),
-    randomBytes(4).toString("hex"),
-    names[0],
-    gender,
-    species,
-    Status.Living,
-    names[1],
-    randomInt(60, 90),
-  );
+  return [
+    new Citizen(
+      age(birthdate, referenceDate),
+      birthdate,
+      randomInt(150, 190),
+      randomBytes(4).toString("hex"),
+      names[0],
+      gender,
+      species,
+      Status.Living,
+      names[1],
+      randomInt(60, 90),
+    ),
+    new Location("origin-1"),
+  ];
 };
 
 export const age = (birthdate: Date, reference: Date) => {
