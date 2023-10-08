@@ -3,12 +3,12 @@ import { serveStatic } from "hono/bun";
 import seed from "./data/seed.json";
 import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
-import {
-  CitizensAgeSystem as CitizenAgingSystem,
-  StartupCitizenPopulatorSystem as CitizenPopulatorSystem,
-  generateCitizen,
-} from "./src/system/citizens";
 import { NetSystem } from "./src/system/net";
+import {
+  AgeSystem as CitizenAgingSystem,
+  PopulationStartupSystem as CitizenPopulatorSystem,
+  generateCitizen,
+} from "./src/system/population";
 import { StartupTimeSystem, TimeSystem } from "./src/system/time";
 import {
   TransportDispatchSystem,
@@ -21,10 +21,10 @@ import {
   TimeUiSystem,
   TravellerUiSystem,
 } from "./src/system/ui";
-import { CitizensCensus, CitizensDetail } from "./templates/citizens";
 import { Time } from "./templates/global";
 import { Layout } from "./templates/layout";
-import { TravellersTable } from "./templates/transport";
+import { Population, PopulationCensus } from "./templates/population";
+import { Travellers } from "./templates/transport";
 
 /**
  * Generate/Collect Seed Data
@@ -70,9 +70,9 @@ app.get("/", (c) =>
   c.html(
     <Layout title="Cyberpunk City Simulator">
       <Time />
-      <CitizensCensus />
-      <CitizensDetail />
-      <TravellersTable />
+      <PopulationCensus />
+      <Population />
+      <Travellers />
     </Layout>,
   ),
 );

@@ -1,7 +1,7 @@
-import { Census, Citizen } from "../src/system/citizens";
+import { Census, Citizen } from "../src/system/population";
 import { Location } from "../src/system/transport";
 
-export const CitizensCensus = (props: { census?: Census }) => {
+export const PopulationCensus = (props: { census?: Census }) => {
   const jsx = (
     <table>
       <thead>
@@ -36,7 +36,7 @@ export const CitizensCensus = (props: { census?: Census }) => {
   );
 };
 
-export const CitizensDetail = (props: {
+export const Population = (props: {
   citizens?: { citizen: Citizen; location: Location }[];
 }) => {
   const jsx = (

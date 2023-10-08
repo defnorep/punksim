@@ -1,6 +1,6 @@
 import { Component, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
-import { Citizen } from "./citizens";
+import { Citizen } from "./population";
 import { FlowingTime } from "./time";
 
 export class TransportDispatchSystem extends System {

@@ -8,7 +8,7 @@ import { Location } from "./transport";
 /**
  * The CitizensAgeSystem is responsible for aging citizens.
  */
-export class CitizensAgeSystem extends System {
+export class AgeSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
     const time = this.ecs.getSingleton(FlowingTime);
 
@@ -28,16 +28,16 @@ export class CitizensAgeSystem extends System {
 /**
  * The CitizensPopulator is responsible for creating the initial set of citizens.
  */
-export class StartupCitizenPopulatorSystem extends System {
+export class PopulationStartupSystem extends System {
   constructor(
     ecs: Ecs,
-    private citizens: [Citizen, Location][],
+    private population: [Citizen, Location][],
   ) {
     super(ecs);
   }
 
   update(_delta: number, _entities: EntityContainer): void {
-    this.citizens.forEach((citizen) => {
+    this.population.forEach((citizen) => {
       this.ecs.createEntity(...citizen);
     });
   }

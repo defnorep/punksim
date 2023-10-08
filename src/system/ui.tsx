@@ -1,10 +1,10 @@
-import { CitizensCensus, CitizensDetail } from "../../templates/citizens";
 import { Time } from "../../templates/global";
-import { TravellersTable } from "../../templates/transport";
+import { Population, PopulationCensus } from "../../templates/population";
+import { Travellers } from "../../templates/transport";
 import { System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
-import { Citizen, deriveCensus } from "./citizens";
 import { SocketConnection } from "./net";
+import { Citizen, deriveCensus } from "./population";
 import { FlowingTime } from "./time";
 import { Location, Travelling } from "./transport";
 
@@ -41,7 +41,7 @@ export class CensusUiSystem extends System {
     for (const [_entity, components] of connections) {
       components
         .get(SocketConnection)
-        .socket.send(<CitizensCensus census={deriveCensus(citizens)} />);
+        .socket.send(<PopulationCensus census={deriveCensus(citizens)} />);
     }
   }
 }
@@ -64,7 +64,7 @@ export class CitizensUiSystem extends System {
     for (const [_entity, components] of connections) {
       components
         .get(SocketConnection)
-        .socket.send(<CitizensDetail citizens={citizens} />);
+        .socket.send(<Population citizens={citizens} />);
     }
   }
 }
@@ -84,7 +84,7 @@ export class TravellerUiSystem extends System {
     for (const [_entity, components] of connections) {
       components
         .get(SocketConnection)
-        .socket.send(<TravellersTable travellers={travellers} />);
+        .socket.send(<Travellers travellers={travellers} />);
     }
   }
 }

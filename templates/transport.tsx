@@ -1,7 +1,7 @@
-import { Citizen } from "../src/system/citizens";
+import { Citizen } from "../src/system/population";
 import { Travelling } from "../src/system/transport";
 
-export const TravellersTable = (props: {
+export const Travellers = (props: {
   travellers?: (Citizen & Travelling)[];
 }) => {
   const jsx = (
