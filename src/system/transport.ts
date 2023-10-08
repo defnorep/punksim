@@ -88,17 +88,12 @@ export class TransportTravellingSystem extends System {
 export class RandomTravelIntentSystem extends System {
   update(delta: number, entities: EntityContainer): void {
     const citizens = entities.allOf(Citizen, Location);
-    const travellers = entities.allOf(Travelling);
 
     for (const [entity, components] of citizens.results()) {
       const willTravel = Math.random() < 0.01;
       const location = components.get(Location);
 
-      if (
-        travellers.results().length < 3 &&
-        location.id === "Residence-1" &&
-        willTravel
-      ) {
+      if (location.id === "Residence-1" && willTravel) {
         this.ecs.addComponents(entity, [
           new IntendsToTravel("Work-1", TransportMode.Road),
         ]);
