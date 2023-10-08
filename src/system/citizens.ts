@@ -3,6 +3,7 @@ import names from "../../data/names.json";
 import { Component, Ecs, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
 import { FlowingTime } from "./time";
+import { Location } from "./transport";
 
 /**
  * The CitizensAgeSystem is responsible for aging citizens.
@@ -37,7 +38,7 @@ export class StartupCitizenPopulatorSystem extends System {
 
   update(_delta: number, _entities: EntityContainer): void {
     this.citizens.forEach((citizen) => {
-      this.ecs.createEntity(citizen);
+      this.ecs.createEntity(citizen, new Location("origin-1"));
     });
   }
 }
@@ -123,7 +124,7 @@ export const deriveCensus = (citizens: Citizen[]): Census => {
 export const generateCitizen = (
   referenceDate: Date,
   ageJitter: number = 0,
-): Citizen => {
+): Citizen & Location => {
   const isAndroid = Math.random() > 0.7;
   const species = isAndroid ? Species.Android : Species.Human;
   const names = generateCitizenName(species);

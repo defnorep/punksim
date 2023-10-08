@@ -8,7 +8,7 @@ export class EntityContainer {
     const entities = new NarrowedEntityContainer();
 
     for (const [entity, components] of this.map) {
-      if (components.hasAll(componentClasses)) {
+      if (components.hasAll(...componentClasses)) {
         entities.map.set(entity, components);
       }
     }
@@ -20,7 +20,7 @@ export class EntityContainer {
     const entities = new NarrowedEntityContainer();
 
     for (const [entity, components] of this.map) {
-      if (!components.hasAll(componentClasses)) {
+      if (!components.hasAll(...componentClasses)) {
         entities.map.set(entity, components);
       }
     }

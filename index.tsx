@@ -6,19 +6,25 @@ import { Engine } from "./src/engine";
 import {
   CitizensAgeSystem as CitizenAgingSystem,
   StartupCitizenPopulatorSystem as CitizenPopulatorSystem,
-  deriveCensus,
   generateCitizen,
 } from "./src/system/citizens";
 import { NetSystem } from "./src/system/net";
 import { StartupTimeSystem, TimeSystem } from "./src/system/time";
 import {
+  TransportDispatchSystem,
+  TransportRandomIntentSystem,
+  TransportTravellingSystem,
+} from "./src/system/transport";
+import {
   CensusUiSystem,
   CitizensUiSystem,
   TimeUiSystem,
+  TravellerUiSystem,
 } from "./src/system/ui";
 import { CitizensCensus, CitizensDetail } from "./templates/citizens";
 import { Time } from "./templates/global";
 import { Layout } from "./templates/layout";
+import { TravellersTable } from "./templates/transport";
 
 /**
  * Generate/Collect Seed Data
@@ -41,9 +47,13 @@ ecs
   .addStartupSystem(new StartupTimeSystem(ecs, date, rateOfTime))
   .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
   .addSystem(new TimeSystem(ecs))
+  .addSystem(new TransportDispatchSystem(ecs))
+  .addSystem(new TransportTravellingSystem(ecs))
+  .addSystem(new TransportRandomIntentSystem(ecs))
   .addSystem(new CitizenAgingSystem(ecs))
   .addSystem(new CensusUiSystem(ecs))
   .addSystem(new CitizensUiSystem(ecs))
+  .addSystem(new TravellerUiSystem(ecs))
   .addSystem(new TimeUiSystem(ecs));
 
 new Engine(ecs).start();
@@ -57,9 +67,10 @@ const app = new Hono();
 app.get("/", (c) =>
   c.html(
     <Layout title="Cyberpunk City Simulator">
-      <Time datetime={date} />
-      <CitizensCensus census={deriveCensus(citizens)} />
-      <CitizensDetail citizens={citizens} />
+      <Time />
+      <CitizensCensus />
+      <CitizensDetail />
+      <TravellersTable />
     </Layout>,
   ),
 );

@@ -1,8 +1,8 @@
 import { Census, Citizen } from "../src/system/citizens";
+import { Location } from "../src/system/transport";
 
-export const CitizensCensus = (props: { census: Census }) => (
-  <div id="citizens-census">
-    <h2>Census</h2>
+export const CitizensCensus = (props: { census?: Census }) => {
+  const jsx = (
     <table>
       <thead>
         <caption style="text-align: left;">Population</caption>
@@ -17,21 +17,29 @@ export const CitizensCensus = (props: { census: Census }) => (
       </thead>
       <tbody>
         <tr>
-          <td>{props.census.population.total}</td>
-          <td>{props.census.population.human}</td>
-          <td>{props.census.population.android}</td>
-          <td>{props.census.population.male}</td>
-          <td>{props.census.population.female}</td>
-          <td>{props.census.population.noGender}</td>
+          <td>{props.census?.population.total}</td>
+          <td>{props.census?.population.human}</td>
+          <td>{props.census?.population.android}</td>
+          <td>{props.census?.population.male}</td>
+          <td>{props.census?.population.female}</td>
+          <td>{props.census?.population.noGender}</td>
         </tr>
       </tbody>
     </table>
-  </div>
-);
+  );
 
-export const CitizensDetail = (props: { citizens: Citizen[] }) => (
-  <div id="citizens-detail">
-    <h2>Individuals</h2>
+  return (
+    <div id="citizens-census">
+      <h2>Census</h2>
+      {props.census ? jsx : "No Socket"}
+    </div>
+  );
+};
+
+export const CitizensDetail = (props: {
+  citizens?: { citizen: Citizen; location: Location }[];
+}) => {
+  const jsx = (
     <table>
       <thead>
         <tr>
@@ -44,23 +52,32 @@ export const CitizensDetail = (props: { citizens: Citizen[] }) => (
           <th>Weight</th>
           <th>Species</th>
           <th>Status</th>
+          <th>Location</th>
         </tr>
       </thead>
       <tbody>
-        {props.citizens.map((citizen) => (
+        {props.citizens?.map((citizen) => (
           <tr>
-            <td>{citizen.name}</td>
-            <td>{citizen.surname}</td>
-            <td>{citizen.id}</td>
-            <td>{citizen.age}</td>
-            <td>{citizen.gender.toString()}</td>
-            <td>{citizen.height} cm</td>
-            <td>{citizen.weight} kg</td>
-            <td>{citizen.species.toString()}</td>
-            <td>{citizen.status.toString()}</td>
+            <td>{citizen.citizen.name}</td>
+            <td>{citizen.citizen.surname}</td>
+            <td>{citizen.citizen.id}</td>
+            <td>{citizen.citizen.age}</td>
+            <td>{citizen.citizen.gender.toString()}</td>
+            <td>{citizen.citizen.height} cm</td>
+            <td>{citizen.citizen.weight} kg</td>
+            <td>{citizen.citizen.species.toString()}</td>
+            <td>{citizen.citizen.status.toString()}</td>
+            <td>{citizen.location.id}</td>
           </tr>
         ))}
       </tbody>
     </table>
-  </div>
-);
+  );
+
+  return (
+    <div id="citizens-detail">
+      <h2>Individuals</h2>
+      {props.citizens ? jsx : "No Socket"}
+    </div>
+  );
+};

@@ -5,6 +5,6 @@
     "rateOfTime": 1.0
   },
   "fast": {
-    "rateOfTime": 86400.0
+    "rateOfTime": 1.0
   }
 }

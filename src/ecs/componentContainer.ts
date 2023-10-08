@@ -15,7 +15,7 @@ export class ComponentContainer {
     return this.map.has(componentClass);
   }
 
-  public hasAll(componentClasses: Iterable<Function>): boolean {
+  public hasAll(...componentClasses: Function[]): boolean {
     for (let cls of componentClasses) {
       if (!this.map.has(cls)) {
         return false;

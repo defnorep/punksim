@@ -9,6 +9,12 @@ test("ecs component container", () => {
     }
   }
 
+  class TestComponent2 extends Component {
+    constructor(public value: string) {
+      super();
+    }
+  }
+
   const container = new ComponentContainer();
   const test1 = new TestComponent(100);
   container.add(test1);
@@ -17,9 +23,13 @@ test("ecs component container", () => {
 
   const ecs = new Ecs();
   const test2 = new TestComponent(200);
-  const entity = ecs.createEntity(test2);
+  const test3 = new TestComponent2("foo");
+  const entity = ecs.createEntity(test2, test3);
   expect(ecs.getComponents(entity).has(TestComponent)).toBe(true);
   expect(ecs.getComponents(entity).get(TestComponent).value).toBe(200);
+  expect(ecs.getComponents(entity).hasAll(TestComponent, TestComponent2)).toBe(
+    true,
+  );
 });
 
 test("ecs entity container", () => {

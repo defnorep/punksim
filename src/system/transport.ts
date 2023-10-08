@@ -1,29 +1,67 @@
 import { Component, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
+import { Citizen } from "./citizens";
+import { FlowingTime } from "./time";
 
-/**
- * The TransportSystem is responsible for moving entities around.
- *
- * An entity (probably a Citizen) can signal their intent to travel, including the destination.
- * If the user is in the right place to begin travel, then the system will determine how long
- * it would take for them to travel and put them in travel status for that amount of time.
- * When the time is up, the system will move the entity to the destination and reset any travel markers.
- */
-export class TransportSystem extends System {
-  update(delta: number, entities: EntityContainer): void {
-    /**
-     * Here are the basic steps. We may split this up into multiple systems.
-     *
-     * 1. Select Entities that have both IntendsToTravel and Location components.
-     * 2. Create a Travelling component on each Entity using data from IntendsToTravel, Location,
-     *    and our own location graph knowledge such as distance. Remove the IntendsToTravel and Location components.
-     * 3. On each update, Select Entities that are Travelling, and reduce the timeRemaining proeprty by the delta value.
-     * 4. When the Entity has arrived, update the Location component to the new location and remove Travelling.
-     */
+export class TransportDispatchSystem extends System {
+  update(_delta: number, entities: EntityContainer): void {
     const travellers = entities.allOf(IntendsToTravel, Location);
-    for (const [_entity, components] of travellers.results()) {
-      const _intendsToTravel = components.get(IntendsToTravel);
-      const _location = components.get(Location);
+
+    for (const [entity, components] of travellers.results()) {
+      const intendsToTravel = components.get(IntendsToTravel);
+      const location = components.get(Location);
+
+      if (intendsToTravel.destinationId === location.id) {
+        return;
+      }
+
+      this.ecs.addComponents(entity, [
+        // time in minutes
+        new Travelling(location.id, intendsToTravel.destinationId, 0.2 * 60000),
+      ]);
+
+      this.ecs.removeComponents(entity, [IntendsToTravel, Location]);
+    }
+  }
+}
+
+export class TransportTravellingSystem extends System {
+  update(delta: number, entities: EntityContainer): void {
+    const travellers = entities.allOf(Travelling);
+    const time = this.ecs.getSingleton(FlowingTime);
+
+    for (const [entity, components] of travellers.results()) {
+      const travelling = components.get(Travelling);
+
+      travelling.timeRemaining -= delta * time.rate;
+
+      if (travelling.timeRemaining <= 0) {
+        this.ecs.addComponents(entity, [
+          new Location(travelling.destinationId),
+        ]);
+
+        this.ecs.removeComponents(entity, [Travelling]);
+      }
+    }
+  }
+}
+
+export class TransportRandomIntentSystem extends System {
+  update(delta: number, entities: EntityContainer): void {
+    const citizens = entities.allOf(Citizen, Location);
+    const travellers = entities.allOf(Travelling);
+
+    for (const [entity, components] of citizens.results()) {
+      const willTravel = Math.random() < 0.005;
+      const location = components.get(Location);
+
+      if (
+        travellers.results().length < 3 &&
+        location.id === "origin-1" &&
+        willTravel
+      ) {
+        this.ecs.addComponents(entity, [new IntendsToTravel("destination-1")]);
+      }
     }
   }
 }
@@ -31,15 +69,15 @@ export class TransportSystem extends System {
 export type LocationId = string;
 
 export class IntendsToTravel extends Component {
-  constructor(public destination: LocationId) {
+  constructor(public destinationId: LocationId) {
     super();
   }
 }
 
 export class Travelling extends Component {
   constructor(
-    public origin: LocationId,
-    public destination: LocationId,
+    public originId: LocationId,
+    public destinationId: LocationId,
     public timeRemaining: number,
   ) {
     super();
