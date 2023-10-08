@@ -31,7 +31,9 @@ import { TravellersTable } from "./templates/transport";
  * Let's use the fast seed layer all the time for now.
  * Maybe we will slow things down in the future when there is more to watch.
  */
-const config = { ...seed.base, ...seed.fast };
+const config = process.env.FAST
+  ? { ...seed.base, ...seed.fast }
+  : { ...seed.base };
 const date = new Date(config.date);
 const rateOfTime = config.rateOfTime;
 const citizens = Array(config.citizens)
