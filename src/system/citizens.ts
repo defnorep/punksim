@@ -1,22 +1,25 @@
 import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
-import { Component, Ecs, Entity, System } from "../ecs";
+import { Component, Ecs, System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { FlowingTime } from "./time";
 
 /**
  * The CitizensAgeSystem is responsible for aging citizens.
  */
 export class CitizensAgeSystem extends System {
-  update(_delta: number, entities: Entity[]): void {
-    const time = this.ecs.reduceToComponent(FlowingTime).at(0); // scary; what if there are more?
+  update(_delta: number, entities: EntityContainer): void {
+    const time = this.ecs.getSingleton(FlowingTime);
 
     if (!time) {
-      // we literally need more time
       return;
     }
 
-    for (const citizen of this.ecs.reduceToComponent(Citizen)) {
-      citizen.age = age(citizen.birthdate, time.datetime);
+    for (const [_entity, components] of entities.allOf(Citizen).results()) {
+      if (components.has(Citizen)) {
+        const citizen = components.get(Citizen);
+        citizen.age = age(citizen.birthdate, time.datetime);
+      }
     }
   }
 }
@@ -32,7 +35,7 @@ export class StartupCitizenPopulatorSystem extends System {
     super(ecs);
   }
 
-  update(_delta: number, _entities: Entity[]): void {
+  update(_delta: number, _entities: EntityContainer): void {
     this.citizens.forEach((citizen) => {
       this.ecs.createEntity(citizen);
     });

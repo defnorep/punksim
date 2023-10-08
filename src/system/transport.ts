@@ -1,4 +1,5 @@
-import { Component, Entity, System } from "../ecs";
+import { Component, System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 
 /**
  * The TransportSystem is responsible for moving entities around.
@@ -9,7 +10,7 @@ import { Component, Entity, System } from "../ecs";
  * When the time is up, the system will move the entity to the destination and reset any travel markers.
  */
 export class TransportSystem extends System {
-  update(delta: number, entities: Entity[]): void {
+  update(delta: number, entities: EntityContainer): void {
     /**
      * Here are the basic steps. We may split this up into multiple systems.
      *
@@ -19,9 +20,11 @@ export class TransportSystem extends System {
      * 3. On each update, Select Entities that are Travelling, and reduce the timeRemaining proeprty by the delta value.
      * 4. When the Entity has arrived, update the Location component to the new location and remove Travelling.
      */
-    const entitiesWithTravelIntent =
-      // already seeing some ergonomic requirements; we need to be able to select entities with multiple components
-      this.ecs.reduceToComponent(IntendsToTravel);
+    const travellers = entities.allOf(IntendsToTravel, Location);
+    for (const [_entity, components] of travellers.results()) {
+      const _intendsToTravel = components.get(IntendsToTravel);
+      const _location = components.get(Location);
+    }
   }
 }
 

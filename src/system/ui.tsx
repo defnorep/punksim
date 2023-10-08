@@ -1,7 +1,7 @@
-import { HtmlEscapedString } from "hono/utils/html";
 import { CitizensCensus, CitizensDetail } from "../../templates/citizens";
 import { Time } from "../../templates/global";
-import { Ecs, Entity, System } from "../ecs";
+import { System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { Citizen, deriveCensus } from "./citizens";
 import { SocketConnection } from "./net";
 import { FlowingTime } from "./time";
@@ -10,16 +10,15 @@ import { FlowingTime } from "./time";
  * Broadcasts the current time to all connected clients.
  */
 export class TimeUiSystem extends System {
-  update(_delta: number, entities: Entity[]): void {
-    const entity = entities.find((entity) =>
-      this.ecs.getComponents(entity).has(FlowingTime),
-    );
+  update(_delta: number, entities: EntityContainer): void {
+    const time = this.ecs.getSingleton(FlowingTime);
+    const connections = entities.allOf(SocketConnection).results();
 
-    if (entity) {
-      const time = this.ecs.getComponents(entity).get(FlowingTime);
-
-      if (time) {
-        broadcast(this.ecs, <Time datetime={time.datetime} />);
+    if (time) {
+      for (const [_entity, components] of connections) {
+        components
+          .get(SocketConnection)
+          .socket.send(<Time datetime={time.datetime} />);
       }
     }
   }
@@ -29,10 +28,19 @@ export class TimeUiSystem extends System {
  * Broadcasts the current census to all connected clients.
  */
 export class CensusUiSystem extends System {
-  update(_delta: number, entities: Entity[]): void {
-    const citizens = this.ecs.reduceToComponent(Citizen);
+  update(_delta: number, entities: EntityContainer): void {
+    const citizens = entities
+      .allOf(Citizen)
+      .results()
+      .map(([_, c]) => c.get(Citizen));
 
-    broadcast(this.ecs, <CitizensCensus census={deriveCensus(citizens)} />);
+    const connections = entities.allOf(SocketConnection).results();
+
+    for (const [_entity, components] of connections) {
+      components
+        .get(SocketConnection)
+        .socket.send(<CitizensCensus census={deriveCensus(citizens)} />);
+    }
   }
 }
 
@@ -40,15 +48,18 @@ export class CensusUiSystem extends System {
  * Broadcasts the current citizen details to all connected clients.
  */
 export class CitizensUiSystem extends System {
-  update(_delta: number, entities: Entity[]): void {
-    const citizens = this.ecs.reduceToComponent(Citizen);
+  update(_delta: number, entities: EntityContainer): void {
+    const citizens = entities
+      .allOf(Citizen)
+      .results()
+      .map(([_, c]) => c.get(Citizen));
 
-    broadcast(this.ecs, <CitizensDetail citizens={citizens} />);
+    const connections = entities.allOf(SocketConnection).results();
+
+    for (const [_entity, components] of connections) {
+      components
+        .get(SocketConnection)
+        .socket.send(<CitizensDetail citizens={citizens} />);
+    }
   }
 }
-
-const broadcast = (ecs: Ecs, message: HtmlEscapedString) => {
-  for (const connection of ecs.reduceToComponent(SocketConnection)) {
-    connection.socket.send(message);
-  }
-};

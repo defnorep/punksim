@@ -1,47 +1,21 @@
 import { randomBytes } from "crypto";
+import { ComponentContainer } from "./ecs/componentContainer";
+import { EntityContainer } from "./ecs/entityContainer";
 
 export type Entity = string;
 
 export abstract class Component {}
 
-type ComponentClass<T extends Component> = new (...args: any[]) => T;
-
-export class ComponentContainer {
-  private map = new Map<Function, Component>();
-
-  public add(component: Component): void {
-    this.map.set(component.constructor, component);
-  }
-
-  public get<T extends Component>(componentClass: ComponentClass<T>): T {
-    return this.map.get(componentClass) as T;
-  }
-
-  public has(componentClass: Function): boolean {
-    return this.map.has(componentClass);
-  }
-
-  public hasAll(componentClasses: Iterable<Function>): boolean {
-    for (let cls of componentClasses) {
-      if (!this.map.has(cls)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public delete(componentClass: Function): void {
-    this.map.delete(componentClass);
-  }
-}
+export type ComponentClass<T extends Component> = new (...args: any[]) => T;
 
 export abstract class System {
   constructor(protected ecs: Ecs) {}
-  abstract update(delta: number, entities: Entity[]): void;
+  abstract update(delta: number, entities: EntityContainer): void;
 }
 
 export class Ecs {
   private entities: Map<Entity, ComponentContainer> = new Map();
+  private singletons: ComponentContainer = new ComponentContainer();
   private startupSystems: System[] = [];
   private systems: System[] = [];
 
@@ -57,20 +31,20 @@ export class Ecs {
 
     return entity;
   }
-
   destroyEntity(entity: Entity): void {
     this.entities.delete(entity);
   }
 
-  getEntities(): Entity[] {
-    return [...this.entities.keys()];
+  getEntities(): EntityContainer {
+    return new EntityContainer(this.entities);
   }
 
-  reduceToComponent<T extends Component>(component: ComponentClass<T>): T[] {
-    return this.getEntities()
-      .map((entity) => this.getComponents(entity))
-      .filter((components) => components.has(component))
-      .map((components) => components.get(component));
+  createSingleton(component: Component) {
+    this.singletons.add(component);
+  }
+
+  getSingleton<T extends Component>(component: ComponentClass<T>) {
+    return this.singletons.get(component);
   }
 
   addComponents(entity: Entity, components: Component[]): void {

@@ -1,0 +1,19 @@
+{
+  "graph": {
+    "nodes": {
+      "Residence": {},
+      "Work": {}
+    },
+    "edges": [
+      {
+        "source": "Residence",
+        "target": "Work",
+        "relation": "roadway",
+        "directed": false,
+        "metadata": {
+          "distance": 1.0
+        }
+      }
+    ]
+  }
+}

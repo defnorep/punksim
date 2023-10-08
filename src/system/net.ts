@@ -1,11 +1,12 @@
 import { ServerWebSocket } from "bun";
 import { Component, Entity, System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 
 /**
  * The NetSystem is responsible for managing the network connection.
  */
 export class NetSystem extends System {
-  update(_delta: number, _entities: Entity[]): void {
+  update(_delta: number, _entities: EntityContainer): void {
     Bun.serve<WebSocketData>({
       port: 3001,
       fetch: (req, server) => {
