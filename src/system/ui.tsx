@@ -1,5 +1,5 @@
-import { Time } from "../../templates/global";
 import { Population, PopulationCensus } from "../../templates/population";
+import { Time } from "../../templates/time";
 import { Travellers } from "../../templates/transport";
 import { System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";

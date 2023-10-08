@@ -21,9 +21,9 @@ import {
   TimeUiSystem,
   TravellerUiSystem,
 } from "./src/system/ui";
-import { Time } from "./templates/global";
 import { Layout } from "./templates/layout";
 import { Population, PopulationCensus } from "./templates/population";
+import { Time } from "./templates/time";
 import { Travellers } from "./templates/transport";
 
 /**
