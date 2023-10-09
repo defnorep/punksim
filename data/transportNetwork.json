@@ -47,7 +47,7 @@
         "relation": "Road",
         "directed": false,
         "metadata": {
-          "distance": 500
+          "distance": 1500
         }
       },
       {
@@ -56,7 +56,7 @@
         "relation": "Road",
         "directed": false,
         "metadata": {
-          "distance": 500
+          "distance": 1500
         }
       },
       {
@@ -65,7 +65,7 @@
         "relation": "Road",
         "directed": false,
         "metadata": {
-          "distance": 500
+          "distance": 2000
         }
       },
       {
@@ -74,7 +74,7 @@
         "relation": "Road",
         "directed": false,
         "metadata": {
-          "distance": 500
+          "distance": 1000
         }
       }
     ]

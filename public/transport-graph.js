@@ -5,13 +5,11 @@ const cy = cytoscape({
   container: document.getElementById("render"),
   elements,
   style: [
-    // the stylesheet for the graph
     {
       selector: "node",
       style: {
-        height: 20,
-        width: 20,
         color: "#fff",
+        "font-size": "16px",
         "background-color": "#18e018",
         label: "data(label)",
       },
@@ -22,8 +20,7 @@ const cy = cytoscape({
       style: {
         "curve-style": "haystack",
         "haystack-radius": 0,
-        width: 5,
-        opacity: 0.5,
+        opacity: 0.35,
         "line-color": "#a2efa2",
       },
     },

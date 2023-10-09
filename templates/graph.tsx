@@ -29,6 +29,7 @@ const tpnToCyto = (tpn: TransportNetwork) => {
         id: randomBytes(8).toString("hex"),
         source: e.source,
         target: e.target,
+        weight: e.distance,
       },
     })),
   ]);
