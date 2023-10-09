@@ -11,7 +11,7 @@
         "relation": "Road",
         "directed": false,
         "metadata": {
-          "distance": 1000
+          "distance": 500
         }
       }
     ]
