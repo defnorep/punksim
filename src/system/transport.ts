@@ -156,7 +156,8 @@ export class TransportNetwork {
 
     for (const node in object.nodes) {
       network.addNode({
-        label: node,
+        label: object.nodes[node].label,
+        id: node,
       });
     }
 
@@ -181,6 +182,14 @@ export class TransportNetwork {
     this.edges.add(edge);
   }
 
+  public getNodes() {
+    return Array.from(this.nodes.entries());
+  }
+
+  public getEdges() {
+    return Array.from(this.edges);
+  }
+
   public findPath(
     origin: LocationId,
     destination: LocationId,
@@ -199,7 +208,9 @@ enum TransportMode {
 
 export interface TransportNode {
   label: string;
+  id: string;
 }
+
 export interface TransportEdge {
   source: LocationId;
   target: LocationId;

@@ -23,6 +23,7 @@ import {
   TimeUiSystem,
   TravellerUiSystem,
 } from "./src/system/ui";
+import { TransportNetworkGraph } from "./templates/graph";
 import { Layout } from "./templates/layout";
 import { Population, PopulationCensus } from "./templates/population";
 import { Time } from "./templates/time";
@@ -79,6 +80,7 @@ app.get("/", (c) =>
       <PopulationCensus />
       <Population />
       <Travellers />
+      <TransportNetworkGraph network={tpn} />
     </Layout>,
   ),
 );

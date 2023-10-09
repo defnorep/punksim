@@ -1,13 +1,76 @@
 {
   "graph": {
     "nodes": {
-      "Residence-1": {},
-      "Work-1": {}
+      "Residence-1": {
+        "label": "Critical Heights Apartments",
+        "metadata": {}
+      },
+      "Residence-2": {
+        "label": "Capsule Condominiums",
+        "metadata": {}
+      },
+      "Work-1": {
+        "label": "Underlink Central Office",
+        "metadata": {}
+      },
+      "Work-2": {
+        "label": "Multibyte Semiconductor",
+        "metadata": {}
+      },
+      "Plaza-1": {
+        "label": "Glorious Executive Plaza",
+        "metadata": {}
+      }
     },
     "edges": [
       {
         "source": "Residence-1",
         "target": "Work-1",
+        "relation": "Road",
+        "directed": false,
+        "metadata": {
+          "distance": 500
+        }
+      },
+      {
+        "source": "Residence-1",
+        "target": "Work-2",
+        "relation": "Road",
+        "directed": false,
+        "metadata": {
+          "distance": 1000
+        }
+      },
+      {
+        "source": "Plaza-1",
+        "target": "Residence-1",
+        "relation": "Road",
+        "directed": false,
+        "metadata": {
+          "distance": 500
+        }
+      },
+      {
+        "source": "Plaza-1",
+        "target": "Residence-2",
+        "relation": "Road",
+        "directed": false,
+        "metadata": {
+          "distance": 500
+        }
+      },
+      {
+        "source": "Plaza-1",
+        "target": "Work-1",
+        "relation": "Road",
+        "directed": false,
+        "metadata": {
+          "distance": 500
+        }
+      },
+      {
+        "source": "Plaza-1",
+        "target": "Work-2",
         "relation": "Road",
         "directed": false,
         "metadata": {
