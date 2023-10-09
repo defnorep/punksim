@@ -4,7 +4,7 @@ import { EntityContainer } from "../ecs/entityContainer";
 /**
  * This system is responsible for starting the time in the game world.
  */
-export class StartupTimeSystem extends System {
+export class TimeStartupSystem extends System {
   constructor(
     ecs: Ecs,
     private datetime: Date,

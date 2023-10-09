@@ -5,7 +5,7 @@ import { EntityContainer } from "../ecs/entityContainer";
 /**
  * The NetSystem is responsible for managing the network connection.
  */
-export class NetSystem extends System {
+export class NetStartupSystem extends System {
   update(_delta: number, _entities: EntityContainer): void {
     Bun.serve<WebSocketData>({
       port: 3001,

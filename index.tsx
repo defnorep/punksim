@@ -4,13 +4,13 @@ import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
-import { NetSystem } from "./src/system/net";
+import { NetStartupSystem } from "./src/system/net";
 import {
-  AgeSystem as CitizenAgingSystem,
-  PopulationStartupSystem as CitizenPopulatorSystem,
+  AgeSystem,
+  PopulationStartupSystem,
   generateCitizen,
 } from "./src/system/population";
-import { StartupTimeSystem, TimeSystem } from "./src/system/time";
+import { TimeStartupSystem, TimeSystem } from "./src/system/time";
 import {
   RandomTravelIntentSystem,
   TransportDispatchSystem,
@@ -51,14 +51,14 @@ const speeds = TransportTravellingSystem.deserializeModeSpeeds(
  */
 const ecs = new Ecs();
 ecs
-  .addStartupSystem(new NetSystem(ecs))
-  .addStartupSystem(new StartupTimeSystem(ecs, date, rateOfTime))
-  .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
+  .addStartupSystem(new NetStartupSystem(ecs))
+  .addStartupSystem(new TimeStartupSystem(ecs, date, rateOfTime))
+  .addStartupSystem(new PopulationStartupSystem(ecs, citizens))
   .addSystem(new TimeSystem(ecs))
   .addSystem(new TransportDispatchSystem(ecs, tpn))
   .addSystem(new TransportTravellingSystem(ecs, speeds))
   .addSystem(new RandomTravelIntentSystem(ecs))
-  .addSystem(new CitizenAgingSystem(ecs))
+  .addSystem(new AgeSystem(ecs))
   .addSystem(new CensusUiSystem(ecs))
   .addSystem(new CitizensUiSystem(ecs))
   .addSystem(new TravellerUiSystem(ecs))
