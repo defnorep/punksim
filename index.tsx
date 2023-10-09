@@ -4,25 +4,20 @@ import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
-import { NetStartupSystem } from "./src/system/net";
-import {
-  AgeSystem,
-  PopulationStartupSystem,
-  generateCitizen,
-} from "./src/system/population";
-import { TimeStartupSystem, TimeSystem } from "./src/system/time";
-import {
-  RandomTravelIntentSystem,
-  TransportDispatchSystem,
-  TransportNetwork,
-  TransportTravellingSystem,
-} from "./src/system/transport";
-import {
-  CensusUiSystem,
-  CitizensUiSystem,
-  TimeUiSystem,
-  TravellerUiSystem,
-} from "./src/system/ui";
+import { NetStartupSystem } from "./src/system/net/NetStartupSystem";
+import { generateCitizen } from "./src/system/population";
+import { AgeSystem } from "./src/system/population/AgeSystem";
+import { PopulationStartupSystem } from "./src/system/population/PopulationStartupSystem";
+import { TimeStartupSystem } from "./src/system/time/TimeStartupSystem";
+import { TimeSystem } from "./src/system/time/TimeSystem";
+import { RandomTravelIntentSystem } from "./src/system/transport/RandomTravelIntentSystem";
+import { TransportDispatchSystem } from "./src/system/transport/TransportDispatchSystem";
+import { TransportNetwork } from "./src/system/transport/TransportNetwork";
+import { TransportTravellingSystem } from "./src/system/transport/TransportTravellingSystem";
+import { CensusUiSystem } from "./src/system/ui/CensusUiSystem";
+import { CitizensUiSystem } from "./src/system/ui/CitizensUiSystem";
+import { TimeUiSystem } from "./src/system/ui/TimeUiSystem";
+import { TravellerUiSystem } from "./src/system/ui/TravellerUiSystem";
 import { TransportNetworkGraph } from "./templates/graph";
 import { Layout } from "./templates/layout";
 import { Population, PopulationCensus } from "./templates/population";

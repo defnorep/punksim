@@ -1,66 +1,7 @@
 import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
-import { Component, Ecs, System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { TimeComponent } from "./time";
+import { Component } from "../ecs";
 import { LocationComponent } from "./transport";
-
-/**
- * The CitizensAgeSystem is responsible for aging citizens.
- */
-export class AgeSystem extends System {
-  update(_delta: number, entities: EntityContainer): void {
-    const time = this.ecs.getSingleton(TimeComponent);
-
-    if (!time) {
-      return;
-    }
-
-    for (const [_entity, components] of entities
-      .allOf(CitizenComponent)
-      .results()) {
-      if (components.has(CitizenComponent)) {
-        const citizen = components.get(CitizenComponent);
-        citizen.age = age(citizen.birthdate, time.datetime);
-      }
-    }
-  }
-}
-
-/**
- * The CitizensPopulator is responsible for creating the initial set of citizens.
- */
-export class PopulationStartupSystem extends System {
-  constructor(
-    ecs: Ecs,
-    private population: [CitizenComponent, LocationComponent][],
-  ) {
-    super(ecs);
-  }
-
-  update(_delta: number, _entities: EntityContainer): void {
-    this.population.forEach((citizen) => {
-      this.ecs.createEntity(...citizen);
-    });
-  }
-}
-
-export class CitizenComponent extends Component {
-  constructor(
-    public age: number,
-    public birthdate: Date,
-    public height: number,
-    public id: string,
-    public name: string,
-    public gender: Gender,
-    public species: Species,
-    public status: Status,
-    public surname: string,
-    public weight: number,
-  ) {
-    super();
-  }
-}
 
 export enum Species {
   Android = "Android",
@@ -87,6 +28,23 @@ export interface Census {
     female: number;
     noGender: number;
   };
+}
+
+export class CitizenComponent extends Component {
+  constructor(
+    public age: number,
+    public birthdate: Date,
+    public height: number,
+    public id: string,
+    public name: string,
+    public gender: Gender,
+    public species: Species,
+    public status: Status,
+    public surname: string,
+    public weight: number,
+  ) {
+    super();
+  }
 }
 
 export const deriveCensus = (citizens: CitizenComponent[]): Census => {

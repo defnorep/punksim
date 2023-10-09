@@ -1,0 +1,25 @@
+import { System } from "../../ecs";
+import { EntityContainer } from "../../ecs/entityContainer";
+import {
+  IntendsToTravelComponent,
+  LocationComponent,
+  TransportMode,
+} from "../transport";
+import { CitizenComponent } from "./../population";
+
+export class RandomTravelIntentSystem extends System {
+  update(delta: number, entities: EntityContainer): void {
+    const citizens = entities.allOf(CitizenComponent, LocationComponent);
+
+    for (const [entity, components] of citizens.results()) {
+      const willTravel = Math.random() < 0.01;
+      const location = components.get(LocationComponent);
+
+      if (location.id === "Residence-1" && willTravel) {
+        this.ecs.addComponents(entity, [
+          new IntendsToTravelComponent("Work-1", TransportMode.Road),
+        ]);
+      }
+    }
+  }
+}
