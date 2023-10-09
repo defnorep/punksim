@@ -2,7 +2,10 @@
   "base": {
     "date": "2200/01/01",
     "citizens": 20,
-    "rateOfTime": 1.0
+    "rateOfTime": 1.0,
+    "transportSpeeds": {
+      "Road": 50
+    }
   },
   "fast": {
     "rateOfTime": 86400.0

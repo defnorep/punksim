@@ -2,7 +2,7 @@ import { Component, Ecs, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
 
 /**
- * The StartupTimeSystem is responsible for setting the initial time.
+ * This system is responsible for starting the time in the game world.
  */
 export class StartupTimeSystem extends System {
   constructor(
@@ -19,7 +19,7 @@ export class StartupTimeSystem extends System {
 }
 
 /**
- * The TimeSystem is responsible for managing the flow of time.
+ * This system is responsible for updating the time in the game world.
  */
 export class TimeSystem extends System {
   constructor(ecs: Ecs) {

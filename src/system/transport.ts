@@ -33,7 +33,6 @@ export class TransportDispatchSystem extends System {
       );
 
       this.ecs.addComponents(entity, [
-        // time in minutes
         new Travelling(
           location.id,
           intendsToTravel.destinationId,
@@ -49,11 +48,11 @@ export class TransportDispatchSystem extends System {
 }
 
 export class TransportTravellingSystem extends System {
-  speeds: Map<TransportMode, number>;
-  constructor(ecs: Ecs) {
+  constructor(
+    ecs: Ecs,
+    private speeds: Map<TransportMode, number>,
+  ) {
     super(ecs);
-    this.speeds = new Map();
-    this.speeds.set(TransportMode.Road, 50);
   }
 
   update(delta: number, entities: EntityContainer): void {
@@ -82,6 +81,16 @@ export class TransportTravellingSystem extends System {
         this.ecs.removeComponents(entity, [Travelling]);
       }
     }
+  }
+
+  static deserializeModeSpeeds(object: any): Map<TransportMode, number> {
+    const speeds = new Map();
+
+    for (const mode in object) {
+      speeds.set(mode as TransportMode, object[mode]);
+    }
+
+    return speeds;
   }
 }
 

@@ -42,6 +42,9 @@ const citizens = Array(config.citizens)
   .fill(1)
   .map(() => generateCitizen(date, 80));
 const tpn = TransportNetwork.fromObject(transportNetwork.graph);
+const speeds = TransportTravellingSystem.deserializeModeSpeeds(
+  config.transportSpeeds,
+);
 
 /**
  * Simulation setup.
@@ -53,7 +56,7 @@ ecs
   .addStartupSystem(new CitizenPopulatorSystem(ecs, citizens))
   .addSystem(new TimeSystem(ecs))
   .addSystem(new TransportDispatchSystem(ecs, tpn))
-  .addSystem(new TransportTravellingSystem(ecs))
+  .addSystem(new TransportTravellingSystem(ecs, speeds))
   .addSystem(new RandomTravelIntentSystem(ecs))
   .addSystem(new CitizenAgingSystem(ecs))
   .addSystem(new CensusUiSystem(ecs))
