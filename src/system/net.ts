@@ -26,7 +26,9 @@ export class NetStartupSystem extends System {
       websocket: {
         open: (ws) => {
           console.log(`Client connected: `, ws.remoteAddress);
-          this.ecs.addComponents(ws.data.entity, [new SocketConnection(ws)]);
+          this.ecs.addComponents(ws.data.entity, [
+            new SocketConnectionComponent(ws),
+          ]);
         },
         // Bun requires this method to be implemented
         // even though we aren't receiving any messages right now.
@@ -40,7 +42,7 @@ export class NetStartupSystem extends System {
   }
 }
 
-export class SocketConnection extends Component {
+export class SocketConnectionComponent extends Component {
   constructor(public socket: ServerWebSocket<unknown>) {
     super();
   }

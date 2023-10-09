@@ -3,23 +3,23 @@ import { Time } from "../../templates/time";
 import { Travellers } from "../../templates/transport";
 import { System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
-import { SocketConnection } from "./net";
-import { Citizen, deriveCensus } from "./population";
-import { FlowingTime } from "./time";
-import { Location, Travelling } from "./transport";
+import { SocketConnectionComponent } from "./net";
+import { CitizenComponent, deriveCensus } from "./population";
+import { TimeComponent } from "./time";
+import { LocationComponent, TravellingComponent } from "./transport";
 
 /**
  * Broadcasts the current time to all connected clients.
  */
 export class TimeUiSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
-    const time = this.ecs.getSingleton(FlowingTime);
-    const connections = entities.allOf(SocketConnection).results();
+    const time = this.ecs.getSingleton(TimeComponent);
+    const connections = entities.allOf(SocketConnectionComponent).results();
 
     if (time) {
       for (const [_entity, components] of connections) {
         components
-          .get(SocketConnection)
+          .get(SocketConnectionComponent)
           .socket.send(<Time datetime={time.datetime} />);
       }
     }
@@ -32,15 +32,15 @@ export class TimeUiSystem extends System {
 export class CensusUiSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
     const citizens = entities
-      .allOf(Citizen)
+      .allOf(CitizenComponent)
       .results()
-      .map(([_, c]) => c.get(Citizen));
+      .map(([_, c]) => c.get(CitizenComponent));
 
-    const connections = entities.allOf(SocketConnection).results();
+    const connections = entities.allOf(SocketConnectionComponent).results();
 
     for (const [_entity, components] of connections) {
       components
-        .get(SocketConnection)
+        .get(SocketConnectionComponent)
         .socket.send(<PopulationCensus census={deriveCensus(citizens)} />);
     }
   }
@@ -52,18 +52,18 @@ export class CensusUiSystem extends System {
 export class CitizensUiSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
     const citizens = entities
-      .allOf(Citizen, Location)
+      .allOf(CitizenComponent, LocationComponent)
       .results()
       .map(([_, c]) => ({
-        citizen: c.get(Citizen),
-        location: c.get(Location),
+        citizen: c.get(CitizenComponent),
+        location: c.get(LocationComponent),
       }));
 
-    const connections = entities.allOf(SocketConnection).results();
+    const connections = entities.allOf(SocketConnectionComponent).results();
 
     for (const [_entity, components] of connections) {
       components
-        .get(SocketConnection)
+        .get(SocketConnectionComponent)
         .socket.send(<Population citizens={citizens} />);
     }
   }
@@ -73,17 +73,20 @@ export class CitizensUiSystem extends System {
  * Broadcasts the current traveller details to all connected clients.
  */
 export class TravellerUiSystem extends System {
-  update(delta: number, entities: EntityContainer): void {
+  update(_delta: number, entities: EntityContainer): void {
     const travellers = entities
-      .allOf(Citizen, Travelling)
+      .allOf(CitizenComponent, TravellingComponent)
       .results()
-      .map(([_, c]) => ({ ...c.get(Citizen), ...c.get(Travelling) }));
+      .map(([_, c]) => ({
+        ...c.get(CitizenComponent),
+        ...c.get(TravellingComponent),
+      }));
 
-    const connections = entities.allOf(SocketConnection).results();
+    const connections = entities.allOf(SocketConnectionComponent).results();
 
     for (const [_entity, components] of connections) {
       components
-        .get(SocketConnection)
+        .get(SocketConnectionComponent)
         .socket.send(<Travellers travellers={travellers} />);
     }
   }

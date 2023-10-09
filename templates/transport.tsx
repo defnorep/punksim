@@ -1,8 +1,8 @@
-import { Citizen } from "../src/system/population";
-import { Travelling } from "../src/system/transport";
+import { CitizenComponent } from "../src/system/population";
+import { TravellingComponent } from "../src/system/transport";
 
 export const Travellers = (props: {
-  travellers?: (Citizen & Travelling)[];
+  travellers?: (CitizenComponent & TravellingComponent)[];
 }) => {
   const jsx = (
     <table>

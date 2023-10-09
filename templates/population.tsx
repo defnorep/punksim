@@ -1,5 +1,5 @@
-import { Census, Citizen } from "../src/system/population";
-import { Location } from "../src/system/transport";
+import { Census, CitizenComponent } from "../src/system/population";
+import { LocationComponent } from "../src/system/transport";
 
 export const PopulationCensus = (props: { census?: Census }) => {
   const jsx = (
@@ -37,7 +37,7 @@ export const PopulationCensus = (props: { census?: Census }) => {
 };
 
 export const Population = (props: {
-  citizens?: { citizen: Citizen; location: Location }[];
+  citizens?: { citizen: CitizenComponent; location: LocationComponent }[];
 }) => {
   const jsx = (
     <table>

@@ -14,7 +14,7 @@ export class TimeStartupSystem extends System {
   }
 
   update(_delta: number, _entities: EntityContainer): void {
-    this.ecs.createSingleton(new FlowingTime(this.datetime, this.rate));
+    this.ecs.createSingleton(new TimeComponent(this.datetime, this.rate));
   }
 }
 
@@ -27,7 +27,7 @@ export class TimeSystem extends System {
   }
 
   update(delta: number, entities: EntityContainer): void {
-    const time = this.ecs.getSingleton(FlowingTime);
+    const time = this.ecs.getSingleton(TimeComponent);
 
     if (time) {
       time.datetime.setTime(time.datetime.getTime() + delta * time.rate);
@@ -35,7 +35,7 @@ export class TimeSystem extends System {
   }
 }
 
-export class FlowingTime extends Component {
+export class TimeComponent extends Component {
   constructor(
     public datetime: Date,
     public rate: number,

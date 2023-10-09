@@ -1,7 +1,7 @@
 import { Component, Ecs, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
-import { Citizen } from "./population";
-import { FlowingTime } from "./time";
+import { CitizenComponent } from "./population";
+import { TimeComponent } from "./time";
 
 export class TransportDispatchSystem extends System {
   constructor(
@@ -12,11 +12,14 @@ export class TransportDispatchSystem extends System {
   }
 
   update(_delta: number, entities: EntityContainer): void {
-    const travellers = entities.allOf(IntendsToTravel, Location);
+    const travellers = entities.allOf(
+      IntendsToTravelComponent,
+      LocationComponent,
+    );
 
     for (const [entity, components] of travellers.results()) {
-      const intendsToTravel = components.get(IntendsToTravel);
-      const location = components.get(Location);
+      const intendsToTravel = components.get(IntendsToTravelComponent);
+      const location = components.get(LocationComponent);
 
       if (intendsToTravel.destinationId === location.id) {
         return;
@@ -33,7 +36,7 @@ export class TransportDispatchSystem extends System {
       );
 
       this.ecs.addComponents(entity, [
-        new Travelling(
+        new TravellingComponent(
           location.id,
           intendsToTravel.destinationId,
           distance,
@@ -42,7 +45,9 @@ export class TransportDispatchSystem extends System {
         ),
       ]);
 
-      this.ecs.removeComponents(entity, [IntendsToTravel, Location]);
+      this.ecs.removeComponents(entity, [IntendsToTravelComponent]);
+
+      location.id = `Travelling by ${intendsToTravel.mode}`;
     }
   }
 }
@@ -56,11 +61,11 @@ export class TransportTravellingSystem extends System {
   }
 
   update(delta: number, entities: EntityContainer): void {
-    const travellers = entities.allOf(Travelling);
-    const time = this.ecs.getSingleton(FlowingTime);
+    const travellers = entities.allOf(TravellingComponent);
+    const time = this.ecs.getSingleton(TimeComponent);
 
     for (const [entity, components] of travellers.results()) {
-      const travelling = components.get(Travelling);
+      const travelling = components.get(TravellingComponent);
       const speed = this.speeds.get(travelling.mode);
 
       if (!speed) {
@@ -75,10 +80,10 @@ export class TransportTravellingSystem extends System {
         delta * time.rate * ((speed * 1000) / 60 / 60 / 1000);
       if (travelling.distanceRemaining <= 0) {
         this.ecs.addComponents(entity, [
-          new Location(travelling.destinationId),
+          new LocationComponent(travelling.destinationId),
         ]);
 
-        this.ecs.removeComponents(entity, [Travelling]);
+        this.ecs.removeComponents(entity, [TravellingComponent]);
       }
     }
   }
@@ -96,15 +101,15 @@ export class TransportTravellingSystem extends System {
 
 export class RandomTravelIntentSystem extends System {
   update(delta: number, entities: EntityContainer): void {
-    const citizens = entities.allOf(Citizen, Location);
+    const citizens = entities.allOf(CitizenComponent, LocationComponent);
 
     for (const [entity, components] of citizens.results()) {
       const willTravel = Math.random() < 0.01;
-      const location = components.get(Location);
+      const location = components.get(LocationComponent);
 
       if (location.id === "Residence-1" && willTravel) {
         this.ecs.addComponents(entity, [
-          new IntendsToTravel("Work-1", TransportMode.Road),
+          new IntendsToTravelComponent("Work-1", TransportMode.Road),
         ]);
       }
     }
@@ -113,7 +118,7 @@ export class RandomTravelIntentSystem extends System {
 
 export type LocationId = string;
 
-export class IntendsToTravel extends Component {
+export class IntendsToTravelComponent extends Component {
   constructor(
     public destinationId: LocationId,
     public mode: TransportMode,
@@ -122,7 +127,7 @@ export class IntendsToTravel extends Component {
   }
 }
 
-export class Travelling extends Component {
+export class TravellingComponent extends Component {
   constructor(
     public originId: LocationId,
     public destinationId: LocationId,
@@ -134,7 +139,7 @@ export class Travelling extends Component {
   }
 }
 
-export class Location extends Component {
+export class LocationComponent extends Component {
   constructor(public id: LocationId) {
     super();
   }

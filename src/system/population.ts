@@ -2,23 +2,25 @@ import { randomBytes, randomInt } from "crypto";
 import names from "../../data/names.json";
 import { Component, Ecs, System } from "../ecs";
 import { EntityContainer } from "../ecs/entityContainer";
-import { FlowingTime } from "./time";
-import { Location } from "./transport";
+import { TimeComponent } from "./time";
+import { LocationComponent } from "./transport";
 
 /**
  * The CitizensAgeSystem is responsible for aging citizens.
  */
 export class AgeSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
-    const time = this.ecs.getSingleton(FlowingTime);
+    const time = this.ecs.getSingleton(TimeComponent);
 
     if (!time) {
       return;
     }
 
-    for (const [_entity, components] of entities.allOf(Citizen).results()) {
-      if (components.has(Citizen)) {
-        const citizen = components.get(Citizen);
+    for (const [_entity, components] of entities
+      .allOf(CitizenComponent)
+      .results()) {
+      if (components.has(CitizenComponent)) {
+        const citizen = components.get(CitizenComponent);
         citizen.age = age(citizen.birthdate, time.datetime);
       }
     }
@@ -31,7 +33,7 @@ export class AgeSystem extends System {
 export class PopulationStartupSystem extends System {
   constructor(
     ecs: Ecs,
-    private population: [Citizen, Location][],
+    private population: [CitizenComponent, LocationComponent][],
   ) {
     super(ecs);
   }
@@ -43,7 +45,7 @@ export class PopulationStartupSystem extends System {
   }
 }
 
-export class Citizen extends Component {
+export class CitizenComponent extends Component {
   constructor(
     public age: number,
     public birthdate: Date,
@@ -87,7 +89,7 @@ export interface Census {
   };
 }
 
-export const deriveCensus = (citizens: Citizen[]): Census => {
+export const deriveCensus = (citizens: CitizenComponent[]): Census => {
   return {
     population: citizens.reduce(
       (population, citizen) => {
@@ -124,7 +126,7 @@ export const deriveCensus = (citizens: Citizen[]): Census => {
 export const generateCitizen = (
   referenceDate: Date,
   ageJitter: number = 0,
-): [Citizen, Location] => {
+): [CitizenComponent, LocationComponent] => {
   const isAndroid = Math.random() > 0.7;
   const species = isAndroid ? Species.Android : Species.Human;
   const names = generateCitizenName(species);
@@ -143,7 +145,7 @@ export const generateCitizen = (
   }
 
   return [
-    new Citizen(
+    new CitizenComponent(
       age(birthdate, referenceDate),
       birthdate,
       randomInt(150, 190),
@@ -155,7 +157,7 @@ export const generateCitizen = (
       names[1],
       randomInt(60, 90),
     ),
-    new Location("Residence-1"),
+    new LocationComponent("Residence-1"),
   ];
 };
 
