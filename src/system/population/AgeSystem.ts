@@ -1,6 +1,6 @@
 import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
-import { CitizenComponent, age } from "../population";
+import { CivicIdentityComponent, EpochComponent, age } from "../population";
 import { TimeComponent } from "../time";
 
 /**
@@ -16,11 +16,11 @@ export class AgeSystem extends System {
     }
 
     for (const [_entity, components] of entities
-      .allOf(CitizenComponent)
+      .allOf(CivicIdentityComponent, EpochComponent)
       .results()) {
-      if (components.has(CitizenComponent)) {
-        const citizen = components.get(CitizenComponent);
-        citizen.age = age(citizen.birthdate, time.datetime);
+      if (components.has(EpochComponent)) {
+        const citizen = components.get(EpochComponent);
+        citizen.age = age(citizen.epoch, time.datetime);
       }
     }
   }

@@ -23,13 +23,29 @@ type Meters = number;
 type Kilograms = number;
 type Years = number;
 
+export type CitizenIntersection = CivicIdentityComponent &
+  EpochComponent &
+  PhysicalComponent &
+  LifeformClassificationComponent &
+  GenderComponent &
+  LocationComponent;
+
+export type CitizenArchetype = [
+  CivicIdentityComponent,
+  EpochComponent,
+  PhysicalComponent,
+  LifeformClassificationComponent,
+  GenderComponent,
+  LocationComponent,
+];
+
 export class GenderComponent extends Component {
   constructor(public gender: Gender) {
     super();
   }
 }
 
-export class BiologicalClassificationComponent extends Component {
+export class LifeformClassificationComponent extends Component {
   constructor(public species: Species) {
     super();
   }
@@ -48,34 +64,17 @@ export class CivicIdentityComponent extends Component {
   constructor(
     public id: string,
     public name: string,
-    public status: Status,
     public surname: string,
+    public status: Status,
   ) {
     super();
   }
 }
 
-export class AgeComponent extends Component {
+export class EpochComponent extends Component {
   constructor(
     public age: Years,
-    public birthdate: Date,
-  ) {
-    super();
-  }
-}
-
-export class CitizenComponent extends Component {
-  constructor(
-    public age: number,
-    public birthdate: Date,
-    public height: number,
-    public id: string,
-    public name: string,
-    public gender: Gender,
-    public species: Species,
-    public status: Status,
-    public surname: string,
-    public weight: number,
+    public epoch: Date,
   ) {
     super();
   }
@@ -84,7 +83,7 @@ export class CitizenComponent extends Component {
 export const generateCitizen = (
   referenceDate: Date,
   ageJitter: number = 0,
-): [CitizenComponent, LocationComponent] => {
+): CitizenArchetype => {
   const isAndroid = Math.random() > 0.7;
   const species = isAndroid ? Species.Android : Species.Human;
   const names = generateCitizenName(species);
@@ -103,18 +102,19 @@ export const generateCitizen = (
   }
 
   return [
-    new CitizenComponent(
-      age(birthdate, referenceDate),
-      birthdate,
-      randomInt(150, 190),
+    new CivicIdentityComponent(
       randomBytes(4).toString("hex"),
       names[0],
-      gender,
-      species,
-      Status.Living,
       names[1],
+      Status.Living,
+    ),
+    new EpochComponent(age(birthdate, referenceDate), birthdate),
+    new PhysicalComponent(
+      [randomInt(150, 190) / 10, 0.6, 0.3],
       randomInt(60, 90),
     ),
+    new LifeformClassificationComponent(species),
+    new GenderComponent(gender),
     new LocationComponent("Residence-1"),
   ];
 };
@@ -146,6 +146,7 @@ const generateAndroidName = (): [string, string] => {
     randomInt(100, 999).toString(),
   ];
 };
+
 export class CensusComponent extends Component {
   constructor(
     public total: number,

@@ -2,10 +2,16 @@ import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
 import {
   CensusComponent,
-  CitizenComponent,
+  CitizenArchetype,
+  CivicIdentityComponent,
+  EpochComponent,
   Gender,
+  GenderComponent,
+  LifeformClassificationComponent,
+  PhysicalComponent,
   Species,
 } from "../population";
+import { LocationComponent } from "../transport";
 
 export class CensusStartupSystem extends System {
   update(delta: number, entities: EntityContainer): void {
@@ -17,15 +23,29 @@ export class CensusSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
     const censusComponent = this.ecs.getSingleton(CensusComponent);
     const citizens = entities
-      .allOf(CitizenComponent)
+      .allOf(
+        CivicIdentityComponent,
+        EpochComponent,
+        LifeformClassificationComponent,
+        GenderComponent,
+      )
       .results()
-      .map(([_entity, components]) => components.get(CitizenComponent));
+      .map(
+        ([_entity, components]): CitizenArchetype => [
+          components.get(CivicIdentityComponent),
+          components.get(EpochComponent),
+          components.get(PhysicalComponent),
+          components.get(LifeformClassificationComponent),
+          components.get(GenderComponent),
+          components.get(LocationComponent),
+        ],
+      );
 
     const census = citizens.reduce(
-      (population, citizen) => {
+      (population, [_id, _epoch, _physical, lifeform, gender]) => {
         population.total++;
 
-        switch (citizen.species) {
+        switch (lifeform.species) {
           case Species.Human:
             population.human++;
             break;
@@ -34,7 +54,7 @@ export class CensusSystem extends System {
             break;
         }
 
-        switch (citizen.gender) {
+        switch (gender.gender) {
           case Gender.Male:
             population.male++;
             break;

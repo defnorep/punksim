@@ -1,4 +1,4 @@
-import { CensusComponent, CitizenComponent } from "../src/system/population";
+import { CensusComponent, CitizenIntersection } from "../src/system/population";
 import { LocationComponent } from "../src/system/transport";
 
 export const PopulationCensus = (props: { census?: CensusComponent }) => {
@@ -37,7 +37,10 @@ export const PopulationCensus = (props: { census?: CensusComponent }) => {
 };
 
 export const Population = (props: {
-  citizens?: { citizen: CitizenComponent; location: LocationComponent }[];
+  citizens?: {
+    citizen: CitizenIntersection;
+    location: LocationComponent;
+  }[];
 }) => {
   const jsx = (
     <table>
@@ -63,8 +66,8 @@ export const Population = (props: {
             <td>{citizen.citizen.id}</td>
             <td>{citizen.citizen.age}</td>
             <td>{citizen.citizen.gender.toString()}</td>
-            <td>{citizen.citizen.height} cm</td>
-            <td>{citizen.citizen.weight} kg</td>
+            <td>{citizen.citizen.dimensions[0]} cm</td>
+            <td>{citizen.citizen.mass} kg</td>
             <td>{citizen.citizen.species.toString()}</td>
             <td>{citizen.citizen.status.toString()}</td>
             <td>{citizen.location.id}</td>

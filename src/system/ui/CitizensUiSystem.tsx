@@ -2,7 +2,13 @@ import { Population } from "../../../templates/population";
 import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
-import { CitizenComponent } from "../population";
+import {
+  CivicIdentityComponent,
+  EpochComponent,
+  GenderComponent,
+  LifeformClassificationComponent,
+  PhysicalComponent,
+} from "../population";
 import { LocationComponent } from "../transport";
 
 /**
@@ -12,10 +18,26 @@ import { LocationComponent } from "../transport";
 export class CitizensUiSystem extends System {
   update(_delta: number, entities: EntityContainer): void {
     const citizens = entities
-      .allOf(CitizenComponent, LocationComponent)
+      // we could shorten this with an archetype selector that can reference components by name in an array,
+      // e.g., export type CitizenArchetype = [ components ]
+      .allOf(
+        CivicIdentityComponent,
+        PhysicalComponent,
+        LifeformClassificationComponent,
+        GenderComponent,
+        LocationComponent,
+        EpochComponent,
+      )
       .results()
       .map(([_, c]) => ({
-        citizen: c.get(CitizenComponent),
+        citizen: {
+          ...c.get(CivicIdentityComponent),
+          ...c.get(PhysicalComponent),
+          ...c.get(LifeformClassificationComponent),
+          ...c.get(GenderComponent),
+          ...c.get(LocationComponent),
+          ...c.get(EpochComponent),
+        },
         location: c.get(LocationComponent),
       }));
 

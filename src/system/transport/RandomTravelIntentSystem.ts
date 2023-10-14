@@ -5,11 +5,11 @@ import {
   LocationComponent,
   TransportMode,
 } from "../transport";
-import { CitizenComponent } from "./../population";
+import { CivicIdentityComponent } from "./../population";
 
 export class RandomTravelIntentSystem extends System {
   update(delta: number, entities: EntityContainer): void {
-    const citizens = entities.allOf(CitizenComponent, LocationComponent);
+    const citizens = entities.allOf(CivicIdentityComponent, LocationComponent);
 
     for (const [entity, components] of citizens.results()) {
       const willTravel = Math.random() < 0.01;
