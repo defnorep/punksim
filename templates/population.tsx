@@ -1,5 +1,4 @@
-import { CitizenComponent } from "../src/system/population";
-import { CensusComponent } from "../src/system/population/CensusSystem";
+import { CensusComponent, CitizenComponent } from "../src/system/population";
 import { LocationComponent } from "../src/system/transport";
 
 export const PopulationCensus = (props: { census?: CensusComponent }) => {

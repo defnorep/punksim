@@ -2,7 +2,7 @@ import { PopulationCensus } from "../../../templates/population";
 import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
-import { CensusComponent } from "../population/CensusSystem";
+import { CensusComponent } from "../population";
 
 /**
  * Broadcasts the current census to all connected clients.

@@ -1,6 +1,11 @@
-import { Component, System } from "../../ecs";
+import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
-import { CitizenComponent, Gender, Species } from "../population";
+import {
+  CensusComponent,
+  CitizenComponent,
+  Gender,
+  Species,
+} from "../population";
 
 export class CensusStartupSystem extends System {
   update(delta: number, entities: EntityContainer): void {
@@ -52,18 +57,5 @@ export class CensusSystem extends System {
     censusComponent.male = census.male;
     censusComponent.female = census.female;
     censusComponent.noGender = census.noGender;
-  }
-}
-
-export class CensusComponent extends Component {
-  constructor(
-    public total: number,
-    public human: number,
-    public android: number,
-    public male: number,
-    public female: number,
-    public noGender: number,
-  ) {
-    super();
   }
 }
