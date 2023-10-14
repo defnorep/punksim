@@ -1,5 +1,4 @@
-import { CensusComponent, CitizenIntersection } from "../src/system/population";
-import { LocationComponent } from "../src/system/transport";
+import { CensusComponent, CitizenArchetype } from "../src/system/population";
 
 export const PopulationCensus = (props: { census?: CensusComponent }) => {
   const jsx = (
@@ -36,12 +35,7 @@ export const PopulationCensus = (props: { census?: CensusComponent }) => {
   );
 };
 
-export const Population = (props: {
-  citizens?: {
-    citizen: CitizenIntersection;
-    location: LocationComponent;
-  }[];
-}) => {
+export const Population = (props: { citizens?: CitizenArchetype[] }) => {
   const jsx = (
     <table>
       <thead>
@@ -59,20 +53,22 @@ export const Population = (props: {
         </tr>
       </thead>
       <tbody>
-        {props.citizens?.map((citizen) => (
-          <tr>
-            <td>{citizen.citizen.name}</td>
-            <td>{citizen.citizen.surname}</td>
-            <td>{citizen.citizen.id}</td>
-            <td>{citizen.citizen.age}</td>
-            <td>{citizen.citizen.gender.toString()}</td>
-            <td>{citizen.citizen.dimensions[0]} cm</td>
-            <td>{citizen.citizen.mass} kg</td>
-            <td>{citizen.citizen.species.toString()}</td>
-            <td>{citizen.citizen.status.toString()}</td>
-            <td>{citizen.location.id}</td>
-          </tr>
-        ))}
+        {props.citizens?.map(
+          ([id, epoch, physical, lifeform, gender, location]) => (
+            <tr>
+              <td>{id.name}</td>
+              <td>{id.surname}</td>
+              <td>{id.id}</td>
+              <td>{epoch.age}</td>
+              <td>{gender.gender.toString()}</td>
+              <td>{physical.dimensions[0]} cm</td>
+              <td>{physical.mass} kg</td>
+              <td>{lifeform.species.toString()}</td>
+              <td>{id.status.toString()}</td>
+              <td>{location.id}</td>
+            </tr>
+          ),
+        )}
       </tbody>
     </table>
   );

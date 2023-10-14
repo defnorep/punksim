@@ -3,6 +3,7 @@ import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
 import {
+  CitizenArchetype,
   CivicIdentityComponent,
   EpochComponent,
   GenderComponent,
@@ -29,17 +30,16 @@ export class CitizensUiSystem extends System {
         EpochComponent,
       )
       .results()
-      .map(([_, c]) => ({
-        citizen: {
-          ...c.get(CivicIdentityComponent),
-          ...c.get(PhysicalComponent),
-          ...c.get(LifeformClassificationComponent),
-          ...c.get(GenderComponent),
-          ...c.get(LocationComponent),
-          ...c.get(EpochComponent),
-        },
-        location: c.get(LocationComponent),
-      }));
+      .map(
+        ([_, c]): CitizenArchetype => [
+          c.get(CivicIdentityComponent),
+          c.get(EpochComponent),
+          c.get(PhysicalComponent),
+          c.get(LifeformClassificationComponent),
+          c.get(GenderComponent),
+          c.get(LocationComponent),
+        ],
+      );
 
     const connections = entities.allOf(SocketConnectionComponent).results();
 

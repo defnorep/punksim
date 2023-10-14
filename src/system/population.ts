@@ -23,13 +23,6 @@ type Meters = number;
 type Kilograms = number;
 type Years = number;
 
-export type CitizenIntersection = CivicIdentityComponent &
-  EpochComponent &
-  PhysicalComponent &
-  LifeformClassificationComponent &
-  GenderComponent &
-  LocationComponent;
-
 export type CitizenArchetype = [
   CivicIdentityComponent,
   EpochComponent,
