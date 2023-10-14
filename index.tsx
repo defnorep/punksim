@@ -80,8 +80,8 @@ app.get("/", (c) =>
       <Time />
       <PopulationCensus />
       <Population />
-      <Travellers />
       <TransportNetworkGraph network={tpn} />
+      <Travellers />
     </Layout>,
   ),
 );

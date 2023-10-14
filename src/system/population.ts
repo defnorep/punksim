@@ -73,6 +73,19 @@ export class EpochComponent extends Component {
   }
 }
 
+export class CensusComponent extends Component {
+  constructor(
+    public total: number,
+    public human: number,
+    public android: number,
+    public male: number,
+    public female: number,
+    public noGender: number,
+  ) {
+    super();
+  }
+}
+
 export const generateCitizen = (
   referenceDate: Date,
   ageJitter: number = 0,
@@ -139,16 +152,3 @@ const generateAndroidName = (): [string, string] => {
     randomInt(100, 999).toString(),
   ];
 };
-
-export class CensusComponent extends Component {
-  constructor(
-    public total: number,
-    public human: number,
-    public android: number,
-    public male: number,
-    public female: number,
-    public noGender: number,
-  ) {
-    super();
-  }
-}
