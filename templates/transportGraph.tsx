@@ -23,7 +23,9 @@ const tpnToCyto = (tpn: TransportNetwork) => {
   const edges = tpn.getEdges();
 
   return JSON.stringify([
-    ...nodes.map((n) => ({ data: { id: n[1].id, label: n[1].label } })),
+    ...nodes.map(([_string, node]) => ({
+      data: { id: node.id, label: node.label },
+    })),
     ...edges.map((e) => ({
       data: {
         id: randomBytes(8).toString("hex"),

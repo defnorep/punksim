@@ -18,11 +18,11 @@ import { CensusUiSystem } from "./src/system/ui/CensusUiSystem";
 import { CitizensUiSystem } from "./src/system/ui/CitizensUiSystem";
 import { TimeUiSystem } from "./src/system/ui/TimeUiSystem";
 import { TravellerUiSystem } from "./src/system/ui/TravellerUiSystem";
-import { TransportNetworkGraph } from "./templates/graph";
 import { Layout } from "./templates/layout";
 import { Population, PopulationCensus } from "./templates/population";
 import { Time } from "./templates/time";
 import { Travellers } from "./templates/transport";
+import { TransportNetworkGraph } from "./templates/transportGraph";
 
 /**
  * Generate/Collect Seed Data
