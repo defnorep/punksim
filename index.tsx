@@ -7,6 +7,10 @@ import { Engine } from "./src/engine";
 import { NetStartupSystem } from "./src/system/net/NetStartupSystem";
 import { generateCitizen } from "./src/system/population";
 import { AgeSystem } from "./src/system/population/AgeSystem";
+import {
+  CensusStartupSystem,
+  CensusSystem,
+} from "./src/system/population/CensusSystem";
 import { PopulationStartupSystem } from "./src/system/population/PopulationStartupSystem";
 import { TimeStartupSystem } from "./src/system/time/TimeStartupSystem";
 import { TimeSystem } from "./src/system/time/TimeSystem";
@@ -50,7 +54,9 @@ ecs
   .addStartupSystem(new NetStartupSystem(ecs))
   .addStartupSystem(new TimeStartupSystem(ecs, date, rateOfTime))
   .addStartupSystem(new PopulationStartupSystem(ecs, citizens))
+  .addStartupSystem(new CensusStartupSystem(ecs))
   .addSystem(new TimeSystem(ecs))
+  .addSystem(new CensusSystem(ecs))
   .addSystem(new TransportDispatchSystem(ecs, tpn))
   .addSystem(new TransportTravellingSystem(ecs, speeds))
   .addSystem(new RandomTravelIntentSystem(ecs))

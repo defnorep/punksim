@@ -1,7 +1,8 @@
-import { Census, CitizenComponent } from "../src/system/population";
+import { CitizenComponent } from "../src/system/population";
+import { CensusComponent } from "../src/system/population/CensusSystem";
 import { LocationComponent } from "../src/system/transport";
 
-export const PopulationCensus = (props: { census?: Census }) => {
+export const PopulationCensus = (props: { census?: CensusComponent }) => {
   const jsx = (
     <table>
       <thead>
@@ -17,12 +18,12 @@ export const PopulationCensus = (props: { census?: Census }) => {
       </thead>
       <tbody>
         <tr>
-          <td>{props.census?.population.total}</td>
-          <td>{props.census?.population.human}</td>
-          <td>{props.census?.population.android}</td>
-          <td>{props.census?.population.male}</td>
-          <td>{props.census?.population.female}</td>
-          <td>{props.census?.population.noGender}</td>
+          <td>{props.census?.total}</td>
+          <td>{props.census?.human}</td>
+          <td>{props.census?.android}</td>
+          <td>{props.census?.male}</td>
+          <td>{props.census?.female}</td>
+          <td>{props.census?.noGender}</td>
         </tr>
       </tbody>
     </table>

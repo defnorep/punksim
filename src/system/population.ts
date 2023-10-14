@@ -19,15 +19,49 @@ export enum Gender {
   None = "None",
 }
 
-export interface Census {
-  population: {
-    total: number;
-    human: number;
-    android: number;
-    male: number;
-    female: number;
-    noGender: number;
-  };
+type Meters = number;
+type Kilograms = number;
+type Years = number;
+
+export class GenderComponent extends Component {
+  constructor(public gender: Gender) {
+    super();
+  }
+}
+
+export class BiologicalClassificationComponent extends Component {
+  constructor(public species: Species) {
+    super();
+  }
+}
+
+export class PhysicalComponent extends Component {
+  constructor(
+    public dimensions: [Meters, Meters, Meters],
+    public mass: Kilograms,
+  ) {
+    super();
+  }
+}
+
+export class CivicIdentityComponent extends Component {
+  constructor(
+    public id: string,
+    public name: string,
+    public status: Status,
+    public surname: string,
+  ) {
+    super();
+  }
+}
+
+export class AgeComponent extends Component {
+  constructor(
+    public age: Years,
+    public birthdate: Date,
+  ) {
+    super();
+  }
 }
 
 export class CitizenComponent extends Component {
@@ -46,40 +80,6 @@ export class CitizenComponent extends Component {
     super();
   }
 }
-
-export const deriveCensus = (citizens: CitizenComponent[]): Census => {
-  return {
-    population: citizens.reduce(
-      (population, citizen) => {
-        population.total++;
-
-        switch (citizen.species) {
-          case Species.Human:
-            population.human++;
-            break;
-          case Species.Android:
-            population.android++;
-            break;
-        }
-
-        switch (citizen.gender) {
-          case Gender.Male:
-            population.male++;
-            break;
-          case Gender.Female:
-            population.female++;
-            break;
-          case Gender.None:
-            population.noGender++;
-            break;
-        }
-
-        return population;
-      },
-      { total: 0, human: 0, android: 0, male: 0, female: 0, noGender: 0 },
-    ),
-  };
-};
 
 export const generateCitizen = (
   referenceDate: Date,
