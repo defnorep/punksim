@@ -29,7 +29,7 @@ export class EntityContainer {
   }
 }
 
-export class NarrowedEntityContainer extends EntityContainer {
+class NarrowedEntityContainer extends EntityContainer {
   public empty() {
     return this.map.size === 0;
   }
