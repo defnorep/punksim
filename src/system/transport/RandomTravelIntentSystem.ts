@@ -1,10 +1,7 @@
 import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
-import {
-  IntendsToTravelComponent,
-  LocationComponent,
-  TransportMode,
-} from "../transport";
+import { LocationComponent } from "../global";
+import { IntendsToTravelComponent, TransportMode } from "../transport";
 import { CivicIdentityComponent } from "./../population";
 
 export class RandomTravelIntentSystem extends System {

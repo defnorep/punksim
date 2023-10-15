@@ -1,8 +1,7 @@
 import { Component } from "../ecs";
+import { Meters } from "./global";
 
 export type LocationId = string;
-
-export type Meters = number;
 
 export enum TransportMode {
   Road = "Road",
@@ -25,12 +24,6 @@ export class TravellingComponent extends Component {
     public distanceRemaining: Meters = 0,
     public mode: TransportMode,
   ) {
-    super();
-  }
-}
-
-export class LocationComponent extends Component {
-  constructor(public id: LocationId) {
     super();
   }
 }

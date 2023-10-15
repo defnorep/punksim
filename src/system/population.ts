@@ -1,4 +1,5 @@
 import { Component } from "../ecs";
+import { Kilograms, Meters, Years } from "./global";
 
 export enum Species {
   Android = "Android",
@@ -15,10 +16,6 @@ export enum Gender {
   Female = "Female",
   None = "None",
 }
-
-type Meters = number;
-type Kilograms = number;
-type Years = number;
 
 export interface PsychologicalDisorder {
   id: string;

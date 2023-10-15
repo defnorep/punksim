@@ -1,4 +1,5 @@
-import { LocationId, Meters, TransportMode } from "../transport";
+import { Meters } from "../global";
+import { LocationId, TransportMode } from "../transport";
 
 export class TransportNetwork {
   private nodes: Map<string, TransportNode> = new Map();

@@ -2,6 +2,7 @@ import { randomBytes, randomInt } from "crypto";
 import names from "../../../data/names.json";
 import { Ecs, System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
+import { LocationComponent } from "../global";
 import {
   CivicIdentityComponent,
   EpochComponent,
@@ -18,7 +19,6 @@ import {
   age,
 } from "../population";
 import { TimeComponent } from "../time";
-import { LocationComponent } from "../transport";
 
 export type Modifiers = {
   disorders: {

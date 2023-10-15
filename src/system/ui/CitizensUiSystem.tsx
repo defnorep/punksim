@@ -1,6 +1,7 @@
 import { Population } from "../../../templates/population";
 import { System } from "../../ecs";
 import { EntityContainer } from "../../ecs/entityContainer";
+import { LocationComponent } from "../global";
 import { SocketConnectionComponent } from "../net";
 import {
   CivicIdentityComponent,
@@ -10,7 +11,6 @@ import {
   LifeformClassificationComponent,
   PhysicalComponent,
 } from "../population";
-import { LocationComponent } from "../transport";
 
 /**
  * Broadcasts the current citizen details to all connected clients.
