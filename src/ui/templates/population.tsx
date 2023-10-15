@@ -1,4 +1,4 @@
-import { LocationComponent } from "../src/global";
+import { LocationComponent } from "../../global";
 import {
   CensusComponent,
   CivicIdentityComponent,
@@ -7,7 +7,7 @@ import {
   ImplantsComponent,
   LifeformClassificationComponent,
   PhysicalComponent,
-} from "../src/population";
+} from "../../population/population";
 
 export const PopulationCensus = (props: { census?: CensusComponent }) => {
   const jsx = (

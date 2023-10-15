@@ -1,8 +1,8 @@
-import { Time } from "../../templates/time";
-import { System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { SocketConnectionComponent } from "../net";
-import { TimeComponent } from "../time";
+import { EntityContainer } from "../ecs/EntityContainer";
+import { System } from "../ecs/ecs";
+import { SocketConnectionComponent } from "../net/net";
+import { TimeComponent } from "../time/time";
+import { Time } from "./templates/time";
 
 /**
  * Broadcasts the current time to all connected clients.

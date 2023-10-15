@@ -1,6 +1,6 @@
-import { Entity, System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { SocketConnectionComponent } from "../net";
+import { Entity, System } from "../ecs/ecs";
+import { EntityContainer } from "../ecs/EntityContainer";
+import { SocketConnectionComponent } from "./net";
 
 /**
  * The NetSystem is responsible for managing the network connection.

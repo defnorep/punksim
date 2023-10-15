@@ -1,7 +1,7 @@
-import { System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { CivicIdentityComponent, EpochComponent, age } from "../population";
-import { TimeComponent } from "../time";
+import { EntityContainer } from "../ecs/EntityContainer";
+import { System } from "../ecs/ecs";
+import { TimeComponent } from "../time/time";
+import { CivicIdentityComponent, EpochComponent, age } from "./population";
 
 /**
  * The CitizensAgeSystem is responsible for aging citizens.

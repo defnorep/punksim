@@ -1,4 +1,4 @@
-import { Component } from "./ecs";
+import { Component } from "../ecs/ecs";
 
 export class TimeComponent extends Component {
   constructor(

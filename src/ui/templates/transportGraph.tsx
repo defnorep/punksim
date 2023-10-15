@@ -1,5 +1,5 @@
 import { randomBytes } from "crypto";
-import { TransportNetwork } from "../src/transport/TransportNetwork";
+import { TransportNetwork } from "../../transport/TransportNetwork";
 
 export const TransportNetworkGraph = (props: { network: TransportNetwork }) => {
   const networkJson = tpnToCyto(props.network);

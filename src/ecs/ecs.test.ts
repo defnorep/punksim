@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
+import { ComponentContainer } from "./ComponentContainer";
 import { Component, Ecs } from "./ecs";
-import { ComponentContainer } from "./ecs/componentContainer";
 
 test("ecs component container", () => {
   class TestComponent extends Component {

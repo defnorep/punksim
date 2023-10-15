@@ -1,5 +1,5 @@
-import { System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
+import { System } from "../ecs/ecs";
+import { EntityContainer } from "../ecs/EntityContainer";
 import { LocationComponent } from "../global";
 import {
   CensusComponent,
@@ -11,7 +11,7 @@ import {
   LifeformClassificationComponent,
   PhysicalComponent,
   Species,
-} from "../population";
+} from "./population";
 
 export class CensusStartupSystem extends System {
   update(_delta: number, _entities: EntityContainer): void {

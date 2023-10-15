@@ -1,9 +1,9 @@
-import { Travellers } from "../../templates/transport";
-import { System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { SocketConnectionComponent } from "../net";
-import { CivicIdentityComponent } from "../population";
-import { TravellingComponent } from "../transport";
+import { EntityContainer } from "../ecs/EntityContainer";
+import { System } from "../ecs/ecs";
+import { SocketConnectionComponent } from "../net/net";
+import { CivicIdentityComponent } from "../population/population";
+import { TravellingComponent } from "../transport/transport";
+import { Travellers } from "./templates/transport";
 
 /**
  * Broadcasts the current traveller details to all connected clients.

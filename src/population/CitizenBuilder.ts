@@ -1,8 +1,9 @@
 import { randomBytes, randomInt } from "crypto";
 import modifiers from "../../data/modifiers.json";
 import names from "../../data/names.json";
-import { Component } from "../ecs";
+import { Component } from "../ecs/ecs";
 import { Kilograms, LocationComponent, Meters } from "../global";
+import { LocationId } from "../transport/transport";
 import {
   CivicIdentityComponent,
   EpochComponent,
@@ -16,8 +17,7 @@ import {
   Species,
   Status,
   age,
-} from "../population";
-import { LocationId } from "../transport";
+} from "./population";
 
 export class CitizenBuilder {
   private components = new Map<Function, Component>();

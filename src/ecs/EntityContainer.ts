@@ -1,5 +1,5 @@
-import { Entity } from "../ecs";
-import { ComponentContainer } from "./componentContainer";
+import { ComponentContainer } from "./ComponentContainer";
+import { Entity } from "./ecs";
 
 export class EntityContainer {
   constructor(protected map: Map<Entity, ComponentContainer> = new Map()) {}

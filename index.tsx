@@ -3,16 +3,16 @@ import { serveStatic } from "hono/bun";
 import modifiers from "./data/modifiers.json";
 import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
-import { Ecs } from "./src/ecs";
+import { Ecs } from "./src/ecs/ecs";
 import { Engine } from "./src/engine";
 import { NetStartupSystem } from "./src/net/NetStartupSystem";
-import { Modifiers } from "./src/population";
 import { AgeSystem } from "./src/population/AgeSystem";
 import {
   CensusStartupSystem,
   CensusSystem,
 } from "./src/population/CensusSystem";
 import { PopulationStartupSystem } from "./src/population/PopulationStartupSystem";
+import { Modifiers } from "./src/population/population";
 import { TimeStartupSystem } from "./src/time/TimeStartupSystem";
 import { TimeSystem } from "./src/time/TimeSystem";
 import { RandomTravelIntentSystem } from "./src/transport/RandomTravelIntentSystem";
@@ -23,11 +23,11 @@ import { CensusUiSystem } from "./src/ui/CensusUiSystem";
 import { CitizensUiSystem } from "./src/ui/CitizensUiSystem";
 import { TimeUiSystem } from "./src/ui/TimeUiSystem";
 import { TravellerUiSystem } from "./src/ui/TravellerUiSystem";
-import { Layout } from "./templates/layout";
-import { Population, PopulationCensus } from "./templates/population";
-import { Time } from "./templates/time";
-import { Travellers } from "./templates/transport";
-import { TransportNetworkGraph } from "./templates/transportGraph";
+import { Layout } from "./src/ui/templates/layout";
+import { Population, PopulationCensus } from "./src/ui/templates/population";
+import { Time } from "./src/ui/templates/time";
+import { Travellers } from "./src/ui/templates/transport";
+import { TransportNetworkGraph } from "./src/ui/templates/transportGraph";
 
 /**
  * Generate/Collect Seed Data

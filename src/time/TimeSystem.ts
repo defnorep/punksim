@@ -1,6 +1,6 @@
-import { Ecs, System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { TimeComponent } from "../time";
+import { Ecs, System } from "../ecs/ecs";
+import { EntityContainer } from "../ecs/EntityContainer";
+import { TimeComponent } from "./time";
 
 /**
  * This system is responsible for updating the time in the game world.

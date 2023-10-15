@@ -1,7 +1,7 @@
-import { Ecs, System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
+import { Ecs, System } from "../ecs/ecs";
+import { EntityContainer } from "../ecs/EntityContainer";
 import { LocationComponent } from "../global";
-import { IntendsToTravelComponent, TravellingComponent } from "../transport";
+import { IntendsToTravelComponent, TravellingComponent } from "./transport";
 import { TransportNetwork } from "./TransportNetwork";
 
 export class TransportDispatchSystem extends System {

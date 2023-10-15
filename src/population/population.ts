@@ -1,5 +1,5 @@
-import { Component } from "./ecs";
-import { Kilograms, Meters, Years } from "./global";
+import { Component } from "../ecs/ecs";
+import { Kilograms, Meters, Years } from "../global";
 
 export enum Species {
   Android = "Android",

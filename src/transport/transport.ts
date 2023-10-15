@@ -1,5 +1,5 @@
-import { Component } from "./ecs";
-import { Meters } from "./global";
+import { Component } from "../ecs/ecs";
+import { Meters } from "../global";
 
 export type LocationId = string;
 

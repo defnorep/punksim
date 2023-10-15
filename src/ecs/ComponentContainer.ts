@@ -1,4 +1,4 @@
-import { Component, ComponentClass } from "../ecs";
+import { Component, ComponentClass } from "./ecs";
 
 export class ComponentContainer {
   private map = new Map<Function, Component>();

@@ -1,17 +1,6 @@
 import { randomBytes } from "crypto";
-import { ComponentContainer } from "./ecs/componentContainer";
-import { EntityContainer } from "./ecs/entityContainer";
-
-export type Entity = string;
-
-export abstract class Component {}
-
-export type ComponentClass<T extends Component> = new (...args: any[]) => T;
-
-export abstract class System {
-  constructor(protected ecs: Ecs) {}
-  abstract update(delta: number, entities: EntityContainer): void;
-}
+import { ComponentContainer } from "./ComponentContainer";
+import { EntityContainer } from "./EntityContainer";
 
 export class Ecs {
   private entities: Map<Entity, ComponentContainer> = new Map();
@@ -87,3 +76,10 @@ export class Ecs {
     });
   }
 }
+export abstract class System {
+  constructor(protected ecs: Ecs) {}
+  abstract update(delta: number, entities: EntityContainer): void;
+}
+export type ComponentClass<T extends Component> = new (...args: any[]) => T;
+export abstract class Component {}
+export type Entity = string;

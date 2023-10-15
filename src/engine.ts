@@ -1,4 +1,4 @@
-import { Ecs } from "./ecs";
+import { Ecs } from "./ecs/ecs";
 
 export class Engine {
   constructor(

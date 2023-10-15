@@ -1,8 +1,8 @@
-import { PopulationCensus } from "../../templates/population";
-import { System } from "../ecs";
-import { EntityContainer } from "../ecs/entityContainer";
-import { SocketConnectionComponent } from "../net";
-import { CensusComponent } from "../population";
+import { EntityContainer } from "../ecs/EntityContainer";
+import { System } from "../ecs/ecs";
+import { SocketConnectionComponent } from "../net/net";
+import { CensusComponent } from "../population/population";
+import { PopulationCensus } from "./templates/population";
 
 /**
  * Broadcasts the current census to all connected clients.
