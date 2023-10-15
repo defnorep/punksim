@@ -4,7 +4,7 @@ import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs/ecs";
 import { Engine } from "./src/engine";
-import { NetStartupSystem as SocketStartupSystem } from "./src/net/NetStartupSystem";
+import { SocketStartupSystem } from "./src/net/SocketStartupSystem";
 import { AgeSystem } from "./src/population/AgeSystem";
 import {
   CensusStartupSystem,

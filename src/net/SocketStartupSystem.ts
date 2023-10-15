@@ -6,7 +6,7 @@ import { SocketConnectionComponent } from "./net";
  * The NetSystem is responsible for managing the network connection.
  */
 
-export class NetStartupSystem extends System {
+export class SocketStartupSystem extends System {
   update(_delta: number, _entities: EntityContainer): void {
     Bun.serve<WebSocketData>({
       port: 3001,
