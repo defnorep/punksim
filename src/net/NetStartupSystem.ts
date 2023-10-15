@@ -1,5 +1,5 @@
-import { Entity, System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { Entity, System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
 
 /**

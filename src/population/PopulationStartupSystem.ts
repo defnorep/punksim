@@ -1,5 +1,5 @@
-import { Ecs, System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { Ecs, System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { Modifiers } from "../population";
 import { TimeComponent } from "../time";
 import { CitizenBuilder } from "./CitizenBuilder";

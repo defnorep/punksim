@@ -1,6 +1,6 @@
-import { Time } from "../../../templates/time";
-import { System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { Time } from "../../templates/time";
+import { System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
 import { TimeComponent } from "../time";
 

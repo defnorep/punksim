@@ -1,5 +1,5 @@
-import { System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { CivicIdentityComponent, EpochComponent, age } from "../population";
 import { TimeComponent } from "../time";
 

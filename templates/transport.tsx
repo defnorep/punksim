@@ -1,5 +1,5 @@
-import { CivicIdentityComponent } from "../src/system/population";
-import { TravellingComponent } from "../src/system/transport";
+import { CivicIdentityComponent } from "../src/population";
+import { TravellingComponent } from "../src/transport";
 
 export const Travellers = (props: {
   travellers?: (CivicIdentityComponent & TravellingComponent)[];

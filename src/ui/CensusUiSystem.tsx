@@ -1,6 +1,6 @@
-import { PopulationCensus } from "../../../templates/population";
-import { System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { PopulationCensus } from "../../templates/population";
+import { System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
 import { CensusComponent } from "../population";
 

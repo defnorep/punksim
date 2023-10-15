@@ -1,6 +1,6 @@
-import { Travellers } from "../../../templates/transport";
-import { System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { Travellers } from "../../templates/transport";
+import { System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { SocketConnectionComponent } from "../net";
 import { CivicIdentityComponent } from "../population";
 import { TravellingComponent } from "../transport";

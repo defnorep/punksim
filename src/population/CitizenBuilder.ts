@@ -1,7 +1,7 @@
 import { randomBytes, randomInt } from "crypto";
-import modifiers from "../../../data/modifiers.json";
-import names from "../../../data/names.json";
-import { Component } from "../../ecs";
+import modifiers from "../../data/modifiers.json";
+import names from "../../data/names.json";
+import { Component } from "../ecs";
 import { Kilograms, LocationComponent, Meters } from "../global";
 import {
   CivicIdentityComponent,

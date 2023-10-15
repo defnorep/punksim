@@ -1,4 +1,4 @@
-import { Component } from "../ecs";
+import { Component } from "./ecs";
 import { Kilograms, Meters, Years } from "./global";
 
 export enum Species {

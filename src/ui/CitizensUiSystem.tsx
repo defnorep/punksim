@@ -1,6 +1,6 @@
-import { Population } from "../../../templates/population";
-import { System } from "../../ecs";
-import { EntityContainer } from "../../ecs/entityContainer";
+import { Population } from "../../templates/population";
+import { System } from "../ecs";
+import { EntityContainer } from "../ecs/entityContainer";
 import { LocationComponent } from "../global";
 import { SocketConnectionComponent } from "../net";
 import {
