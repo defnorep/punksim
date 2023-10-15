@@ -8,7 +8,7 @@ import {
 } from "./transport";
 
 export class RandomTravelIntentSystem extends System {
-  update(delta: number, entities: EntityContainer): void {
+  update(_delta: number, entities: EntityContainer): void {
     const citizens = entities.allOf(CivicIdentityComponent, LocationComponent);
 
     for (const [entity, components] of citizens.results()) {

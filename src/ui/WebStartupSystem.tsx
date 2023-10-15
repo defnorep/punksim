@@ -17,7 +17,7 @@ export class WebStartupSystem extends System {
   ) {
     super(ecs);
   }
-  update(delta: number, entities: EntityContainer): void {
+  update(_delta: number, _entities: EntityContainer): void {
     this.hono.get("/", (c) =>
       c.html(
         <Layout title="Cyberpunk City Simulator">

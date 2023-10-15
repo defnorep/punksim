@@ -3,9 +3,8 @@ import { EntityContainer } from "../ecs/EntityContainer";
 import { SocketConnectionComponent } from "./net";
 
 /**
- * The NetSystem is responsible for managing the network connection.
+ * The SocketSystem is responsible for managing the network connection.
  */
-
 export class SocketStartupSystem extends System {
   update(_delta: number, _entities: EntityContainer): void {
     Bun.serve<WebSocketData>({

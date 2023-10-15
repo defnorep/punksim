@@ -1,6 +1,5 @@
 import { Component } from "../ecs/ecs";
 import { Meters } from "../global";
-import { LocationId } from "./transport";
 
 export type LocationId = string;
 
