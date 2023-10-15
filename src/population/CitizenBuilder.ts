@@ -2,8 +2,8 @@ import { randomBytes, randomInt } from "crypto";
 import modifiers from "../../data/modifiers.json";
 import names from "../../data/names.json";
 import { Component } from "../ecs/ecs";
-import { Kilograms, LocationComponent, Meters } from "../global";
-import { LocationId } from "../transport/transport";
+import { Kilograms, Meters } from "../global";
+import { LocationComponent, LocationId } from "../transport/transport";
 import {
   CivicIdentityComponent,
   EpochComponent,

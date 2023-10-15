@@ -20,6 +20,7 @@ export class Ecs {
 
     return entity;
   }
+
   destroyEntity(entity: Entity): void {
     this.entities.delete(entity);
   }
@@ -76,6 +77,7 @@ export class Ecs {
     });
   }
 }
+
 export abstract class System {
   constructor(protected ecs: Ecs) {}
   abstract update(delta: number, entities: EntityContainer): void;

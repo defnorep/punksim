@@ -1,8 +1,11 @@
-import { Ecs, System } from "../ecs/ecs";
 import { EntityContainer } from "../ecs/EntityContainer";
-import { LocationComponent } from "../global";
+import { Ecs, System } from "../ecs/ecs";
 import { TimeComponent } from "../time/time";
-import { TransportMode, TravellingComponent } from "./transport";
+import {
+  LocationComponent,
+  TransportMode,
+  TravellingComponent,
+} from "./transport";
 
 export class TransportTravellingSystem extends System {
   constructor(

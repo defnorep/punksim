@@ -1,5 +1,6 @@
 import { Component } from "../ecs/ecs";
 import { Meters } from "../global";
+import { LocationId } from "./transport";
 
 export type LocationId = string;
 
@@ -24,6 +25,11 @@ export class TravellingComponent extends Component {
     public distanceRemaining: Meters = 0,
     public mode: TransportMode,
   ) {
+    super();
+  }
+}
+export class LocationComponent extends Component {
+  constructor(public locationId: LocationId) {
     super();
   }
 }

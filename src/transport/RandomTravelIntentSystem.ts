@@ -1,8 +1,11 @@
-import { System } from "../ecs/ecs";
 import { EntityContainer } from "../ecs/EntityContainer";
-import { LocationComponent } from "../global";
+import { System } from "../ecs/ecs";
 import { CivicIdentityComponent } from "../population/population";
-import { IntendsToTravelComponent, TransportMode } from "./transport";
+import {
+  IntendsToTravelComponent,
+  LocationComponent,
+  TransportMode,
+} from "./transport";
 
 export class RandomTravelIntentSystem extends System {
   update(delta: number, entities: EntityContainer): void {

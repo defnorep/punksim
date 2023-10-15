@@ -1,6 +1,6 @@
 import { System } from "../ecs/ecs";
 import { EntityContainer } from "../ecs/EntityContainer";
-import { LocationComponent } from "../global";
+import { LocationComponent } from "../transport/transport";
 import {
   CensusComponent,
   CitizenArchetype,

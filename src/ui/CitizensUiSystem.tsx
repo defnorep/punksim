@@ -1,6 +1,5 @@
 import { EntityContainer } from "../ecs/EntityContainer";
 import { System } from "../ecs/ecs";
-import { LocationComponent } from "../global";
 import { SocketConnectionComponent } from "../net/net";
 import {
   CivicIdentityComponent,
@@ -10,6 +9,7 @@ import {
   LifeformClassificationComponent,
   PhysicalComponent,
 } from "../population/population";
+import { LocationComponent } from "../transport/transport";
 import { Population } from "./templates/population";
 
 /**
