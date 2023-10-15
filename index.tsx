@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
 import modifiers from "./data/modifiers.json";
 import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
@@ -23,11 +22,7 @@ import { CensusUiSystem } from "./src/ui/CensusUiSystem";
 import { CitizensUiSystem } from "./src/ui/CitizensUiSystem";
 import { TimeUiSystem } from "./src/ui/TimeUiSystem";
 import { TravellerUiSystem } from "./src/ui/TravellerUiSystem";
-import { Layout } from "./src/ui/templates/layout";
-import { Population, PopulationCensus } from "./src/ui/templates/population";
-import { Time } from "./src/ui/templates/time";
-import { Travellers } from "./src/ui/templates/transport";
-import { TransportNetworkGraph } from "./src/ui/templates/transportGraph";
+import { WebStartupSystem } from "./src/ui/WebStartupSystem";
 
 /**
  * Generate/Collect Seed Data
@@ -46,11 +41,18 @@ const speeds = TransportTravellingSystem.deserializeModeSpeeds(
 const { disorders, implants }: Modifiers = modifiers;
 
 /**
+ * Web Server Setup
+ * Just serves the application shell.
+ */
+const app = new Hono();
+
+/**
  * Simulation setup.
  */
 const ecs = new Ecs();
 ecs
   .addStartupSystem(new NetStartupSystem(ecs))
+  .addStartupSystem(new WebStartupSystem(ecs, app, tpn))
   .addStartupSystem(new TimeStartupSystem(ecs, date, rateOfTime))
   .addStartupSystem(
     new PopulationStartupSystem(ecs, config.citizens, { disorders, implants }),
@@ -68,24 +70,5 @@ ecs
   .addSystem(new TimeUiSystem(ecs));
 
 new Engine(ecs).start();
-
-/**
- * Web Server Setup
- * Just serves the application shell.
- */
-const app = new Hono();
-
-app.get("/", (c) =>
-  c.html(
-    <Layout title="Cyberpunk City Simulator">
-      <Time />
-      <PopulationCensus />
-      <Population />
-      <TransportNetworkGraph network={tpn} />
-      <Travellers />
-    </Layout>,
-  ),
-);
-app.use("/public/*", serveStatic({ root: "./" }));
 
 export default app;
