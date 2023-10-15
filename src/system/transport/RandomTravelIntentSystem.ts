@@ -12,7 +12,7 @@ export class RandomTravelIntentSystem extends System {
       const willTravel = Math.random() < 0.01;
       const location = components.get(LocationComponent);
 
-      if (location.id === "Residence-1" && willTravel) {
+      if (location.locationId === "Residence-1" && willTravel) {
         this.ecs.addComponents(entity, [
           new IntendsToTravelComponent("Work-1", TransportMode.Road),
         ]);

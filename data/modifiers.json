@@ -1,75 +1,85 @@
 {
   "implants": {
     "Sandevistan": {
-      "id": "0001",
-      "label": "Sandevistan",
+      "name": "Sandevistan",
       "description": "Increases the speed of neural connections to the point where the user's perception of time is slowed down."
     },
     "Kerenzikov": {
-      "id": "0002",
-      "label": "Kerenzikov",
+      "name": "Kerenzikov",
       "description": "Allows the user to aim and shoot while dodging."
     },
     "Optical Camo": {
-      "id": "0003",
-      "label": "Optical Camo",
+      "name": "Optical Camo",
       "description": "Allows the user to become invisible for a short period of time."
     },
     "Gorilla Arms": {
-      "id": "0004",
-      "label": "Gorilla Arms",
+      "name": "Gorilla Arms",
       "description": "Allows the user to rip doors off their hinges and deal massive damage to enemies."
     },
     "Braindance": {
-      "id": "0005",
-      "label": "Braindance",
+      "name": "Braindance",
       "description": "Allows the user to experience the recorded memories of others."
     }
   },
   "disorders": {
     "psychological": {
-      "Anxiety": { "id": "0001", "label": "Anxiety", "adjective": "Anxious" },
+      "Anxiety": {
+        "name": "Anxiety",
+        "adjective": "Anxious",
+        "description": "A mental health disorder characterized by feelings of worry, anxiety, or fear that are strong enough to interfere with one's daily activities."
+      },
       "Depression": {
-        "id": "0002",
-        "label": "Depression",
-        "adjective": "Depressed"
+        "name": "Depression",
+        "adjective": "Depressed",
+        "description": "A mental health disorder characterized by persistently depressed mood or loss of interest in activities, causing significant impairment in daily life."
       },
       "Bipolar Disorder": {
-        "id": "0003",
-        "label": "Bipolar Disorder",
-        "adjective": "Bipolar"
+        "name": "Bipolar Disorder",
+        "adjective": "Bipolar",
+        "description": "A mental health disorder characterized by extreme mood swings that include emotional highs (mania or hypomania) and lows (depression)."
       },
       "Schizophrenia": {
-        "id": "0004",
-        "label": "Schizophrenia",
-        "adjective": "Schizophrenic"
+        "name": "Schizophrenia",
+        "adjective": "Schizophrenic",
+        "description": "A mental health disorder characterized by delusions, hallucinations, disorganized speech, and/or diminished, inappropriate emotional expression."
       },
-      "Paranoia": { "id": "0005", "label": "Paranoia", "adjective": "Paranoid" }
+      "Paranoia": {
+        "name": "Paranoia",
+        "adjective": "Paranoid",
+        "description": "A mental health disorder characterized by excessive fear and anxiety."
+      }
     },
     "medical": {
       "Diabetes": {
-        "id": "0001",
-        "label": "Diabetes",
-        "adjective": "Diabetic"
+        "name": "Diabetes",
+        "adjective": "Diabetic",
+        "description": "A disease in which the body's ability to produce or respond to the hormone insulin is impaired, resulting in abnormal metabolism of carbohydrates and elevated levels of glucose in the blood and urine."
       },
       "Hypertension": {
-        "id": "0002",
-        "label": "Hypertension",
-        "adjective": "Hypertensive"
+        "name": "Hypertension",
+        "adjective": "Hypertensive",
+        "description": "A condition in which the force of the blood against the artery walls is too high."
       },
       "Heart Disease": {
-        "id": "0003",
-        "label": "Heart Disease",
-        "adjective": "Cardiac"
+        "name": "Heart Disease",
+        "adjective": "Cardiac",
+        "description": "A range of conditions that affect your heart."
       },
-      "Cancer": { "id": "0004", "label": "Cancer", "adjective": "Cancerous" },
-      "Asthma": { "id": "0005", "label": "Asthma", "adjective": "Asthmatic" },
+      "Cancer": {
+        "name": "Cancer",
+        "adjective": "Cancerous",
+        "description": "A disease caused by an uncontrolled division of abnormal cells in a part of the body."
+      },
+      "Asthma": {
+        "name": "Asthma",
+        "adjective": "Asthmatic",
+        "description": "A condition in which a person's airways become inflamed, narrow and swell, and produce extra mucus, which makes it difficult to breathe."
+      },
       "Epilepsy": {
-        "id": "0006",
-        "label": "Epilepsy",
-        "adjective": "Epileptic"
-      },
-      "HIV": { "id": "0007", "label": "HIV", "adjective": "HIV+" }
+        "name": "Epilepsy",
+        "adjective": "Epileptic",
+        "description": "A neurological disorder marked by sudden recurrent episodes of sensory disturbance, loss of consciousness, or convulsions, associated with abnormal electrical activity in the brain."
+      }
     }
   }
 }

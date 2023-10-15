@@ -6,15 +6,13 @@ import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
 import { NetStartupSystem } from "./src/system/net/NetStartupSystem";
+import { Modifiers } from "./src/system/population";
 import { AgeSystem } from "./src/system/population/AgeSystem";
 import {
   CensusStartupSystem,
   CensusSystem,
 } from "./src/system/population/CensusSystem";
-import {
-  Modifiers,
-  PopulationStartupSystem,
-} from "./src/system/population/PopulationStartupSystem";
+import { PopulationStartupSystem } from "./src/system/population/PopulationStartupSystem";
 import { TimeStartupSystem } from "./src/system/time/TimeStartupSystem";
 import { TimeSystem } from "./src/system/time/TimeSystem";
 import { RandomTravelIntentSystem } from "./src/system/transport/RandomTravelIntentSystem";

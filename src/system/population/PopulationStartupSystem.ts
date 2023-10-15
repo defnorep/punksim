@@ -11,22 +11,13 @@ import {
   Implant,
   ImplantsComponent,
   LifeformClassificationComponent,
-  MedicalDisorder,
+  Modifiers,
   PhysicalComponent,
-  PsychologicalDisorder,
   Species,
   Status,
   age,
 } from "../population";
 import { TimeComponent } from "../time";
-
-export type Modifiers = {
-  disorders: {
-    medical: { [key: string]: MedicalDisorder };
-    psychological: { [key: string]: PsychologicalDisorder };
-  };
-  implants: { [ke: string]: Implant };
-};
 
 /**
  * The PopulationStartupSystem is responsible for creating the initial set of citizens.

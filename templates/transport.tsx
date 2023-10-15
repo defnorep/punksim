@@ -20,10 +20,10 @@ export const Travellers = (props: {
       </thead>
       <tbody>
         {props.travellers?.map((traveller) => (
-          <tr key={traveller.id}>
+          <tr key={traveller.civicId}>
             <td>{traveller.name}</td>
             <td>{traveller.surname}</td>
-            <td>{traveller.id}</td>
+            <td>{traveller.civicId}</td>
             <td>{traveller.originId}</td>
             <td>{traveller.destinationId}</td>
             <td>{traveller.mode}</td>

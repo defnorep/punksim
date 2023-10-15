@@ -18,19 +18,29 @@ export enum Gender {
 }
 
 export interface PsychologicalDisorder {
-  id: string;
-  label: string;
+  name: string;
+  description: string;
+  adjective: string;
 }
 
 export interface MedicalDisorder {
-  id: string;
-  label: string;
+  name: string;
+  description: string;
+  adjective: string;
 }
 
 export interface Implant {
-  id: string;
-  label: string;
+  name: string;
+  description: string;
 }
+
+export type Modifiers = {
+  disorders: {
+    medical: { [key: string]: MedicalDisorder };
+    psychological: { [key: string]: PsychologicalDisorder };
+  };
+  implants: { [key: string]: Implant };
+};
 
 export class PsychologicalAttributesComponent extends Component {
   constructor(
@@ -93,7 +103,7 @@ export class PhysicalComponent extends Component {
 
 export class CivicIdentityComponent extends Component {
   constructor(
-    public id: string,
+    public civicId: string,
     public name: string,
     public surname: string,
     public status: Status,

@@ -77,14 +77,14 @@ export const Population = (props: {
             <tr>
               <td>{id.name}</td>
               <td>{id.surname}</td>
-              <td>{id.id}</td>
+              <td>{id.civicId}</td>
               <td>{epoch.age}</td>
               <td>{gender.gender.toString()}</td>
               <td>{physical.dimensions[0]} cm</td>
               <td>{physical.mass} kg</td>
               <td>{lifeform.species.toString()}</td>
               <td>{id.status.toString()}</td>
-              <td>{location.id}</td>
+              <td>{location.locationId}</td>
             </tr>
           ),
         )}

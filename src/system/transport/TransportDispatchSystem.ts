@@ -22,12 +22,12 @@ export class TransportDispatchSystem extends System {
       const intendsToTravel = components.get(IntendsToTravelComponent);
       const location = components.get(LocationComponent);
 
-      if (intendsToTravel.destinationId === location.id) {
+      if (intendsToTravel.destinationId === location.locationId) {
         return;
       }
 
       const path = this.network.findPath(
-        location.id,
+        location.locationId,
         intendsToTravel.destinationId,
       );
 
@@ -38,7 +38,7 @@ export class TransportDispatchSystem extends System {
 
       this.ecs.addComponents(entity, [
         new TravellingComponent(
-          location.id,
+          location.locationId,
           intendsToTravel.destinationId,
           distance,
           distance,
@@ -48,7 +48,7 @@ export class TransportDispatchSystem extends System {
 
       this.ecs.removeComponents(entity, [IntendsToTravelComponent]);
 
-      location.id = `Travelling by ${intendsToTravel.mode}`;
+      location.locationId = `Travelling by ${intendsToTravel.mode}`;
     }
   }
 }
