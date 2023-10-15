@@ -4,7 +4,7 @@ import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs/ecs";
 import { Engine } from "./src/engine";
-import { NetStartupSystem } from "./src/net/NetStartupSystem";
+import { NetStartupSystem as SocketStartupSystem } from "./src/net/NetStartupSystem";
 import { AgeSystem } from "./src/population/AgeSystem";
 import {
   CensusStartupSystem,
@@ -51,7 +51,7 @@ const app = new Hono();
  */
 const ecs = new Ecs();
 ecs
-  .addStartupSystem(new NetStartupSystem(ecs))
+  .addStartupSystem(new SocketStartupSystem(ecs))
   .addStartupSystem(new WebStartupSystem(ecs, app, tpn))
   .addStartupSystem(new TimeStartupSystem(ecs, date, rateOfTime))
   .addStartupSystem(
