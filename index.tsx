@@ -1,17 +1,20 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
+import modifiers from "./data/modifiers.json";
 import seed from "./data/seed.json";
 import transportNetwork from "./data/transportNetwork.json";
 import { Ecs } from "./src/ecs";
 import { Engine } from "./src/engine";
 import { NetStartupSystem } from "./src/system/net/NetStartupSystem";
-import { generateCitizen } from "./src/system/population";
 import { AgeSystem } from "./src/system/population/AgeSystem";
 import {
   CensusStartupSystem,
   CensusSystem,
 } from "./src/system/population/CensusSystem";
-import { PopulationStartupSystem } from "./src/system/population/PopulationStartupSystem";
+import {
+  Modifiers,
+  PopulationStartupSystem,
+} from "./src/system/population/PopulationStartupSystem";
 import { TimeStartupSystem } from "./src/system/time/TimeStartupSystem";
 import { TimeSystem } from "./src/system/time/TimeSystem";
 import { RandomTravelIntentSystem } from "./src/system/transport/RandomTravelIntentSystem";
@@ -38,13 +41,11 @@ const config = process.env.FAST
   : { ...seed.base };
 const date = new Date(config.date);
 const rateOfTime = config.rateOfTime;
-const citizens = Array(config.citizens)
-  .fill(1)
-  .map(() => generateCitizen(date, 80));
 const tpn = TransportNetwork.fromObject(transportNetwork.graph);
 const speeds = TransportTravellingSystem.deserializeModeSpeeds(
   config.transportSpeeds,
 );
+const { disorders, implants }: Modifiers = modifiers;
 
 /**
  * Simulation setup.
@@ -53,7 +54,9 @@ const ecs = new Ecs();
 ecs
   .addStartupSystem(new NetStartupSystem(ecs))
   .addStartupSystem(new TimeStartupSystem(ecs, date, rateOfTime))
-  .addStartupSystem(new PopulationStartupSystem(ecs, citizens))
+  .addStartupSystem(
+    new PopulationStartupSystem(ecs, config.citizens, { disorders, implants }),
+  )
   .addStartupSystem(new CensusStartupSystem(ecs))
   .addSystem(new TimeSystem(ecs))
   .addSystem(new CensusSystem(ecs))

@@ -14,7 +14,7 @@ import {
 import { LocationComponent } from "../transport";
 
 export class CensusStartupSystem extends System {
-  update(delta: number, entities: EntityContainer): void {
+  update(_delta: number, _entities: EntityContainer): void {
     this.ecs.createSingleton(new CensusComponent(0, 0, 0, 0, 0, 0));
   }
 }

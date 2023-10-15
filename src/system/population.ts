@@ -1,7 +1,4 @@
-import { randomBytes, randomInt } from "crypto";
-import names from "../../data/names.json";
 import { Component } from "../ecs";
-import { LocationComponent } from "./transport";
 
 export enum Species {
   Android = "Android",
@@ -23,14 +20,58 @@ type Meters = number;
 type Kilograms = number;
 type Years = number;
 
-export type CitizenArchetype = [
-  CivicIdentityComponent,
-  EpochComponent,
-  PhysicalComponent,
-  LifeformClassificationComponent,
-  GenderComponent,
-  LocationComponent,
-];
+export interface PsychologicalDisorder {
+  id: string;
+  label: string;
+}
+
+export interface MedicalDisorder {
+  id: string;
+  label: string;
+}
+
+export interface Implant {
+  id: string;
+  label: string;
+}
+
+export class PsychologicalAttributesComponent extends Component {
+  constructor(
+    public intelligence: number,
+    public willpower: number,
+    public charisma: number,
+  ) {
+    super();
+  }
+}
+
+export class AthleticAttributesComponent extends Component {
+  constructor(
+    public strength: number,
+    public agility: number,
+    public endurance: number,
+  ) {
+    super();
+  }
+}
+
+export class PsychologicalDisordersComponent extends Component {
+  constructor(public disorders: PsychologicalDisorder[]) {
+    super();
+  }
+}
+
+export class MedicalDisordersComponent extends Component {
+  constructor(public disorders: MedicalDisorder[]) {
+    super();
+  }
+}
+
+export class ImplantsComponent extends Component {
+  constructor(public implants: Implant[]) {
+    super();
+  }
+}
 
 export class GenderComponent extends Component {
   constructor(public gender: Gender) {
@@ -86,69 +127,6 @@ export class CensusComponent extends Component {
   }
 }
 
-export const generateCitizen = (
-  referenceDate: Date,
-  ageJitter: number = 0,
-): CitizenArchetype => {
-  const isAndroid = Math.random() > 0.7;
-  const species = isAndroid ? Species.Android : Species.Human;
-  const names = generateCitizenName(species);
-  const birthdate = new Date();
-  birthdate.setFullYear(
-    referenceDate.getFullYear() - Math.round(Math.random() * ageJitter),
-  );
-
-  const genderRoll = randomInt(0, 3);
-  let gender = Gender.None;
-  if (genderRoll > 0) {
-    gender = Gender.Male;
-    if (genderRoll > 1) {
-      gender = Gender.Female;
-    }
-  }
-
-  return [
-    new CivicIdentityComponent(
-      randomBytes(4).toString("hex"),
-      names[0],
-      names[1],
-      Status.Living,
-    ),
-    new EpochComponent(age(birthdate, referenceDate), birthdate),
-    new PhysicalComponent(
-      [randomInt(150, 190) / 10, 0.6, 0.3],
-      randomInt(60, 90),
-    ),
-    new LifeformClassificationComponent(species),
-    new GenderComponent(gender),
-    new LocationComponent("Residence-1"),
-  ];
-};
-
 export const age = (birthdate: Date, reference: Date) => {
   return reference.getFullYear() - new Date(birthdate).getFullYear();
-};
-
-export const generateCitizenName = (species: Species = Species.Human) => {
-  switch (species) {
-    case Species.Android:
-      return generateAndroidName();
-    case Species.Human:
-    default:
-      return generateHumanName();
-  }
-};
-
-const generateHumanName = (): [string, string] => {
-  return [
-    names.human[Math.floor(Math.random() * names.human.length)],
-    names.human[Math.floor(Math.random() * names.human.length)],
-  ];
-};
-
-const generateAndroidName = (): [string, string] => {
-  return [
-    names.elements[Math.floor(Math.random() * names.elements.length)],
-    randomInt(100, 999).toString(),
-  ];
 };

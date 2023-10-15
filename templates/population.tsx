@@ -1,4 +1,13 @@
-import { CensusComponent, CitizenArchetype } from "../src/system/population";
+import {
+  CensusComponent,
+  CivicIdentityComponent,
+  EpochComponent,
+  GenderComponent,
+  ImplantsComponent,
+  LifeformClassificationComponent,
+  PhysicalComponent,
+} from "../src/system/population";
+import { LocationComponent } from "../src/system/transport";
 
 export const PopulationCensus = (props: { census?: CensusComponent }) => {
   const jsx = (
@@ -35,7 +44,17 @@ export const PopulationCensus = (props: { census?: CensusComponent }) => {
   );
 };
 
-export const Population = (props: { citizens?: CitizenArchetype[] }) => {
+export const Population = (props: {
+  citizens?: [
+    CivicIdentityComponent,
+    EpochComponent,
+    PhysicalComponent,
+    LifeformClassificationComponent,
+    GenderComponent,
+    LocationComponent,
+    ImplantsComponent,
+  ][];
+}) => {
   const jsx = (
     <table>
       <thead>

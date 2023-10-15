@@ -1,0 +1,75 @@
+{
+  "implants": {
+    "Sandevistan": {
+      "id": "0001",
+      "label": "Sandevistan",
+      "description": "Increases the speed of neural connections to the point where the user's perception of time is slowed down."
+    },
+    "Kerenzikov": {
+      "id": "0002",
+      "label": "Kerenzikov",
+      "description": "Allows the user to aim and shoot while dodging."
+    },
+    "Optical Camo": {
+      "id": "0003",
+      "label": "Optical Camo",
+      "description": "Allows the user to become invisible for a short period of time."
+    },
+    "Gorilla Arms": {
+      "id": "0004",
+      "label": "Gorilla Arms",
+      "description": "Allows the user to rip doors off their hinges and deal massive damage to enemies."
+    },
+    "Braindance": {
+      "id": "0005",
+      "label": "Braindance",
+      "description": "Allows the user to experience the recorded memories of others."
+    }
+  },
+  "disorders": {
+    "psychological": {
+      "Anxiety": { "id": "0001", "label": "Anxiety", "adjective": "Anxious" },
+      "Depression": {
+        "id": "0002",
+        "label": "Depression",
+        "adjective": "Depressed"
+      },
+      "Bipolar Disorder": {
+        "id": "0003",
+        "label": "Bipolar Disorder",
+        "adjective": "Bipolar"
+      },
+      "Schizophrenia": {
+        "id": "0004",
+        "label": "Schizophrenia",
+        "adjective": "Schizophrenic"
+      },
+      "Paranoia": { "id": "0005", "label": "Paranoia", "adjective": "Paranoid" }
+    },
+    "medical": {
+      "Diabetes": {
+        "id": "0001",
+        "label": "Diabetes",
+        "adjective": "Diabetic"
+      },
+      "Hypertension": {
+        "id": "0002",
+        "label": "Hypertension",
+        "adjective": "Hypertensive"
+      },
+      "Heart Disease": {
+        "id": "0003",
+        "label": "Heart Disease",
+        "adjective": "Cardiac"
+      },
+      "Cancer": { "id": "0004", "label": "Cancer", "adjective": "Cancerous" },
+      "Asthma": { "id": "0005", "label": "Asthma", "adjective": "Asthmatic" },
+      "Epilepsy": {
+        "id": "0006",
+        "label": "Epilepsy",
+        "adjective": "Epileptic"
+      },
+      "HIV": { "id": "0007", "label": "HIV", "adjective": "HIV+" }
+    }
+  }
+}
